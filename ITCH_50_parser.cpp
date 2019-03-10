@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <unordered_map>
 #include <fstream>
 #include <vector>
 #include <algorithm>
@@ -8,6 +9,10 @@
 #include <math.h>
 
 std::vector<std::string> split(std::string str, std::string token){
+    //
+    //splits str wrt the string token
+    // and returns a vector of strings
+    //
     std::vector<std::string>result;
     while(str.size()){
         int index = str.find(token);
@@ -28,6 +33,7 @@ class Parser{
         std::ifstream inFile;
         std::ofstream outFile;
         unsigned count;
+        std::unordered_map<char, std::vector<std::string>> format_map;
     public:
         Parser(const std::string &inFileName, const std::string &outFileName){
             inFile.open(inFileName);
@@ -41,14 +47,25 @@ class Parser{
         }
 
         void writeChunk(const char *type){
+            //
+            // given a char array type like Ix
+            // interprets and write the following x bytes as indicated by the first keycode
+            // Ix: interprets and write the following x bytes as integers in big-endian order
+            // Ax: interprets and write the follwoing x bytes as alphabetic
+            // Px,n interprets and write the following x bytes as a float number with n decimal digits
+            // *.: writes aslso a \r\n
+            // X: wrties the single letter X to the output file. Should be the message indcator.
+            //
             if(strlen(type)==1){outFile << type << "," ; return;}
-            const std::size_t size = (strlen(type)>1) ? atoi(&type[1]) : 1;
-            const std::string sep = (strlen(type)>2 and type[strlen(type)-1]=='.') ? "\r\n" : ",";
+            std::size_t len = strlen(type);
+            const std::size_t size = (len>1) ? atoi(&type[1]) : 1;
+            const std::string sep = (len>2 and type[len-1]=='.') ? "\r\n" : ",";
             std::vector<unsigned char> buffer(size);
             inFile.read((char *) &buffer[0], size);
             if(type[0]=='A'){
-                std::string s( buffer.begin(), buffer.end());
-                outFile <<  s;
+                //std::string s( buffer.begin(), buffer.end());
+                //outFile <<  s;
+                copy(buffer.cbegin(), buffer.cend(), std::ostreambuf_iterator<char>(outFile));
             }
             else if(type[0]=='I' or type[0]=='P'){
                 long num = 0;
@@ -56,7 +73,7 @@ class Parser{
                     num *= (1<<8);
                     num += buffer[i];
                 }
-                if(type[0]=='P' and strlen(type)>3){
+                if(type[0]=='P' and len>3){
                     int N = atoi(&(type[3]));
                     outFile << ((float)num/pow(10,N));
                 }
@@ -66,13 +83,24 @@ class Parser{
         }
 
         void writeMessage(const std::string &format){
-            std::vector<std::string> types = split(format,"-");
+            //
+            //splits the format string and calls wrtieChunk with the specified interpretation.
+            //
+            char key = format[0];
+            auto it = format_map.find(key);
+            std::vector<std::string> types;
+            if(it == format_map.end()){
+                types = split(format,"-");
+                format_map.insert(std::make_pair(key,types));
+            }
+            else
+                types = it->second;
             for(std::string t: types){
                 writeChunk(t.c_str());
             }
             count ++;
-            if((count % 500000)==0){
-                std::cout << "Processed " << count << " messages." << std::endl;
+            if((count % 5000000)==0){
+                std::cout << "Processed " << count/1000000 << "Mio messages." << std::endl;
             }
         }
 
@@ -81,16 +109,18 @@ class Parser{
             outFile.close();
             std::cout << "Finished, processed " << count << " messages in total." << std::endl;
         }
-        
+
         void process(){
             char c;
             while(inFile.get(c)){
+                //
                 // First letter is the type of message.
                 // -: separator
                 // Ix: x bytes Integer
                 // Ax: x bytes Alpha
                 // Px,n: x bytes, n decimal precision
                 // .: end of message. Write "\r\n"
+                //
                 if('S'==c) writeMessage("S-I2-I2-I6-A1.");
                 if('R'==c) writeMessage("R-I2-I2-I6-A8-A1-A1-I4-A1-A1-A2-A1-A1-A1-A1-A1-I4-A1.");
                 if('H'==c) writeMessage("H-I2-I2-I6-A8-A1-A1-A4.");
@@ -111,7 +141,7 @@ class Parser{
                 if('P'==c) writeMessage("P-I2-I2-I6-I8-A1-I4-A8-P4,4-I8.");
                 if('Q'==c) writeMessage("Q-I2-I2-I6-I8-A8-P4,4-I8-A1.");
                 if('B'==c) writeMessage("B-I2-I2-I6-I8.");
-                if('I'==c) writeMessage("I2-I2-I6-I8-I8-A1-A8-P4,4-P4,4-P4,4-A1,A1.");
+                if('I'==c) writeMessage("I-I2-I2-I6-I8-I8-A1-A8-P4,4-P4,4-P4,4-A1,A1.");
             }
             closeStreams();
         }
@@ -123,7 +153,7 @@ int main(int argc, char * argv[]){
         return 0;
     }
     std::string pathFile = argv[1];
-    std::string outFileName = pathFile+"parsed.csv";
+    std::string outFileName = pathFile+"_parsed.csv";
     Parser p(argv[1],outFileName);
     p.process();
     return 0;
