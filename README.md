@@ -9,3 +9,6 @@ exec with:
   
 spec @:
   https://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHspecification.pdf
+
+ITCH data: 
+  ftp://emi.nasdaq.com/ITCH/
