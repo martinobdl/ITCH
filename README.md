@@ -7,8 +7,8 @@ build with
 exec with:
   ./ITCH_50_parser path/of/the/ITCH_50
   
-spec @:
-  https://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHspecification.pdf
+specs @: https://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHspecification.pdf
 
-ITCH data: 
-  ftp://emi.nasdaq.com/ITCH/
+ITCH data: ftp://emi.nasdaq.com/ITCH/
+
+style giude (not complyiant right not): https://google.github.io/styleguide/cppguide.html
