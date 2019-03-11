@@ -10,5 +10,3 @@ exec with:
 specs @: https://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHspecification.pdf
 
 ITCH data: ftp://emi.nasdaq.com/ITCH/
-
-style giude (not complyiant right not): https://google.github.io/styleguide/cppguide.html
