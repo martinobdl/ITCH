@@ -7,10 +7,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 
 std::vector<std::string> split(std::string str, std::string token){
     //
-    //splits str wrt the string token
+    // splits str wrt the string token
     // and returns a vector of strings
     //
     std::vector<std::string>result;
@@ -34,6 +35,7 @@ class Parser{
         std::ofstream outFile;
         unsigned count;
         std::unordered_map<char, std::vector<std::string>> format_map;
+        time_t start;
     public:
         Parser(const std::string &inFileName, const std::string &outFileName){
             inFile.open(inFileName);
@@ -44,6 +46,7 @@ class Parser{
                 std::cout << "Opend "+inFileName+" to parse." << std::endl;
             outFile.open(outFileName);
             count = 0;
+            start = time(0);
         }
 
         void writeChunk(const char *type){
@@ -63,8 +66,6 @@ class Parser{
             std::vector<unsigned char> buffer(size);
             inFile.read((char *) &buffer[0], size);
             if(type[0]=='A'){
-                //std::string s( buffer.begin(), buffer.end());
-                //outFile <<  s;
                 copy(buffer.cbegin(), buffer.cend(), std::ostreambuf_iterator<char>(outFile));
             }
             else if(type[0]=='I' or type[0]=='P'){
@@ -84,7 +85,7 @@ class Parser{
 
         void writeMessage(const std::string &format){
             //
-            //splits the format string and calls wrtieChunk with the specified interpretation.
+            // splits the format string and calls wrtieChunk with the specified interpretation.
             //
             char key = format[0];
             auto it = format_map.find(key);
@@ -100,14 +101,14 @@ class Parser{
             }
             count ++;
             if((count % 5000000)==0){
-                std::cout << "Processed " << count/1000000 << "Mio messages." << std::endl;
+                std::cout << "Processed " << count/1000000 << "Mio messages. " << count/difftime(time(0), start) << " messages per sec." << std::endl;
             }
         }
 
         void closeStreams(){
             inFile.close();
             outFile.close();
-            std::cout << "Finished, processed " << count << " messages in total." << std::endl;
+            std::cout << "Finished, processed " << count << " messages in " << difftime(time(0),start) << "seconds."  << std::endl;
         }
 
         void process(){
