@@ -1,5 +1,4 @@
 class BookConstructor{
-    
     long timestamp;
     Message message;
     OrderBook book;
@@ -12,6 +11,8 @@ class BookConstructor{
     BookConstructor(std::string inputMessageCSV, std::string outputMessageCSV, std::string outputBookCSV);
     void next(); // the next message is the main method in the program
     void WriteBookAndMessage;
+    void updateBook;
+    void updatePool;
 
 }
 
@@ -30,7 +31,14 @@ class Reader{
 }
 
 class Message{
-    // ...
+    long timestamp;
+    Order order;
+    OrderEvent event;
+    public:
+    // from the message string that comes from the reader, we get order id
+    // that we use to look for missing information in the pool
+    // This constructur is maybe the most delicate part of the process.
+    Message(std::string messageString); 
 }
 
 class OrderBook{
@@ -59,20 +67,5 @@ class Order{
     public:
     addDize(long size); // also negative
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
