@@ -16,18 +16,18 @@ class BookConstructor{
 
 }
 
-class Writer{
+class Reader{
     std::string fileName;
     std::ifstream file;
     public:
     std::string getLine(void);
 }
 
-class Reader{
+class Writer{
     std::string fileName;
     std::ofstream file;
     public:
-    writeLine(std::string stringToWrite);
+    void writeLine(std::string stringToWrite);
 }
 
 class Message{
