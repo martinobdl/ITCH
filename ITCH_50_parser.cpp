@@ -43,7 +43,7 @@ class Parser{
                 std::cerr << "Can't open input file " << inFileName << std::endl;
             }
             else
-                std::cout << "Opend "+inFileName+" to parse." << std::endl;
+                std::cout << "Opened "+inFileName+" to parse." << std::endl;
             outFile.open(outFileName);
             count = 0;
             start = time(0);
@@ -150,7 +150,7 @@ class Parser{
 
 int main(int argc, char * argv[]){
     if(argc < 2){
-        std::cerr << "Call it with name of compelte path of the ITCH_50 file as arg" << std::endl;
+        std::cerr << "Call it with name of complete path of the ITCH_50 file as arg" << std::endl;
         return 0;
     }
     std::string pathFile = argv[1];
