@@ -54,10 +54,10 @@ class Parser{
             // given a char array type like Ix
             // interprets and write the following x bytes as indicated by the first keycode
             // Ix: interprets and write the following x bytes as integers in big-endian order
-            // Ax: interprets and write the follwoing x bytes as alphabetic
+            // Ax: interprets and write the following x bytes as alphabetic
             // Px,n interprets and write the following x bytes as a float number with n decimal digits
-            // *.: writes aslso a \r\n
-            // X: wrties the single letter X to the output file. Should be the message indcator.
+            // *.: writes also a \r\n
+            // X: writes the single letter X to the output file. Should be the message indicator.
             //
             if(strlen(type)==1){outFile << type << "," ; return;}
             std::size_t len = strlen(type);
