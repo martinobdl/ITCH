@@ -6,13 +6,14 @@ class BookConstructor{
     Reader message_reader;
     Writer book_writer;
     Writer message_writer;
+    std::string Stock;
 
     public:
-    BookConstructor(std::string inputMessageCSV, std::string outputMessageCSV, std::string outputBookCSV);
+    BookConstructor(std::string inputMessageCSV, std::string outputMessageCSV, std::string outputBookCSV, std::string Stock);
     void next(); // the next message is the main method in the program
     void WriteBookAndMessage;
-    void updateBook;
-    void updatePool;
+    void updateBook();
+    void updatePool();
 
 }
 
@@ -20,6 +21,7 @@ class Reader{
     std::string fileName;
     std::ifstream file;
     public:
+    Reader(std::string fileName);
     std::string getLine(void);
 }
 
@@ -27,6 +29,7 @@ class Writer{
     std::string fileName;
     std::ofstream file;
     public:
+    Writer(std::string fileName);
     void writeLine(std::string stringToWrite);
 }
 
@@ -62,10 +65,11 @@ class OrderPool{
 
 class Order{
     long id;
+    bool side; // 0 for buy, 1 for sell
     long size; // the LOBSTER report puts here size and remaning size. Dunno why.
     long price;
     public:
-    addDize(long size); // also negative
+    addSize(long size); // also negative
 }
 
 
