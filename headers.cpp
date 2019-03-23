@@ -11,7 +11,7 @@ class BookConstructor{
     public:
     BookConstructor(std::string inputMessageCSV, std::string outputMessageCSV, std::string outputBookCSV, std::string Stock);
     void next(); // the next message is the main method in the program
-    void WriteBookAndMessage;
+    void WriteBookAndMessage();
     void updateBook();
     void updatePool();
 
