@@ -4,7 +4,7 @@
 Message::Message(const std::string& _type, const id_type& _id, const long& _timestamp):type(_type), id(_id),timestamp(_timestamp){};
 
 void Message::setType(const std::string& _type){
-        if(_type=="A" || _type == "F")
+        if(_type =="A" || _type == "F")
             type = "A";
         else if (_type == "D" || _type == "X")
             type = "D";
