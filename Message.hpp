@@ -6,9 +6,9 @@
 
 class Message{
 public:
-  typedef float price_type;
-  typedef float size_type;
-  typedef float id_type;
+  typedef double price_type;
+  typedef double size_type;
+  typedef double id_type;
 
 private:
   std::string type="";
@@ -17,7 +17,7 @@ private:
 
   bool side;
   price_type price=0.0;
-  size_type size=0;
+  size_type remSize=0;
   size_type cancSize=0;
   size_type execSize=0;
 
@@ -33,6 +33,7 @@ public:
   void setTimestamp(const long& timestamp);
   void setSide(const bool& side);
   void setPrice(const price_type& price);
+  void setRemSize(const size_type& size);
   void setCancSize(const size_type& size);
   void setExecSize(const size_type& size);
   void setOldId(const id_type& id);

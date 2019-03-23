@@ -23,6 +23,10 @@ void Message::setPrice(const price_type& _price){
 price=_price;
 };
 
+void Message::setRemSize(const size_type& _size){
+remSize=_size;
+};
+
 void Message::setCancSize(const size_type& _size){
 cancSize=_size;
 };
@@ -44,7 +48,18 @@ oldSize=_size;
 };
 
 void Message::print(){
-std::cout<< "The message type is " << type <<",the ID is "<<id<<", the timestamp is " << timestamp <<std::endl;
-std::cout<< "The old Id is " << oldId <<",the old size is "<<oldSize<<", the old price " << oldPrice <<std::endl;
-
+std::cout<<"Message type   :" << type <<std::endl;
+std::cout<<"Id             :"<<id<< std::endl;
+std::cout<<"timestamp      :" << timestamp <<std::endl;
+std::cout<<"side           :" << side <<std::endl;
+std::cout<<"price          :"<<price<<std::endl;
+std::cout<<"remaining size :" << remSize <<std::endl;
+if (type == "D") std::cout<<"deletion size  :" << cancSize <<std::endl;
+if (type == "E") std::cout<<"execution size :" << execSize <<std::endl;
+if (type =="U"){
+  std::cout<< "old Id         :" << oldId <<std::endl;
+  std::cout<< "old size       :"<< oldSize <<std::endl;
+  std::cout<< "old price      :" << oldPrice <<std::endl;
+};
+std::cout<< "" <<std::endl;
 };
