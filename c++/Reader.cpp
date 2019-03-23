@@ -34,18 +34,51 @@ Message createMessage(void){
     std::getline(file, cell, ',');
     std::getline(file, cell, ',');
     msg.setTimeStamp(std::stol(cell));
-    std::getline(file, cell, ',');
+    if(typeCell == 'A' || typeCell == 'F'){
+        std::getline(file, cell, ',');
+        msg.setId(std::stol(cell));
+        std::getline(file, cell, ',');
+        msg.setSide(cell=='S');
+        std::getline(file, cell, ',');
+        msg.setSize(std::stod(cell));
+        std::getline(file, cell, ',');
+        if(typeCell == 'A'){
+            std::getline(file, cell);
+            msg.setPrice(std::stod(cell));
+        }
+        if(typeCell == 'F'){
+            std::getline(file, cell, ',');
+            msg.setPrice(std::stod(cell));
+            std::getline(file, cell);
+        }
+    }
     if(typeCell=='U'){
-        msg.setOldId(std::stod(cell));
+        std::getline(file, cell, ',');
+        msg.setOldId(std::stol(cell));
+        std::getline(file, cell, ',');
+        msg.setId(std::stol(cell));
+        std::getline(file, cell, ',');
+        msg.setPrice(std::stod(cell));
+        std::getline(file, cell);
+        msg.setSize(std::stod(cell));
     }
-    else{
+    if(typeCell == 'D'){
+        std::getline(file, cell);
+        msg.setId(std::stol(cell));
+    }
+    if(typeCell == 'X'){
+        std::getline(file, cell, ',');
         msg.setId(std::stod(cell));
+        std::getline(file, cell);
+        msg.setCancSize(std::stod(cell));
     }
-    std::getline(file, cell, ',');
-    if(typeCell=='A' || typeCell =='F'){
-        
+    if(typeCell == 'E'){
+        std::getline(file, cell, ',');
+        msg.setId(std::stod(cell));
+        std::getline(file, cell, ',');
+        msg.setExecSize(std::stod(cell));
+        std::getline(file, cell);
     }
-
 }
 
 
