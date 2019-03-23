@@ -5,13 +5,13 @@ Message::Message(const std::string& _type, const id_type& _id, const long& _time
 
 void Message::setType(const std::string& _type){
         if(_type =="A" || _type == "F")
-            type = "A";
+            type = "A"; // add
         else if (_type == "D" || _type == "X")
-            type = "D";
+            type = "D"; // delete
         else if (_type == "U")
-            type = "R";
+            type = "R"; // replace
         else
-            type = _type;
+            type = _type; // execute
 };
 
 void Message::setId(const id_type& _id){
