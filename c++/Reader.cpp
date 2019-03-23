@@ -1,7 +1,7 @@
 #include "Reader.hpp"
 
-Reader::Reader(const std::string &_fileName): 
-    fileName(_fileName){
+Reader::Reader(const std::string &_fileName, const std::string &_stock): 
+    fileName(_fileName), stock(_stock){
         file.open(fileName);
         if(!file.is_open()){
             std::cerr << "Can't open input file " << fileName << std::endl;
@@ -21,38 +21,46 @@ std::string Reader::getLine(void){
     else{
         return std::string();
     }
-
 }
 
-Message createMessage(void){
-    Message msg();
+Message Reader::createMessage(void){
+    Message msg;
     std::string typeCell;
-    std::getline(file, typeCell, ',');
-    msg.setType(typeCell);
     std::string cell;
+    std::getline(file, typeCell, ',');
+    if(messageToFilter.find(typeCell)==std::string::npos){
+        std::getline(file, cell);
+        return Message();
+    } 
+    msg.setType(typeCell);
     std::getline(file, cell, ',');
     std::getline(file, cell, ',');
     std::getline(file, cell, ',');
     msg.setTimeStamp(std::stol(cell));
-    if(typeCell == 'A' || typeCell == 'F'){
+    if(typeCell == "A" || typeCell == "F"){
         std::getline(file, cell, ',');
         msg.setId(std::stol(cell));
         std::getline(file, cell, ',');
-        msg.setSide(cell=='S');
+        msg.setSide(cell=="S");
         std::getline(file, cell, ',');
-        msg.setSize(std::stod(cell));
+        msg.setRemSize(std::stod(cell));
         std::getline(file, cell, ',');
-        if(typeCell == 'A'){
+        // check if rigth stock
+        if(cell.compare(stock) != 0){
+            std::getline(file, cell);
+            return Message();
+        }
+        if(typeCell == "A"){
             std::getline(file, cell);
             msg.setPrice(std::stod(cell));
         }
-        if(typeCell == 'F'){
+        if(typeCell == "F"){
             std::getline(file, cell, ',');
             msg.setPrice(std::stod(cell));
             std::getline(file, cell);
         }
     }
-    if(typeCell=='U'){
+    if(typeCell=="U"){
         std::getline(file, cell, ',');
         msg.setOldId(std::stol(cell));
         std::getline(file, cell, ',');
@@ -60,25 +68,26 @@ Message createMessage(void){
         std::getline(file, cell, ',');
         msg.setPrice(std::stod(cell));
         std::getline(file, cell);
-        msg.setSize(std::stod(cell));
+        msg.setRemSize(std::stod(cell));
     }
-    if(typeCell == 'D'){
+    if(typeCell == "D"){
         std::getline(file, cell);
         msg.setId(std::stol(cell));
     }
-    if(typeCell == 'X'){
+    if(typeCell == "X"){
         std::getline(file, cell, ',');
         msg.setId(std::stod(cell));
         std::getline(file, cell);
         msg.setCancSize(std::stod(cell));
     }
-    if(typeCell == 'E'){
+    if(typeCell == "E"){
         std::getline(file, cell, ',');
         msg.setId(std::stod(cell));
         std::getline(file, cell, ',');
         msg.setExecSize(std::stod(cell));
         std::getline(file, cell);
     }
+    return msg;
 }
 
 

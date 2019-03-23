@@ -11,7 +11,7 @@ void Message::setId(const id_type& _id){
 id=_id;
 };
 
-void Message::setTimestamp(const long& _timestamp){
+void Message::setTimeStamp(const long& _timestamp){
 timestamp=_timestamp;
 };
 

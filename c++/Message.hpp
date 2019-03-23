@@ -30,7 +30,7 @@ public:
   Message(const std::string& type,const id_type &id,const long& timestamp);
   void setType(const std::string& type);
   void setId(const id_type& id);
-  void setTimestamp(const long& timestamp);
+  void setTimeStamp(const long& timestamp);
   void setSide(const bool& side);
   void setPrice(const price_type& price);
   void setRemSize(const size_type& size);
