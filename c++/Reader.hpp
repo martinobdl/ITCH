@@ -1,8 +1,10 @@
 #ifndef READER_H_
 #define READER_H_
 
-#include<fstream>
-#include<iostream>
+#include <fstream>
+#include <iostream>
+#include "Message.h"
+#include <string>
 
 class Reader{
     private:
@@ -13,6 +15,7 @@ class Reader{
     public:
     Reader(const std::string &fileName);
     std::string getLine(void);
+    Message createMessage(void); 
     bool eof(){
         return finished;
     }

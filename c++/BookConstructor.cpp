@@ -12,6 +12,12 @@ BookConstructor::next(void){
     WriteBookAndMessage();
 }
 
+BookConstructor::updateMessage(const std::string &msg){
+    if(msg[0]=='A' || msg[0]=='F'){
+        // create order
+        message new_mes();
 
+    }
+}
 
 

@@ -23,3 +23,30 @@ std::string Reader::getLine(void){
     }
 
 }
+
+Message createMessage(void){
+    Message msg();
+    std::string typeCell;
+    std::getline(file, typeCell, ',');
+    msg.setType(typeCell);
+    std::string cell;
+    std::getline(file, cell, ',');
+    std::getline(file, cell, ',');
+    std::getline(file, cell, ',');
+    msg.setTimeStamp(std::stol(cell));
+    std::getline(file, cell, ',');
+    if(typeCell=='U'){
+        msg.setOldId(std::stod(cell));
+    }
+    else{
+        msg.setId(std::stod(cell));
+    }
+    std::getline(file, cell, ',');
+    if(typeCell=='A' || typeCell =='F'){
+        
+    }
+
+}
+
+
+
