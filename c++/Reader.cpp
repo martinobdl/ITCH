@@ -1,21 +1,25 @@
-#ifndef READER_H_
-#define READER_H_
+#include "Reader.hpp"
 
-#include<fstream>
-#include<iostream>
-
-class Reader{
-    private:
-    std::string fileName;
-    std::ifstream file;
-    std::string messageToFilter = "AFEXDUPQ";
-    bool finished = 0;
-    public:
-    Reader(const std::string &fileName);
-    std::string getLine(void);
-    bool eof(){
-        return finished;
+Reader::Reader(const std::string &_fileName): 
+    fileName(_fileName){
+        file.open(fileName);
+        if(!file.is_open()){
+            std::cerr << "Can't open input file " << fileName << std::endl;
+            }
+        else{
+            std::cout << "Opened " << fileName << " to read ITCH 5.0. messages." << std::endl;
+        }
     }
-};
 
-#endif
+std::string Reader::getLine(void){
+    std::string message;
+    std::getline(file, message);
+    finished = file.eof();
+    if(messageToFilter.find(message[0])){
+        return message;
+    }
+    else{
+        return std::string();
+    }
+
+}
