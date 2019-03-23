@@ -40,6 +40,21 @@ public:
   void setOldPrice(const price_type& price);
   void setOldSize(const size_type& size);
 
+  // to be discussed if we need all of them:
+  std::string getType() const;
+  id_type getId() const;
+  long getTimeStamp()const;
+  bool getSide()const;
+  price_type getPrice()const;
+  size_type getRemSize()const;
+  size_type getCancSize()const;
+  size_type getExecSize()const;
+  id_type getOldId()const;
+  price_type getOldPrice()const;
+  size_type getOldSize()const;
+
+
+
   void print();
 
 };

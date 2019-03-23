@@ -5,19 +5,32 @@ BookConstructor::BookConstructor(std::string inputMessageCSV, std::string output
 }
 
 BookConstructor::next(void){
-    std::string msgString message_reader.getLine();
-    updateMessage(msgString);
+    Message msg=message_reader.createMessage();
+    updateMessage(msg);
     updatePool();
     updateBook();
     WriteBookAndMessage();
 }
 
-BookConstructor::updateMessage(const std::string &msg){
-    if(msg[0]=='A' || msg[0]=='F'){
-        // create order
-        message new_mes();
+BookConstructor::updateMessage(Message &msg){
+    std::string typeMsg = msg.getType();
 
+    if(typeMsg == "A")
+        return;
+
+    // find id of msg then split into different cases depending on type
+    if(typeMsg == "D"){
+        // side, remSize, Price
     }
+
+    else if(typeMsg == "R"){
+        //side, oldSize, oldPrice
+    }
+
+
+    else{
+        //execution: side, oldSize, oldPrice
+    }   
 }
 
 

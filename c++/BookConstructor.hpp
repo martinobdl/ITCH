@@ -17,10 +17,10 @@ class BookConstructor{
     BookConstructor(std::string inputMessageCSV, std::string outputMessageCSV, std::string outputBookCSV,     std::string Stock);
     void next(); 
     void WriteBookAndMessage();
-    void updateMessage(const std::string &s);
+    void updateMessage(Message &);
     void updateBook();
     void updatePool();
     void start();
-}
+};
 
 #endif

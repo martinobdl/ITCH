@@ -54,6 +54,54 @@ void Message::setOldSize(const size_type& _size){
 oldSize=_size;
 };
 
+
+// getters
+std::string Message::getType() const{
+  return type;
+}
+
+id_type Message::getId() const{
+  return id;
+
+}
+
+long Message::getTimeStamp()const{
+  return timestamp;
+}
+
+bool Message::getSide()const{
+  return side;
+}
+
+price_type Message::getPrice()const{
+  return price;
+}
+
+size_type Message::getRemSize()const{
+  return remSize;
+}
+
+size_type Message::getCancSize()const{
+  return cancSize;
+}
+
+size_type Message::getExecSize()const{
+  return execSize;
+}
+
+id_type Message::getOldId()const{
+  return odlId;
+}
+
+price_type Message::getOldPrice()const{
+  return oldPrice;
+}
+
+size_type Message::getOldSize()const{
+  return oldSize;
+}
+
+
 void Message::print(){
 std::cout<<"Message type   :" << type <<std::endl;
 std::cout<<"Id             :"<<id<< std::endl;
