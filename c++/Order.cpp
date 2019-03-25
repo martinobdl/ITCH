@@ -22,6 +22,6 @@ long Order::getPrice() const{
 }
 
 
-Order::addSize(long size){
+void Order::addSize(long size){
 
 }// also negative
