@@ -18,8 +18,11 @@ void BookConstructor::updateMessage(Message &msg){
     if(typeMsg == "A")
         return;
 
+    // if we have "replace" message, we are searching the order with id equal to old id
+    id_type foundId = (typeMsg == "R") ? msg.getOldId() : msg.getId();
+    
     // find order corresponding to id of msg 
-    Order foundOrder = pool.findOrderPool(msg.getID());
+    Order foundOrder = pool.findOrderPool(foundId);
     msg.setSide(foundOrder.getSide());
 
     // then split into different cases depending on type
@@ -29,7 +32,7 @@ void BookConstructor::updateMessage(Message &msg){
             // we didnt set up CancSize meaning we are in complete deletion of order 
             msg.setCancSize(foundOrder.getSize()); 
 
-        long remainingSize = foundOrder.getSize() - msg.getCancSize();
+        size_type remainingSize = foundOrder.getSize() - msg.getCancSize();
         msg.setRemSize(remainingSize); 
         msg.setPrice(foundOrder.getPrice());
     }
@@ -44,7 +47,7 @@ void BookConstructor::updateMessage(Message &msg){
     else{
         //execution: remSize, price
         msg.setPrice(foundOrder.getPrice());
-        long remainingSize = foundOrder.getSize() - msg.getExecSize();
+        size_type remainingSize = foundOrder.getSize() - msg.getExecSize();
         msg.setRemSize(remainingSize);
     }   
 

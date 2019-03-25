@@ -1,6 +1,8 @@
 #ifndef _Order_H_
 #define _Order_H_
 
+
+// type def for attributes ?
 class Order{
     long id;
     bool side; // 0 for buy, 1 for sell
