@@ -1,4 +1,6 @@
 #include <iostream>
+#include <sstream>
+
 #include "Message.hpp"
 
 Message::Message(const std::string& _type, const id_type& _id, const long& _timestamp):type(_type), id(_id),timestamp(_timestamp){};
@@ -12,7 +14,7 @@ void Message::setType(const std::string& _type){
             type = "R"; // replace
         else if (_type == "E")
             type = _type; // execute
-        else 
+        else
             std::cerr << "Message with wrong type (" << _type << ") has been found!"<< std::endl;
 };
 
@@ -60,49 +62,54 @@ oldSize=_size;
 // getters
 std::string Message::getType() const{
   return type;
-}
+};
 
-id_type Message::getId() const{
+Message::id_type Message::getId() const{
   return id;
-
-}
+};
 
 long Message::getTimeStamp()const{
   return timestamp;
-}
+};
 
 bool Message::getSide()const{
   return side;
-}
+};
 
-price_type Message::getPrice()const{
+Message::price_type Message::getPrice()const{
   return price;
-}
+};
 
-size_type Message::getRemSize()const{
+Message::size_type Message::getRemSize()const{
   return remSize;
-}
+};
 
-size_type Message::getCancSize()const{
+Message::size_type Message::getCancSize()const{
   return cancSize;
-}
+};
 
-size_type Message::getExecSize()const{
+Message::size_type Message::getExecSize()const{
   return execSize;
-}
+};
 
-id_type Message::getOldId()const{
-  return odlId;
-}
+Message::id_type Message::getOldId()const{
+  return oldId;
+};
 
-price_type Message::getOldPrice()const{
+Message::price_type Message::getOldPrice()const{
   return oldPrice;
-}
+};
 
-size_type Message::getOldSize()const{
+Message::size_type Message::getOldSize()const{
   return oldSize;
-}
+};
 
+std::string Message::getstring()const{
+std::ostringstream string_builder;
+string_builder <<type <<","<< timestamp <<","<<id <<","<<side <<","<<remSize
+<<","<<price<<"," <<cancSize <<","<<execSize <<","<<oldId <<","<<oldSize <<","<<oldPrice <<","<<std::endl;
+return string_builder.str();
+};
 
 void Message::print(){
 std::cout<<"Message type   :" << type <<std::endl;

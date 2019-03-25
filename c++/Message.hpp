@@ -54,7 +54,7 @@ public:
   size_type getOldSize()const;
 
 
-
+  std::string getstring()const;
   void print();
 
 };
