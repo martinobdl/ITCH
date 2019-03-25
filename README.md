@@ -14,3 +14,7 @@ ITCH data: ftp://emi.nasdaq.com/ITCH/
 ##############################################
 
 added headers for the general structure of the program.
+
+##############################################
+
+Example of test compilation (from tests folder): g++ -std=c++11 mexTest.cpp ../c++/Message.cpp ../c++/Reader.cpp -o testMex
