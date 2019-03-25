@@ -25,7 +25,7 @@ BookConstructor::updateMessage(Message &msg){
     // then split into different cases depending on type
     if(typeMsg == "D"){
        //remSize, Price
-        if (msg.getCancSize() != 0 ) // ???? change condition accordingly to if the default value is 0 or NaN; 
+        if (msg.getCancSize() == 0 ) // ???? change condition accordingly to if the default value is 0 or NaN; 
             // we didnt set up CancSize meaning we are in complete deletion of order 
             msg.setCancSize(foundOrder.getSize()); 
 
