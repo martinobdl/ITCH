@@ -12,7 +12,7 @@ BookConstructor::next(void){
     WriteBookAndMessage();
 }
 
-BookConstructor::updateMessage(Message &msg){
+void BookConstructor::updateMessage(Message &msg){
     std::string typeMsg = msg.getType();
 
     if(typeMsg == "A")
@@ -24,8 +24,8 @@ BookConstructor::updateMessage(Message &msg){
 
     // then split into different cases depending on type
     if(typeMsg == "D"){
-       //remSize, Price
-        if (msg.getCancSize() == 0 ) // ???? change condition accordingly to if the default value is 0 or NaN; 
+       //remSize, Price 
+        if (msg.getCancSize() == 0 ) // ???? change condition accordingly to if the default value is 0 or NaN (but it should be NaN :D) 
             // we didnt set up CancSize meaning we are in complete deletion of order 
             msg.setCancSize(foundOrder.getSize()); 
 
