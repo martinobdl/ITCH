@@ -18,22 +18,34 @@ BookConstructor::updateMessage(Message &msg){
     if(typeMsg == "A")
         return;
 
-    
     // find order corresponding to id of msg 
     Order foundOrder = pool.findOrderPool(msg.getID());
+    msg.setSide(foundOrder.getSide());
 
     // then split into different cases depending on type
     if(typeMsg == "D"){
-        // side, remSize, Price
+       //remSize, Price
+        if (msg.getCancSize() != 0 ) // ???? change condition accordingly to if the default value is 0 or NaN; 
+            // we didnt set up CancSize meaning we are in complete deletion of order 
+            msg.setCancSize(foundOrder.getSize()); 
+
+        long remainingSize = foundOrder.getSize() - msg.getCancSize();
+        msg.setRemSize(remainingSize); 
+        msg.setPrice(foundOrder.getPrice());
     }
 
     else if(typeMsg == "R"){
-        //side, oldSize, oldPrice
+        //oldSize, oldPrice
+        msg.setOldSize(foundOrder.getSize());
+        msg.setOldPrice(foundOrder.getPrice());
     }
 
 
     else{
-        //execution: side, oldSize, oldPrice
+        //execution: remSize, price
+        msg.setPrice(foundOrder.getPrice());
+        long remainingSize = foundOrder.getSize() - msg.getExecSize();
+        msg.setRemSize(remainingSize);
     }   
 
 
@@ -41,7 +53,7 @@ BookConstructor::updateMessage(Message &msg){
 
     }
     void updatePool(){
-        
+
     }
 }
 
