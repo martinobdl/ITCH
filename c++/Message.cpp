@@ -10,8 +10,10 @@ void Message::setType(const std::string& _type){
             type = "D"; // delete
         else if (_type == "U")
             type = "R"; // replace
-        else
+        else if (_type == "E")
             type = _type; // execute
+        else 
+            std::cerr << "Message with wrong type (" << _type << ") has been found!"<< std::endl;
 };
 
 void Message::setId(const id_type& _id){
