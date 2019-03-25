@@ -11,7 +11,7 @@ class Order{
     Order()=default;
     Order(const Message& ); // ??? is it better to pass message object or variable by variable
     Order(long, bool, long, long);
-    addSize(long size); // also negative
+    void addSize(long size); // also negative
 
     //getters
     long getId() const;
