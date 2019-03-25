@@ -1,7 +1,10 @@
 #ifndef BOOKCONSTRUCTOR_H_
 #define BOOKCONSTRUCTOR_H_
 
-#include 
+#include "Message.hpp"
+#include "Order.hpp"
+#include "OrderPool.hpp"
+// include
 
 class BookConstructor{
     long timestamp;

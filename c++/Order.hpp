@@ -9,7 +9,7 @@ class Order{
     
     public:
     Order()=default;
-    Order(const Message& ); // ???
+    Order(const Message& ); // ??? is it better to pass message object or variable by variable
     Order(long, bool, long, long);
     addSize(long size); // also negative
 };

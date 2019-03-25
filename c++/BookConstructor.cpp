@@ -18,7 +18,11 @@ BookConstructor::updateMessage(Message &msg){
     if(typeMsg == "A")
         return;
 
-    // find id of msg then split into different cases depending on type
+    
+    // find order corresponding to id of msg 
+    Order foundOrder = pool.findOrderPool(msg.getID());
+
+    // then split into different cases depending on type
     if(typeMsg == "D"){
         // side, remSize, Price
     }
@@ -31,6 +35,14 @@ BookConstructor::updateMessage(Message &msg){
     else{
         //execution: side, oldSize, oldPrice
     }   
+
+
+    void updateBook(){
+
+    }
+    void updatePool(){
+        
+    }
 }
 
 
