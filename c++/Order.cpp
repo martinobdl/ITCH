@@ -53,3 +53,7 @@ void Order::print() const{
   std::cerr<<"Trying to print an empty order"<<std::endl;
 }
 };
+
+bool Order::isEmpty() const{
+    return (id == 0);
+}

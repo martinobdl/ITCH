@@ -12,7 +12,7 @@ Order OrderPool::findOrderPool(id_type idOrder){
   Order ret;
   if (found!=pool.end()){
     ret=found->second;
-  }else {std::cerr <<"Order did not found"<<std::endl;}
+  }
   return ret;
 };
 
@@ -32,3 +32,4 @@ void OrderPool::modifyOrder(id_type idOrder, size_type size=0){
     };
   return;
 };
+

@@ -31,6 +31,7 @@ class Order{
 
     //print
     void print() const;
+    bool isEmpty(void) const;
 };
 
 

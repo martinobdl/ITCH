@@ -20,7 +20,7 @@ class BookConstructor{
     BookConstructor(std::string inputMessageCSV, std::string outputMessageCSV, std::string outputBookCSV,     std::string Stock);
     void next(); 
     void WriteBookAndMessage();
-    void updateMessage();
+    bool updateMessage();
     void updateBook();
     void updatePool();
     void start();

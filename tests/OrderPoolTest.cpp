@@ -1,7 +1,6 @@
 #include <iostream>
 #include "../c++/OrderPool.hpp"
 #include "../c++/Order.hpp"
-#include "../c++/Message.hpp"
 #include "../c++/utility.hpp"
 
 int main(){
@@ -21,7 +20,5 @@ int main(){
   found=pool.findOrderPool(23);
   found.print();
 
-  Message msg;
-  std::cout<< msg.isEmpty()<<std::endl;
   return 0;
 };

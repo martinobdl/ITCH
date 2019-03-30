@@ -3,32 +3,33 @@
  std::string OrderBook::getStringRepresentation(unsigned level) const {
     unsigned buyDepth = buySide.size();
     unsigned sellDepth = sellSide.size();
-    std::ostringstream string_builder << timestamp;
+    std::ostringstream string_builder;
+    string_builder << timestamp << ",";
 
-    std::map<long,long>::reverse_iterator it_buy = buySide.rbegin();
-    std::map<long,long>::iterator it_sell = sellSide.begin();
+    std::map<long,long>::const_reverse_iterator it_buy = buySide.rbegin();
+    std::map<long,long>::const_iterator it_sell = sellSide.begin();
 
 
     for (unsigned i = 0; i < level; i++) {
         //result:  "bestBidPrice,bestBidSize,bestAskPrice,bestAskSize,..."
         
         if( i < buyDepth){
-            string_builder << it_buy->first << ", "<< it_buy->second << ", ";
+            string_builder << it_buy->first << ","<< it_buy->second << ",";
             ++it_buy;
         }
         else // no more prices in buy side
-             string_builder << "0, 0, ";
+             string_builder << "0,0,";
 
         if (i < sellDepth){
-            string_builder << it_sell->first << ", " << it_sell->second << ", ";
+            string_builder << it_sell->first << "," << it_sell->second << ",";
             ++it_sell;
         }
         else // no more prices in sell side
-            string_builder << "0, 0, ";
+            string_builder << "0,0,";
     }
 
     //remove last 2 characters from string stream: space and comma
-    string_builder.seekp(-2, std::ios_base::end);
+    string_builder.seekp(-1, std::ios_base::end);
     string_builder << std::endl;
     return string_builder.str();
 
@@ -51,6 +52,8 @@ void OrderBook::modifySize(long price, long size, bool side){
         else if(buySide[price] < 0)
             std::cerr << "Negative size in order book is found! " << std::endl;
     }
-    
+}
 
+void OrderBook::setTimeStamp(const long &t){
+    timestamp = t;
 }

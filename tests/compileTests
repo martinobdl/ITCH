@@ -1,3 +1,5 @@
 #/!bin/bash
 
-g++ -std=c++11 mexTest.cpp ../c++/Message.cpp ../c++/Reader.cpp -o testMex
+g++ -std=c++11 OrderBookTest.cpp ../c++/OrderBook.cpp -o OrderBookTest
+g++ -std=c++11 MessageTest.cpp ../c++/Message.cpp ../c++/Reader.cpp -o MessageTest 
+g++ -std=c++11 OrderPoolTest.cpp ../c++/OrderPool.cpp ../c++/Order.cpp -o OrderPoolTest

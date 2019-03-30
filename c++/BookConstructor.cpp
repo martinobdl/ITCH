@@ -4,25 +4,34 @@ BookConstructor::BookConstructor(std::string inputMessageCSV, std::string output
     
 }
 
-BookConstructor::next(void){
-    messge = message_reader.createMessage();
-    updateMessage();
-    updatePool();
-    updateBook();
-    WriteBookAndMessage();
+void BookConstructor::next(void){
+    message = message_reader.createMessage();
+    if(!message.isEmpty()){
+        bool validMessage = updateMessage();
+        if(validMessage){
+            updatePool();
+            updateBook();
+            WriteBookAndMessage();
+        }
+    }
 }
 
-void BookConstructor::updateMessage(){
+bool BookConstructor::updateMessage(){
     
     std::string typeMsg = message.getType();
     
-    if(typeMsg == "A")
-        return;
+    if(typeMsg == "A"){
+        validMessage=1;
+    return 1;
+    }
     // If we have "(R)eplace" message, we are searching the order oldId.
     id_type messageId = (typeMsg == "R") ? message.getOldId() : message.getId();
     
     // Find message in pool.
     Order order = pool.findOrderPool(messageId);
+    if(order.isEmpty()){
+        return 0;
+    }
     message.setSide(order.getSide());
 
     if(typeMsg == "D"){
@@ -53,9 +62,11 @@ void BookConstructor::updateMessage(){
 
     else
         std::cerr << "Unexpected type found! " << typeMsg << std::endl;
+    return 1;
 }
 
 void BookConstructor::updateBook(){
+    book.setTimeStamp(messages.getTimeStamp());
     std::string typeMsg = message.getType();
     if(typeMsg=="A"){
         // Add the order to the pool. If key in the map is already there 
@@ -103,4 +114,11 @@ void BookConstructor::updatePool(){
         pool.modifySize(message.getId(), message.getExecSize());
     }
 }
+
+
+void WriteBookAndMessage(){
+    book_writer.writeLine(book.getStringRepresentation());
+    message_write.writeLine(message.getString());
+}
+
 
