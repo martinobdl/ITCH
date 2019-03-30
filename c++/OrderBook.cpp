@@ -1,6 +1,6 @@
 #include "OrderBook.hpp"
 
- std::string OrderBook::getStringRepresentation(unsigned level) const {
+std::string OrderBook::getString(unsigned level) const {
     unsigned buyDepth = buySide.size();
     unsigned sellDepth = sellSide.size();
     std::ostringstream string_builder;
@@ -28,7 +28,7 @@
             string_builder << "0,0,";
     }
 
-    //remove last 2 characters from string stream: space and comma
+    //remove last 1 characters from string stream: comma
     string_builder.seekp(-1, std::ios_base::end);
     string_builder << std::endl;
     return string_builder.str();

@@ -97,7 +97,6 @@ bool Reader::eof(){
 Reader::~Reader(){
   if (file.is_open())
      {
-         file.flush();
          file.close();
          std::cout<<"file "<<fileName<<" has been closed"<<std::endl;
     };

@@ -57,7 +57,7 @@ public:
   size_type getOldSize()const;
 
   bool isEmpty()const;
-  std::string getstring()const;
+  std::string getString()const;
   void print();
 
 };

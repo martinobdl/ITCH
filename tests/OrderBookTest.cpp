@@ -9,6 +9,6 @@ int main(){
     OB.modifySize(15,12,1);
     OB.modifySize(25,11,1);
     OB.modifySize(33,34,1);
-    std::cout << OB.getStringRepresentation(5) << std::endl;
+    std::cout << OB.getString(5) << std::endl;
     return 0;
 }

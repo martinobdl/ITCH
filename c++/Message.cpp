@@ -5,16 +5,16 @@
 Message::Message(const std::string& _type, const id_type& _id, const long& _timestamp):type(_type), id(_id),timestamp(_timestamp){};
 
 void Message::setType(const std::string& _type){
-        if(_type =="A" || _type == "F")
-            type = "A"; // add
-        else if (_type == "D" || _type == "X")
-            type = "D"; // delete
-        else if (_type == "U")
-            type = "R"; // replace
-        else if (_type == "E")
-            type = _type; // execute
-        else
-            std::cerr << "Message with wrong type (" << _type << ") has been found!"<< std::endl;
+    if(_type =="A" || _type == "F")
+        type = "A"; // add
+    else if (_type == "D" || _type == "X")
+        type = "D"; // delete
+    else if (_type == "U")
+        type = "R"; // replace
+    else if (_type == "E")
+        type = _type; // execute
+    else
+        std::cerr << "Message with wrong type (" << _type << ") has been found!"<< std::endl;
 };
 
 void Message::setId(const id_type& _id){
@@ -107,11 +107,11 @@ bool Message::isEmpty()const{
   return (id==0);
 };
 
-std::string Message::getstring()const{
-std::ostringstream string_builder;
-string_builder <<type <<","<< timestamp <<","<<id <<","<<side <<","<<remSize
-<<","<<price<<"," <<cancSize <<","<<execSize <<","<<oldId <<","<<oldSize <<","<<oldPrice <<","<<std::endl;
-return string_builder.str();
+std::string Message::getString()const{
+    std::ostringstream string_builder;
+    string_builder <<type <<","<< timestamp <<","<<id <<","<<side <<","<<remSize
+        <<","<<price<<"," <<cancSize <<","<<execSize <<","<<oldId <<","<<oldSize <<","<<oldPrice <<std::endl;
+    return string_builder.str();
 };
 
 void Message::print(){

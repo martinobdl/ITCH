@@ -4,7 +4,9 @@
 #include "Message.hpp"
 #include "Order.hpp"
 #include "OrderPool.hpp"
-// include
+#include "OrderBook.hpp"
+#include "Reader.hpp"
+#include "Writer.hpp"
 
 class BookConstructor{
     long timestamp;
@@ -12,8 +14,8 @@ class BookConstructor{
     OrderBook book;
     OrderPool pool;
     Reader message_reader;
-    Writer book_writer;
-    Writer message_writer;
+    Writer bookWriter;
+    Writer messageWriter;
     std::string Stock;
 
     public:

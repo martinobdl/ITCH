@@ -12,7 +12,7 @@ class OrderPool{
     //bool inPool(id_type id);
 
     public:
-    OrderPool() =default;
+    OrderPool() = default;
     Order findOrderPool(id_type id);
     void addToOrderPool(id_type id, bool side, size_type size, price_type price);
     void modifyOrder(id_type idOrder, size_type size);

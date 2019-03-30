@@ -1,8 +1,6 @@
-#include "BookConstructor.cpp"
+#include "BookConstructor.hpp"
 
-BookConstructor::BookConstructor(std::string inputMessageCSV, std::string outputMessageCSV, std::string outputBookCSV,std::string _Stock):message_reader(inputMessageCSV),message_writer(outputMessageCSV),book_writer(outputMessageCSV),Stock(_Stock){
-    
-}
+BookConstructor::BookConstructor(std::string inputMessageCSV, std::string outputMessageCSV, std::string outputBookCSV,std::string _Stock):message_reader(inputMessageCSV, _Stock),messageWriter(outputMessageCSV),bookWriter(outputBookCSV),Stock(_Stock){}
 
 void BookConstructor::next(void){
     message = message_reader.createMessage();
@@ -21,8 +19,7 @@ bool BookConstructor::updateMessage(){
     std::string typeMsg = message.getType();
     
     if(typeMsg == "A"){
-        validMessage=1;
-    return 1;
+        return 1;
     }
     // If we have "(R)eplace" message, we are searching the order oldId.
     id_type messageId = (typeMsg == "R") ? message.getOldId() : message.getId();
@@ -66,7 +63,7 @@ bool BookConstructor::updateMessage(){
 }
 
 void BookConstructor::updateBook(){
-    book.setTimeStamp(messages.getTimeStamp());
+    book.setTimeStamp(message.getTimeStamp());
     std::string typeMsg = message.getType();
     if(typeMsg=="A"){
         // Add the order to the pool. If key in the map is already there 
@@ -98,27 +95,31 @@ void BookConstructor::updatePool(){
     std::string typeMsg = message.getType();
     if(typeMsg=="A"){
         // Add order to to order pool.
-        pool.addOrder(message.getId(), message.getSide(), message.getSize(), message.getPrice());
+        pool.addToOrderPool(message.getId(), message.getSide(), message.getRemSize(), message.getPrice());
     }
     if(typeMsg=="R"){
         // Delete old order and add new one.
         pool.modifyOrder(message.getOldId(), message.getOldSize());
-        pool.addOrder(message.getId(), message.getSide(), message.getSize(), message.getPrice());
+        pool.addToOrderPool(message.getId(), message.getSide(), message.getRemSize(), message.getPrice());
     }
     if(typeMsg=="D"){
         // Deleat partially or totally
-        pool.modifyOrder(message.getId(), message.cancSize());
+        pool.modifyOrder(message.getId(), message.getCancSize());
     }
     if(typeMsg=="E"){
         // Take out parto of total size of order.
-        pool.modifySize(message.getId(), message.getExecSize());
+        pool.modifyOrder(message.getId(), message.getExecSize());
     }
 }
 
 
-void WriteBookAndMessage(){
-    book_writer.writeLine(book.getStringRepresentation());
-    message_write.writeLine(message.getString());
+void BookConstructor::WriteBookAndMessage(){
+    bookWriter.writeLine(book.getString(1));
+    messageWriter.writeLine(message.getString());
 }
 
-
+void BookConstructor::start(){
+    while(!message_reader.eof()){
+        next();
+    }
+}

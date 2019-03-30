@@ -15,7 +15,7 @@ class Reader{
     bool finished = 0;
     public:
     Reader(const std::string &fileName, const std::string &stock);
-    ~Writer();
+    ~Reader();
     std::string getLine(void);
     Message createMessage(void);
     bool eof();
