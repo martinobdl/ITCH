@@ -1,0 +1,3 @@
+#/!bin/bash
+
+g++ -std=c++11 mexTest.cpp ../c++/Message.cpp ../c++/Reader.cpp -o testMex
