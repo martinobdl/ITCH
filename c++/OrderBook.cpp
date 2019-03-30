@@ -3,7 +3,7 @@
  std::string OrderBook::getStringRepresentation(unsigned level) const {
     unsigned buyDepth = buySide.size();
     unsigned sellDepth = sellSide.size();
-    std::ostringstream string_builder;
+    std::ostringstream string_builder << timestamp;
 
     std::map<long,long>::reverse_iterator it_buy = buySide.rbegin();
     std::map<long,long>::iterator it_sell = sellSide.begin();
