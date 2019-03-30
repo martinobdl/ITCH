@@ -3,12 +3,15 @@
 
 #include <limits>
 #include <string>
+#include <sstream>
+
+#include "utility.hpp"
 
 class Message{
 public:
-  typedef double price_type;
-  typedef double size_type;
-  typedef double id_type;
+  // typedef double price_type;
+  // typedef double size_type;
+  // typedef double id_type;
 
 private:
   std::string type="";
@@ -53,7 +56,7 @@ public:
   price_type getOldPrice()const;
   size_type getOldSize()const;
 
-
+  bool isEmpty()const;
   std::string getstring()const;
   void print();
 

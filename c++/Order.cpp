@@ -1,27 +1,55 @@
 #include "Order.hpp"
 
+Order::Order(id_type _id, bool _side, size_type _size, price_type _price): id(_id), side(_side), size(_size), price(_price) {}
 
-Order::Order(const Message& msg): id(msg.getID()), side(msg.getSide()), size(msg.getSize()), price(msg.getPrice()){} // ??? is it better to pass message object or variable by variable
-Order::Order(long _id, bool _side, long _size, long _price): id(_id), side(_side), size(_size), price(_price) {}
+//setters
+void Order::setId(id_type _id){
+    id=_id;
+};
+
+void Order::setSide(bool _side){
+    side=_side;
+};
+
+void Order::setSize(size_type _size){
+    size=_size;
+};
+
+void Order::setPrice(price_type _price){
+    price=_price;
+};
 
 
 //getters
-long Order::getId() const{
+id_type Order::getId(void) const{
     return id;
-}
-bool Order::getSide() const{
+};
+
+bool Order::getSide(void) const{
     return side;
-}
+};
 
-long Order::getSize() const{
+size_type Order::getSize(void) const{
     return size;
-}
+};
 
-long Order::getPrice() const{
+price_type Order::getPrice(void) const{
     return price;
+};
+
+
+void Order::addSize(size_type _size){
+  size+=_size;
+  if (size<0) std::cerr<<"Updated order has negative size"<<std::endl;
+};// also negative
+
+void Order::print() const{
+  if (id!=0){
+  std::cout<<"Id             :"<<id<< std::endl;
+  std::cout<<"side           :" << side <<std::endl;
+  std::cout<<"size           :" << size <<std::endl;
+  std::cout<<"price          :"<<price<<std::endl;
+  }else {
+  std::cerr<<"Trying to print an empty order"<<std::endl;
 }
-
-
-void Order::addSize(long size){
-
-}// also negative
+};

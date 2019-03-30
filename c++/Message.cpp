@@ -1,5 +1,4 @@
 #include <iostream>
-#include <sstream>
 
 #include "Message.hpp"
 
@@ -64,7 +63,7 @@ std::string Message::getType() const{
   return type;
 };
 
-Message::id_type Message::getId() const{
+id_type Message::getId() const{
   return id;
 };
 
@@ -76,32 +75,36 @@ bool Message::getSide()const{
   return side;
 };
 
-Message::price_type Message::getPrice()const{
+price_type Message::getPrice()const{
   return price;
 };
 
-Message::size_type Message::getRemSize()const{
+size_type Message::getRemSize()const{
   return remSize;
 };
 
-Message::size_type Message::getCancSize()const{
+size_type Message::getCancSize()const{
   return cancSize;
 };
 
-Message::size_type Message::getExecSize()const{
+size_type Message::getExecSize()const{
   return execSize;
 };
 
-Message::id_type Message::getOldId()const{
+id_type Message::getOldId()const{
   return oldId;
 };
 
-Message::price_type Message::getOldPrice()const{
+price_type Message::getOldPrice()const{
   return oldPrice;
 };
 
-Message::size_type Message::getOldSize()const{
+size_type Message::getOldSize()const{
   return oldSize;
+};
+
+bool Message::isEmpty()const{
+  return (id==0);
 };
 
 std::string Message::getstring()const{
