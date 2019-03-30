@@ -1,6 +1,6 @@
 #include "Reader.hpp"
 
-Reader::Reader(const std::string &_fileName, const std::string &_stock): 
+Reader::Reader(const std::string &_fileName, const std::string &_stock):
     fileName(_fileName), stock(_stock){
         file.open(fileName);
         if(!file.is_open()){
@@ -31,7 +31,7 @@ Message Reader::createMessage(void){
     if(messageToFilter.find(typeCell)==std::string::npos){
         std::getline(file, cell);
         return Message();
-    } 
+    }
     msg.setType(typeCell);
     std::getline(file, cell, ',');
     std::getline(file, cell, ',');
@@ -90,5 +90,15 @@ Message Reader::createMessage(void){
     return msg;
 }
 
+bool Reader::eof(){
+  return finished;
+}
 
-
+Reader::~Reader(){
+  if (file.is_open())
+     {
+         file.flush();
+         file.close();
+         std::cout<<"file "<<fileName<<" has been closed"<<std::endl;
+    };
+};
