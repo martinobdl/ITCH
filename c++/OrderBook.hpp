@@ -8,8 +8,8 @@
 
 class OrderBook{
     long timestamp;
-    std::map<long,long> buySide;
-    std::map<long,long> sellSide;
+    std::map<double,long> buySide;
+    std::map<double,long> sellSide;
     
     public:
     OrderBook(void) = default;
@@ -17,7 +17,7 @@ class OrderBook{
     // the datastructure of buySide/sellSide sould 
     // be done accordingly (not sure map is the right one).
     std::string getString(unsigned) const; // "bestBidPrice,bestBidSize,bestAskPrice,bestAskSize,..."
-    void modifySize(long price, long size, bool side); // size also negative
+    void modifySize(double price, long size, bool side); // size also negative
     void setTimeStamp(const long &t);
 };
 

@@ -6,8 +6,8 @@ std::string OrderBook::getString(unsigned level) const {
     std::ostringstream string_builder;
     string_builder << timestamp << ",";
 
-    std::map<long,long>::const_reverse_iterator it_buy = buySide.rbegin();
-    std::map<long,long>::const_iterator it_sell = sellSide.begin();
+    std::map<double,long>::const_reverse_iterator it_buy = buySide.rbegin();
+    std::map<double,long>::const_iterator it_sell = sellSide.begin();
 
 
     for (unsigned i = 0; i < level; i++) {
@@ -37,7 +37,7 @@ std::string OrderBook::getString(unsigned level) const {
 
 
 
-void OrderBook::modifySize(long price, long size, bool side){
+void OrderBook::modifySize(double price, long size, bool side){
     if (side){ // modify sellSide
         sellSide[price] += size;
         if (sellSide[price] == 0 )
