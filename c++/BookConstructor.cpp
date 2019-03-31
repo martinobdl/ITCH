@@ -1,6 +1,14 @@
 #include "BookConstructor.hpp"
 
-BookConstructor::BookConstructor(std::string inputMessageCSV, std::string outputMessageCSV, std::string outputBookCSV,std::string _Stock):message_reader(inputMessageCSV, _Stock),messageWriter(outputMessageCSV),bookWriter(outputBookCSV),Stock(_Stock){}
+BookConstructor::BookConstructor(const std::string &inputMessageCSV,
+    const std::string &outputMessageCSV,
+    const std::string &outputBookCSV,
+    const std::string &_stock,
+    const unsigned &_levels):
+    message_reader(inputMessageCSV, _stock),
+    messageWriter(outputMessageCSV),
+    bookWriter(outputBookCSV),
+    levels(_levels){}
 
 void BookConstructor::next(void){
     message = message_reader.createMessage();
@@ -112,9 +120,8 @@ void BookConstructor::updatePool(){
     }
 }
 
-
 void BookConstructor::WriteBookAndMessage(){
-    bookWriter.writeLine(book.getString(1));
+    bookWriter.writeLine(book.getString(levels));
     messageWriter.writeLine(message.getString());
 }
 

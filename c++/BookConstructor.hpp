@@ -16,11 +16,11 @@ class BookConstructor{
     Reader message_reader;
     Writer bookWriter;
     Writer messageWriter;
-    std::string Stock;
+    unsigned levels;
 
     public:
-    BookConstructor(std::string inputMessageCSV, std::string outputMessageCSV, std::string outputBookCSV,     std::string Stock);
-    void next(); 
+    BookConstructor(const std::string &inputMessageCSV,const std::string &outputMessageCSV, const std::string &outputBookCSV, const std::string &_stock, const unsigned &_levels);
+    void next();
     void WriteBookAndMessage();
     bool updateMessage();
     void updateBook();
