@@ -6,12 +6,12 @@ Writer::Writer(const std::string& _fileName):fileName(_fileName){
       std::cerr << "Can't open output file " << fileName << std::endl;
       }
   else{
-      std::cout << "Opened " << fileName << " to write messages." << std::endl;
+      std::cout << "Opened " << fileName << " for writing." << std::endl;
   }
 };
 
 void Writer::writeLine(std::string stringToWrite){
-  file << stringToWrite <<std::endl;
+  file << stringToWrite;
 };
 
 Writer::~Writer(){

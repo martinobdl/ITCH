@@ -4,6 +4,7 @@
 #include <limits>
 #include <string>
 #include <sstream>
+#include <iostream>
 
 #include "utility.hpp"
 

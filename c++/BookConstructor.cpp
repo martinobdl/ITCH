@@ -15,15 +15,15 @@ void BookConstructor::next(void){
 }
 
 bool BookConstructor::updateMessage(){
-    
+
     std::string typeMsg = message.getType();
-    
+
     if(typeMsg == "A"){
         return 1;
     }
     // If we have "(R)eplace" message, we are searching the order oldId.
     id_type messageId = (typeMsg == "R") ? message.getOldId() : message.getId();
-    
+
     // Find message in pool.
     Order order = pool.findOrderPool(messageId);
     if(order.isEmpty()){
@@ -32,14 +32,14 @@ bool BookConstructor::updateMessage(){
     message.setSide(order.getSide());
 
     if(typeMsg == "D"){
-       // (D)elete: adding remSize, Price 
-        if (message.getCancSize() == 0){ // ???? change condition accordingly to if the default value is 0 or NaN (but it should be NaN :D) 
+       // (D)elete: adding remSize, Price
+        if (message.getCancSize() == 0){ // ???? change condition accordingly to if the default value is 0 or NaN (but it should be NaN :D)
             // We do not have CancSize hence we are in complete deletion of order.
             message.setCancSize(order.getSize());
         }
 
         size_type remainingSize = order.getSize() - message.getCancSize();
-        message.setRemSize(remainingSize); 
+        message.setRemSize(remainingSize);
         message.setPrice(order.getPrice());
     }
 
@@ -55,7 +55,7 @@ bool BookConstructor::updateMessage(){
         message.setPrice(order.getPrice());
         size_type remainingSize = order.getSize() - message.getExecSize();
         message.setRemSize(remainingSize);
-    }   
+    }
 
     else
         std::cerr << "Unexpected type found! " << typeMsg << std::endl;
@@ -66,7 +66,7 @@ void BookConstructor::updateBook(){
     book.setTimeStamp(message.getTimeStamp());
     std::string typeMsg = message.getType();
     if(typeMsg=="A"){
-        // Add the order to the pool. If key in the map is already there 
+        // Add the order to the pool. If key in the map is already there
         // just add the size. Otherwise add the key with corresponding size.
         // Whatever side of the book I'm looking at.
         book.modifySize(message.getPrice(),message.getRemSize(),message.getSide());
@@ -76,7 +76,7 @@ void BookConstructor::updateBook(){
         //
         // cancel.
         book.modifySize(message.getOldPrice(),-message.getOldSize(),message.getSide());
-        // 
+        //
         // add.
         book.modifySize(message.getPrice(),message.getRemSize(),message.getSide());
     }
@@ -90,7 +90,7 @@ void BookConstructor::updateBook(){
     }
 
 }
-    
+
 void BookConstructor::updatePool(){
     std::string typeMsg = message.getType();
     if(typeMsg=="A"){

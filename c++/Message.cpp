@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "Message.hpp"
 
 Message::Message(const std::string& _type, const id_type& _id, const long& _timestamp):type(_type), id(_id),timestamp(_timestamp){};
