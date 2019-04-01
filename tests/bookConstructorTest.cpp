@@ -4,8 +4,8 @@ int main(){
     std::string nameFile = "/Users/Martino/Documents/ITCH/20180830.PSX_ITCH_50_parsed.csv";
     std::string stock = "AAPL";
 
-    // std::string nameFile = "/Users/Martino/Documents/GitHub/ITCH/tests/messagesTest.csv";
-    // std::string stock = "LFC";
+//    std::string nameFile = "/Users/Martino/Documents/GitHub/ITCH/tests/messagesTest.csv";
+//    std::string stock = "LFC";
 
     std::string stockPadded = stock;
     int levels = 1;

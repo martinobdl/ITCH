@@ -19,7 +19,7 @@ class BookConstructor{
     unsigned levels;
 
     public:
-    BookConstructor(const std::string &inputMessageCSV,const std::string &outputMessageCSV, const std::string &outputBookCSV, const std::string &_stock, const unsigned &_levels);
+    BookConstructor(const std::string &inputMessageCSV, const std::string &outputMessageCSV, const std::string &outputBookCSV, const std::string &_stock, const unsigned &_levels);
     void next();
     void WriteBookAndMessage();
     bool updateMessage();

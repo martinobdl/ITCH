@@ -9,7 +9,7 @@
 class Order{
     id_type id=0;
     bool side; // 0 for buy, 1 for sell
-    size_type size=0; // the LOBSTER report puts here size and remaning size. Dunno why.
+    size_type size=0;
     price_type price=0;
 
     public:

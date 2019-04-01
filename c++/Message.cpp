@@ -1,6 +1,11 @@
 #include "Message.hpp"
 
-Message::Message(const std::string& _type, const id_type& _id, const long& _timestamp):type(_type), id(_id),timestamp(_timestamp){};
+Message::Message(const std::string& _type,
+    const id_type& _id,
+    const long& _timestamp):
+        type(_type),
+        id(_id),
+        timestamp(_timestamp){};
 
 void Message::setType(const std::string& _type){
     if(_type =="A" || _type == "F")
@@ -11,120 +16,166 @@ void Message::setType(const std::string& _type){
         type = "R"; // replace
     else if (_type == "E")
         type = _type; // execute
-    else
+    else{
         std::cerr << "Message with wrong type (" << _type << ") has been found!"<< std::endl;
-};
+    }
+}
 
 void Message::setId(const id_type& _id){
-id=_id;
-};
+    id=_id;
+}
 
 void Message::setTimeStamp(const long& _timestamp){
-timestamp=_timestamp;
-};
+    timestamp=_timestamp;
+}
 
 void Message::setSide(const bool& _side){
-side=_side;
-};
+    side=_side;
+}
 
 void Message::setPrice(const price_type& _price){
-price=_price;
-};
+    price=_price;
+}
 
 void Message::setRemSize(const size_type& _size){
-remSize=_size;
-};
+    remSize=_size;
+}
 
 void Message::setCancSize(const size_type& _size){
-cancSize=_size;
-};
+    cancSize=_size;
+}
 
 void Message::setExecSize(const size_type& _size){
-execSize=_size;
-};
+    execSize=_size;
+}
 
 void Message::setOldId(const id_type& _id){
-oldId=_id;
-};
+    oldId=_id;
+}
 
 void Message::setOldPrice(const price_type& _price){
-oldPrice=_price;
-};
+    oldPrice=_price;
+}
 
 void Message::setOldSize(const size_type& _size){
-oldSize=_size;
-};
-
+    oldSize=_size;
+}
 
 // getters
 std::string Message::getType() const{
-  return type;
-};
+    return type;
+}
 
 id_type Message::getId() const{
-  return id;
-};
+    return id;
+}
 
 long Message::getTimeStamp()const{
-  return timestamp;
-};
+    return timestamp;
+}
 
 bool Message::getSide()const{
-  return side;
-};
+    return side;
+}
 
 price_type Message::getPrice()const{
-  return price;
-};
+    return price;
+}
 
 size_type Message::getRemSize()const{
-  return remSize;
-};
+    return remSize;
+}
 
 size_type Message::getCancSize()const{
-  return cancSize;
-};
+    return cancSize;
+}
 
 size_type Message::getExecSize()const{
-  return execSize;
-};
+    return execSize;
+}
 
 id_type Message::getOldId()const{
-  return oldId;
-};
+    return oldId;
+}
 
 price_type Message::getOldPrice()const{
-  return oldPrice;
-};
+    return oldPrice;
+}
 
 size_type Message::getOldSize()const{
-  return oldSize;
-};
+    return oldSize;
+}
 
 bool Message::isEmpty()const{
-  return (id==0);
-};
+    return (id==ID_DEFAULT);
+}
 
 std::string Message::getString()const{
     std::ostringstream string_builder;
-    string_builder <<type <<","<< timestamp <<","<<id <<","<<side <<","<<remSize
-        <<","<<price<<"," <<cancSize <<","<<execSize <<","<<oldId <<","<<oldSize <<","<<oldPrice <<std::endl;
+    string_builder  << type << ","
+                    << timestamp << ",";
+    if(id!=ID_DEFAULT){
+        string_builder << id;
+    }
+    string_builder << ",";
+
+    string_builder << side << ",";
+
+    if(remSize!=SIZE_DEFAULT){
+        string_builder << remSize;
+    }
+    string_builder << ",";
+
+    if(price!=PRICE_DEFAULT){
+        string_builder << price;
+    }
+    string_builder << ",";
+
+    if(cancSize!=SIZE_DEFAULT){
+        string_builder << cancSize;
+    }
+    string_builder << ",";
+
+    if(execSize!=SIZE_DEFAULT){
+        string_builder << execSize;
+    }
+    string_builder << ",";
+
+    if(oldId!=ID_DEFAULT){
+        string_builder << oldId;
+    }
+    string_builder << ",";
+
+    if(oldSize!=SIZE_DEFAULT){
+        string_builder << oldSize;
+    }
+    string_builder << ",";
+
+    if(oldPrice!=PRICE_DEFAULT){
+        string_builder << oldPrice;
+    }
+    string_builder << std::endl;
+
     return string_builder.str();
-};
+}
 
 void Message::print(){
-std::cout<<"Message type   :" << type <<std::endl;
-std::cout<<"Id             :"<<id<< std::endl;
-std::cout<<"timestamp      :" << timestamp <<std::endl;
-std::cout<<"side           :" << side <<std::endl;
-std::cout<<"price          :"<<price<<std::endl;
-std::cout<<"remaining size :" << remSize <<std::endl;
-if (type == "D") std::cout<<"deletion size  :" << cancSize <<std::endl;
-if (type == "E") std::cout<<"execution size :" << execSize <<std::endl;
-if (type =="U"){
-  std::cout<< "old Id         :" << oldId <<std::endl;
-  std::cout<< "old size       :"<< oldSize <<std::endl;
-  std::cout<< "old price      :" << oldPrice <<std::endl;
-};
-std::cout<< "" <<std::endl;
-};
+    std::cout<<"Message type   :" << type <<std::endl;
+    std::cout<<"Id             :"<<id<< std::endl;
+    std::cout<<"timestamp      :" << timestamp <<std::endl;
+    std::cout<<"side           :" << side <<std::endl;
+    std::cout<<"price          :"<<price<<std::endl;
+    std::cout<<"remaining size :" << remSize <<std::endl;
+    if (type == "D"){
+        std::cout<<"deletion size  :" << cancSize <<std::endl;
+    }
+    if (type == "E"){
+        std::cout<<"execution size :" << execSize <<std::endl;
+    }
+    if (type =="U"){
+        std::cout<< "old Id         :" << oldId <<std::endl;
+        std::cout<< "old size       :"<< oldSize <<std::endl;
+        std::cout<< "old price      :" << oldPrice <<std::endl;
+    }
+    std::cout<< "" <<std::endl;
+}

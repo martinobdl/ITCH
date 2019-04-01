@@ -9,40 +9,35 @@
 #include "utility.hpp"
 
 class Message{
-public:
-  // typedef double price_type;
-  // typedef double size_type;
-  // typedef double id_type;
-
 private:
-  std::string type="";
-  id_type id=0;
-  long timestamp=0;
+  std::string type = NAN_STR;
+  id_type id=-1;
+  time_type timestamp=-1;
 
   bool side;
-  price_type price=0.0;
-  size_type remSize=0;
-  size_type cancSize=0;
-  size_type execSize=0;
+  price_type price=-1;
+  size_type remSize=-1;
+  size_type cancSize=-1;
+  size_type execSize=-1;
 
-  id_type oldId=std::numeric_limits<id_type>::signaling_NaN();
-  price_type oldPrice=std::numeric_limits<price_type>::quiet_NaN();
-  size_type oldSize=std::numeric_limits<size_type>::quiet_NaN();
+  id_type oldId = ID_DEFAULT;
+  price_type oldPrice=-1;
+  size_type oldSize=-1;
 
 public:
   Message()=default;
-  Message(const std::string& type,const id_type &id,const long& timestamp);
-  void setType(const std::string& type);
-  void setId(const id_type& id);
-  void setTimeStamp(const long& timestamp);
-  void setSide(const bool& side);
-  void setPrice(const price_type& price);
-  void setRemSize(const size_type& size);
-  void setCancSize(const size_type& size);
-  void setExecSize(const size_type& size);
-  void setOldId(const id_type& id);
-  void setOldPrice(const price_type& price);
-  void setOldSize(const size_type& size);
+  Message(const std::string& type,const id_type &id,const long &timestamp);
+  void setType(const std::string &type);
+  void setId(const id_type &id);
+  void setTimeStamp(const long &timestamp);
+  void setSide(const bool &side);
+  void setPrice(const price_type &price);
+  void setRemSize(const size_type &size);
+  void setCancSize(const size_type &size);
+  void setExecSize(const size_type &size);
+  void setOldId(const id_type &id);
+  void setOldPrice(const price_type &price);
+  void setOldSize(const size_type &size);
 
   // to be discussed if we need all of them:
   std::string getType() const;

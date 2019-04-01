@@ -39,19 +39,23 @@ price_type Order::getPrice(void) const{
 
 
 void Order::addSize(size_type _size){
-  size+=_size;
-  if (size<0) std::cerr<<"Updated order has negative size"<<std::endl;
+    size+=_size;
+    if (size<0){
+        std::cerr<<"Updated order has negative size"<<std::endl;
+        print();
+    }
 };// also negative
 
 void Order::print() const{
-  if (id!=0){
-  std::cout<<"Id             :"<<id<< std::endl;
-  std::cout<<"side           :" << side <<std::endl;
-  std::cout<<"size           :" << size <<std::endl;
-  std::cout<<"price          :"<<price<<std::endl;
-  }else {
-  std::cerr<<"Trying to print an empty order"<<std::endl;
-}
+    if (id!=0){
+        std::cout<<"Id             :"<<id<< std::endl;
+        std::cout<<"side           :" << side <<std::endl;
+        std::cout<<"size           :" << size <<std::endl;
+        std::cout<<"price          :"<<price<<std::endl;
+    }
+    else{
+        std::cerr<<"Trying to print an empty order"<<std::endl;
+    }
 };
 
 bool Order::isEmpty() const{

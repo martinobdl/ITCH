@@ -8,7 +8,9 @@ BookConstructor::BookConstructor(const std::string &inputMessageCSV,
     message_reader(inputMessageCSV, _stock),
     messageWriter(outputMessageCSV),
     bookWriter(outputBookCSV),
-    levels(_levels){}
+    levels(_levels){
+        messageWriter.writeLine("type,time,id,side,size,price,cancSize,execSize,oldId,oldSize,oldPrice\n");
+    }
 
 void BookConstructor::next(void){
     message = message_reader.createMessage();
