@@ -72,9 +72,9 @@ Message Reader::createMessage(void){
             std::getline(file, cell, ',');
             msg.setId(std::stol(cell));
             std::getline(file, cell, ',');
-            msg.setPrice(std::stod(cell));
-            std::getline(file, cell);
             msg.setRemSize(std::stod(cell));
+            std::getline(file, cell);
+            msg.setPrice(std::stod(cell));
         }
         if(typeCell == "D"){
             std::getline(file, cell);

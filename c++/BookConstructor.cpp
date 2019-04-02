@@ -39,15 +39,15 @@ bool BookConstructor::updateMessage(){
     if(order.isEmpty()){
         return 0;
     }
+
     message.setSide(order.getSide());
 
     if(typeMsg == "D"){
        // (D)elete: adding remSize, Price
-        if (message.getCancSize() == 0){ // ???? change condition accordingly to if the default value is 0 or NaN (but it should be NaN :D)
+        if (message.getCancSize() == SIZE_DEFAULT){
             // We do not have CancSize hence we are in complete deletion of order.
             message.setCancSize(order.getSize());
         }
-
         size_type remainingSize = order.getSize() - message.getCancSize();
         message.setRemSize(remainingSize);
         message.setPrice(order.getPrice());
@@ -59,7 +59,6 @@ bool BookConstructor::updateMessage(){
         message.setOldPrice(order.getPrice());
     }
 
-
     else if(typeMsg == "E"){
         //(E)xecution: adding remSize, price
         message.setPrice(order.getPrice());
@@ -67,8 +66,9 @@ bool BookConstructor::updateMessage(){
         message.setRemSize(remainingSize);
     }
 
-    else
+    else{
         std::cerr << "Unexpected type found! " << typeMsg << std::endl;
+    }
     return 1;
 }
 
@@ -98,7 +98,6 @@ void BookConstructor::updateBook(){
         // Execute order.
         book.modifySize(message.getPrice(),-message.getExecSize(),message.getSide());
     }
-
 }
 
 void BookConstructor::updatePool(){

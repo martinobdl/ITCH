@@ -1,5 +1,5 @@
-#ifndef _OrderPool_H_
-#define _OrderPool_H_
+#ifndef _ORDERPOOL_H_
+#define _ORDERPOOL_H_
 
 #include <unordered_map>
 #include "Order.hpp"
@@ -9,8 +9,6 @@ class OrderPool{
 
     std::unordered_map<id_type,Order> pool;
 
-    //bool inPool(id_type id);
-
     public:
     OrderPool() = default;
     Order findOrderPool(id_type id);
@@ -19,6 +17,4 @@ class OrderPool{
 
 };
 
-
-
-#endif /*_OrderPool_H_*/
+#endif /*_ORDERPOOL_H_*/

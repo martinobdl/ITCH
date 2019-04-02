@@ -5,7 +5,6 @@
 #include "utility.hpp"
 #include "Message.hpp"
 
-// type def for attributes ?
 class Order{
     id_type id=0;
     bool side; // 0 for buy, 1 for sell
@@ -33,7 +32,5 @@ class Order{
     void print() const;
     bool isEmpty(void) const;
 };
-
-
 
 #endif /*_Order_H_*/
