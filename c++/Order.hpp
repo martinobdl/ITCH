@@ -1,15 +1,15 @@
-#ifndef _Order_H_
-#define _Order_H_
+#ifndef _ORDER_H_
+#define _ORDER_H_
 
 #include <iostream>
 #include "utility.hpp"
 #include "Message.hpp"
 
 class Order{
-    id_type id=0;
+    id_type id=ID_DEFAULT;
     bool side; // 0 for buy, 1 for sell
-    size_type size=0;
-    price_type price=0;
+    size_type size=SIZE_DEFAULT;
+    price_type price=PRICE_DEFAULT;
 
     public:
     Order()=default;
@@ -33,4 +33,4 @@ class Order{
     bool isEmpty(void) const;
 };
 
-#endif /*_Order_H_*/
+#endif /*_ORDER_H_*/

@@ -1,18 +1,18 @@
 #include "OrderBook.hpp"
 
-std::string OrderBook::getString(unsigned level) const {
-    unsigned buyDepth = buySide.size();
-    unsigned sellDepth = sellSide.size();
+std::string OrderBook::getString(const size_t &level) const {
+    size_t buyDepth = buySide.size();
+    size_t sellDepth = sellSide.size();
     std::ostringstream string_builder;
     string_builder << timestamp << ",";
 
-    std::map<double,long>::const_reverse_iterator it_buy = buySide.rbegin();
-    std::map<double,long>::const_iterator it_sell = sellSide.begin();
+    std::map<price_type,size_type>::const_reverse_iterator it_buy = buySide.rbegin();
+    std::map<price_type,size_type>::const_iterator it_sell = sellSide.begin();
 
 
     for (unsigned i = 0; i < level; i++) {
         //result:  "bestBidPrice,bestBidSize,bestAskPrice,bestAskSize,..."
-        
+
         if( i < buyDepth){
             string_builder << it_buy->first << ","<< it_buy->second << ",";
             ++it_buy;
@@ -33,11 +33,9 @@ std::string OrderBook::getString(unsigned level) const {
     string_builder << std::endl;
     return string_builder.str();
 
- } 
+ }
 
-
-
-void OrderBook::modifySize(double price, long size, bool side){
+void OrderBook::modifySize(price_type price, size_type size, bool side){
     if (side){ // modify sellSide
         sellSide[price] += size;
         if (sellSide[price] == 0 )
@@ -54,6 +52,6 @@ void OrderBook::modifySize(double price, long size, bool side){
     }
 }
 
-void OrderBook::setTimeStamp(const long &t){
+void OrderBook::setTimeStamp(const time_type &t){
     timestamp = t;
 }

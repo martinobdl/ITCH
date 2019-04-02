@@ -45,7 +45,7 @@ Message Reader::createMessage(void){
         msg.setTimeStamp(std::stol(cell));
         if(typeCell == "A" || typeCell == "F"){
             std::getline(file, cell, ',');
-            msg.setId(std::stol(cell));
+            msg.setId(std::stoi(cell));
             std::getline(file, cell, ',');
             msg.setSide(cell=="S");
             std::getline(file, cell, ',');
@@ -68,9 +68,9 @@ Message Reader::createMessage(void){
         }
         if(typeCell=="U"){
             std::getline(file, cell, ',');
-            msg.setOldId(std::stol(cell));
+            msg.setOldId(std::stoi(cell));
             std::getline(file, cell, ',');
-            msg.setId(std::stol(cell));
+            msg.setId(std::stoi(cell));
             std::getline(file, cell, ',');
             msg.setRemSize(std::stod(cell));
             std::getline(file, cell);
@@ -78,17 +78,17 @@ Message Reader::createMessage(void){
         }
         if(typeCell == "D"){
             std::getline(file, cell);
-            msg.setId(std::stol(cell));
+            msg.setId(std::stoi(cell));
         }
         if(typeCell == "X"){
             std::getline(file, cell, ',');
-            msg.setId(std::stod(cell));
+            msg.setId(std::stoi(cell));
             std::getline(file, cell);
             msg.setCancSize(std::stod(cell));
         }
         if(typeCell == "E"){
             std::getline(file, cell, ',');
-            msg.setId(std::stod(cell));
+            msg.setId(std::stoi(cell));
             std::getline(file, cell, ',');
             msg.setExecSize(std::stod(cell));
             std::getline(file, cell);

@@ -9,21 +9,20 @@
 #include "Writer.hpp"
 
 class BookConstructor{
-    long timestamp;
     Message message;
     OrderBook book;
     OrderPool pool;
     Reader message_reader;
-    Writer bookWriter;
     Writer messageWriter;
-    unsigned levels;
+    Writer bookWriter;
+    size_t levels;
 
     public:
     BookConstructor(const std::string &inputMessageCSV,
                     const std::string &outputMessageCSV,
                     const std::string &outputBookCSV,
                     const std::string &_stock,
-                    const unsigned &_levels);
+                    const size_t &_levels);
     void next();
     void WriteBookAndMessage();
     bool updateMessage();
