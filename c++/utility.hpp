@@ -4,9 +4,10 @@
 #include <iostream>
 
 typedef double price_type;
-typedef double size_type;
-typedef int id_type;
+typedef long size_type;
+typedef long id_type;
 typedef long time_type;
+typedef bool side_type;
 
 extern id_type ID_DEFAULT;
 extern size_type SIZE_DEFAULT;

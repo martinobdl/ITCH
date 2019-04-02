@@ -24,12 +24,16 @@ std::string Reader::getLine(void){
     }
 }
 
-Message Reader::createMessage(void){
-    Message msg;
+void Reader::printProgress(void){
     count ++;
     if((count % 5000000)==0){
         std::cout << "Processed " << count/1000000 << "Mio messages. " << count/difftime(time(0), start) << " messages per sec." << std::endl;
     }
+}
+
+Message Reader::createMessage(void){
+    Message msg;
+    printProgress();
     if(!eof()){
         std::string typeCell;
         std::string cell;
@@ -45,11 +49,11 @@ Message Reader::createMessage(void){
         msg.setTimeStamp(std::stol(cell));
         if(typeCell == "A" || typeCell == "F"){
             std::getline(file, cell, ',');
-            msg.setId(std::stoi(cell));
+            msg.setId(std::stol(cell));
             std::getline(file, cell, ',');
             msg.setSide(cell=="S");
             std::getline(file, cell, ',');
-            msg.setRemSize(std::stod(cell));
+            msg.setRemSize(std::stol(cell));
             std::getline(file, cell, ',');
             // check if rigth stock
             if(cell.compare(stock) != 0){
@@ -68,29 +72,29 @@ Message Reader::createMessage(void){
         }
         if(typeCell=="U"){
             std::getline(file, cell, ',');
-            msg.setOldId(std::stoi(cell));
+            msg.setOldId(std::stol(cell));
             std::getline(file, cell, ',');
-            msg.setId(std::stoi(cell));
+            msg.setId(std::stol(cell));
             std::getline(file, cell, ',');
-            msg.setRemSize(std::stod(cell));
+            msg.setRemSize(std::stol(cell));
             std::getline(file, cell);
             msg.setPrice(std::stod(cell));
         }
         if(typeCell == "D"){
             std::getline(file, cell);
-            msg.setId(std::stoi(cell));
+            msg.setId(std::stol(cell));
         }
         if(typeCell == "X"){
             std::getline(file, cell, ',');
-            msg.setId(std::stoi(cell));
+            msg.setId(std::stol(cell));
             std::getline(file, cell);
-            msg.setCancSize(std::stod(cell));
+            msg.setCancSize(std::stol(cell));
         }
         if(typeCell == "E"){
             std::getline(file, cell, ',');
-            msg.setId(std::stoi(cell));
+            msg.setId(std::stol(cell));
             std::getline(file, cell, ',');
-            msg.setExecSize(std::stod(cell));
+            msg.setExecSize(std::stol(cell));
             std::getline(file, cell);
         }
     }

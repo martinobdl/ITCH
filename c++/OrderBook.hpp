@@ -18,7 +18,7 @@ class OrderBook{
     // the datastructure of buySide/sellSide sould
     // be done accordingly (not sure map is the right one).
     std::string getString(const size_t &level) const; // "bestBidPrice,bestBidSize,bestAskPrice,bestAskSize,..."
-    void modifySize(price_type price, size_type size, bool side); // size also negative
+    void modifySize(price_type price, size_type size, side_type side); // size also negative
     void setTimeStamp(const time_type &t);
 };
 

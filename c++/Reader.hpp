@@ -22,6 +22,7 @@ class Reader{
     std::string getLine(void);
     Message createMessage(void);
     bool eof();
+    void printProgress(void);
 };
 
 #endif

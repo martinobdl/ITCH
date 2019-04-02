@@ -18,14 +18,14 @@ std::string OrderBook::getString(const size_t &level) const {
             ++it_buy;
         }
         else // no more prices in buy side
-             string_builder << "0,0,";
+             string_builder << ",,";
 
         if (i < sellDepth){
             string_builder << it_sell->first << "," << it_sell->second << ",";
             ++it_sell;
         }
         else // no more prices in sell side
-            string_builder << "0,0,";
+            string_builder << ",,";
     }
 
     //remove last 1 characters from string stream: comma
@@ -35,7 +35,7 @@ std::string OrderBook::getString(const size_t &level) const {
 
  }
 
-void OrderBook::modifySize(price_type price, size_type size, bool side){
+void OrderBook::modifySize(price_type price, size_type size, side_type side){
     if (side){ // modify sellSide
         sellSide[price] += size;
         if (sellSide[price] == 0 )

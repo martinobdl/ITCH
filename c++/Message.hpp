@@ -13,7 +13,7 @@ private:
     id_type id=-1;
     time_type timestamp=0;
 
-    bool side;
+    side_type side;
     price_type price=-1;
     size_type remSize=-1;
     size_type cancSize=-1;
@@ -30,7 +30,7 @@ public:
     void setType(const std::string &type);
     void setId(const id_type &id);
     void setTimeStamp(const time_type &timestamp);
-    void setSide(const bool &side);
+    void setSide(const side_type &side);
     void setPrice(const price_type &price);
     void setRemSize(const size_type &size);
     void setCancSize(const size_type &size);
@@ -42,8 +42,8 @@ public:
     // to be discussed if we need all of them:
     std::string getType() const;
     id_type getId() const;
-    long getTimeStamp()const;
-    bool getSide()const;
+    time_type getTimeStamp()const;
+    side_type getSide()const;
     price_type getPrice()const;
     size_type getRemSize()const;
     size_type getCancSize()const;

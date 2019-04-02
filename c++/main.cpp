@@ -8,7 +8,7 @@ int main(int argc, char * argv[]){
         std::cerr << "Call it with: path to ITCH Parsed, Stock name, [optional] levels" << std::endl;
         return 0;
     }
-    else if(argc == 2){
+    else if(argc == 3){
         levels = 1;
     }
     else{

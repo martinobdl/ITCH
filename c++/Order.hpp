@@ -7,28 +7,28 @@
 
 class Order{
     id_type id=ID_DEFAULT;
-    bool side; // 0 for buy, 1 for sell
+    side_type side; // 0 for buy, 1 for sell
     size_type size=SIZE_DEFAULT;
     price_type price=PRICE_DEFAULT;
 
     public:
     Order()=default;
-    Order(id_type _id, bool _side, size_type _size, price_type _price);
+    Order(id_type _id, side_type _side, size_type _size, price_type _price);
     void addSize(size_type size); // also negative
 
-    //setters
+    // setters
     void setId(id_type _id);
-    void setSide(bool _side);
+    void setSide(side_type _side);
     void setSize(size_type size);
     void setPrice(price_type _price);
 
-    //getters
+    // getters
     id_type getId(void) const;
-    bool getSide(void) const;
+    side_type getSide(void) const;
     size_type getSize(void) const;
     price_type getPrice(void) const;
 
-    //print
+    // other methods
     void print() const;
     bool isEmpty(void) const;
 };

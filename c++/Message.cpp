@@ -2,7 +2,7 @@
 
 Message::Message(const std::string& _type,
     const id_type& _id,
-    const long& _timestamp):
+    const time_type& _timestamp):
         type(_type),
         id(_id),
         timestamp(_timestamp){};
@@ -25,11 +25,11 @@ void Message::setId(const id_type& _id){
     id=_id;
 }
 
-void Message::setTimeStamp(const long& _timestamp){
+void Message::setTimeStamp(const time_type& _timestamp){
     timestamp=_timestamp;
 }
 
-void Message::setSide(const bool& _side){
+void Message::setSide(const side_type& _side){
     side=_side;
 }
 
@@ -70,11 +70,11 @@ id_type Message::getId() const{
     return id;
 }
 
-long Message::getTimeStamp()const{
+time_type Message::getTimeStamp()const{
     return timestamp;
 }
 
-bool Message::getSide()const{
+side_type Message::getSide()const{
     return side;
 }
 
