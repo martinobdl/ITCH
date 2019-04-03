@@ -14,13 +14,13 @@ class Order{
     public:
     Order()=default;
     Order(id_type _id, side_type _side, size_type _size, price_type _price);
-    void addSize(size_type size); // also negative
+    void addSize(size_type size);
 
     // setters
-    void setId(id_type _id);
-    void setSide(side_type _side);
-    void setSize(size_type size);
-    void setPrice(price_type _price);
+    // void setId(id_type _id);
+    // void setSide(side_type _side);
+    // void setSize(size_type size);
+    // void setPrice(price_type _price);
 
     // getters
     id_type getId(void) const;

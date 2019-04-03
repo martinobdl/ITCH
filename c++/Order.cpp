@@ -10,22 +10,21 @@ Order::Order(id_type _id,
         price(_price){}
 
 //setters
-void Order::setId(id_type _id){
-    id=_id;
-}
+// void Order::setId(id_type _id){
+//     id=_id;
+// }
 
-void Order::setSide(bool _side){
-    side=_side;
-}
+// void Order::setSide(bool _side){
+//     side=_side;
+// }
 
-void Order::setSize(size_type _size){
-    size=_size;
-}
+// void Order::setSize(size_type _size){
+//     size=_size;
+// }
 
-void Order::setPrice(price_type _price){
-    price=_price;
-}
-
+// void Order::setPrice(price_type _price){
+//     price=_price;
+// }
 
 //getters
 id_type Order::getId(void) const{
@@ -44,14 +43,14 @@ price_type Order::getPrice(void) const{
     return price;
 }
 
-
 void Order::addSize(size_type _size){
+    // Size can be also negative
     size+=_size;
     if(size<0){
         std::cerr << "Updated order has negative size" << std::endl;
         print();
     }
-}// also negative
+}
 
 void Order::print() const{
     if (id != ID_DEFAULT){
