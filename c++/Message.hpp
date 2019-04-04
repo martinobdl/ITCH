@@ -10,18 +10,18 @@
 class Message{
 private:
     std::string type = NAN_STR;
-    id_type id=-1;
+    id_type id=ID_DEFAULT;
     time_type timestamp=0;
 
     side_type side;
-    price_type price=-1;
-    size_type remSize=-1;
-    size_type cancSize=-1;
-    size_type execSize=-1;
+    price_type price=PRICE_DEFAULT;
+    size_type remSize=SIZE_DEFAULT;
+    size_type cancSize=SIZE_DEFAULT;
+    size_type execSize=SIZE_DEFAULT;
 
     id_type oldId = ID_DEFAULT;
-    price_type oldPrice=-1;
-    size_type oldSize=-1;
+    price_type oldPrice=PRICE_DEFAULT;
+    size_type oldSize=SIZE_DEFAULT;
 
 public:
     Message()=default;

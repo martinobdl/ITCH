@@ -15,4 +15,5 @@ class Writer{
     ~Writer();
     void writeLine(std::string stringToWrite);
 };
+
 #endif

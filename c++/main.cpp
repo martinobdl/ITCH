@@ -4,8 +4,8 @@
 
 int main(int argc, char * argv[]){
     size_t levels;
-    if(argc < 2){
-        std::cerr << "Call it with: path to ITCH Parsed, Stock name, [optional] levels" << std::endl;
+    if(argc < 3){
+        std::cerr << "Call it with: path to ITCH Parsed, Stock name, [optional] number of levels" << std::endl;
         return 0;
     }
     else if(argc == 3){

@@ -1,5 +1,5 @@
 EXE = ITCH_50_parser
-OBJECTS = ITCH_50_parser.o
+OBJECTS = ITCH_50_parser.o Parser.o utility.o
 CXXFLAGS += -Wall -std=c++11 \
    -Werror \
    -Wextra \
@@ -25,7 +25,8 @@ all: $(EXE)
 $(EXE): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
-ITCH_50_parser.o:
+ITCH_50_parser.o: Parser.hpp utility.o
+Parser.o: utility.hpp
 
 .PHONY: all clean distclean
 clean:
