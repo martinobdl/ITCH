@@ -112,15 +112,18 @@ bool Message::isEmpty()const{
 
 std::string Message::getString()const{
     std::ostringstream string_builder;
-    string_builder  << type << ","
-                    << timestamp << ",";
-    if(id!=ID_DEFAULT){
-        string_builder << id;
+    string_builder  << type << ",";
+
+    if(!isEmpty()){
+        string_builder  << timestamp  << ","
+                        << id << ","
+                        << side << ",";
     }
-    string_builder << ",";
-
-    string_builder << side << ",";
-
+    else{
+        string_builder  << ","
+                        << ","
+                        << ",";
+    }
     if(remSize!=SIZE_DEFAULT){
         string_builder << remSize;
     }
