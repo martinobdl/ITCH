@@ -6,7 +6,7 @@
 typedef double price_type;
 typedef long size_type;
 typedef long id_type;
-typedef long time_type;
+typedef long long time_type;
 typedef bool side_type;
 
 extern id_type ID_DEFAULT;

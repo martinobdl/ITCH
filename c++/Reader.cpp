@@ -46,7 +46,7 @@ Message Reader::createMessage(void){
         std::getline(file, cell, ',');
         std::getline(file, cell, ',');
         std::getline(file, cell, ',');
-        msg.setTimeStamp(std::stol(cell));
+        msg.setTimeStamp(std::stoll(cell));
         if(typeCell == "A" || typeCell == "F"){
             std::getline(file, cell, ',');
             msg.setId(std::stol(cell));

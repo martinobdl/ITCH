@@ -1,0 +1,10 @@
+• Rewrite Reader: it's ugly, non general (if we change types in utility). We have to rewrite a generale converter from strings to whatever type we have to vonvert it to: eg
+    size_type generalConvert(string,size_type) (maybe with a template)
+
+• gtests: we need to implement google tests (google provides a testing framework for testing functions). Install gtets and gmock on yu machine (I wasnt able to on vagrant)
+
+• UML class graph
+
+• PQ orders
+
+• python plots (after all the above)

@@ -1,5 +1,5 @@
-EXE = BookConstructor
-OBJECTS = Order.o Message.o utility.o main.o BookConstructor.o OrderBook.o OrderPool.o Reader.o Writer.o
+EXE = ITCH_50_parser
+OBJECTS = ITCH_50_parser.o
 CXXFLAGS += -Wall -std=c++11 \
    -Werror \
    -Wextra \
@@ -25,15 +25,7 @@ all: $(EXE)
 $(EXE): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
-main.o: BookConstructor.hpp OrderBook.hpp OrderPool.hpp Order.hpp utility.hpp Message.hpp Writer.hpp Reader.hpp
-BookConstructor.o: OrderBook.hpp OrderPool.hpp Order.hpp utility.hpp Message.hpp Writer.hpp Reader.hpp
-OrderBook.o: OrderBook.hpp utility.hpp
-OrderPool.o: OrderPool.hpp Order.hpp utility.hpp
-Order.o: Order.hpp Message.hpp utility.hpp
-Message.o: Message.hpp utility.hpp
-utility.o: utility.hpp
-Reader.o: Reader.hpp Message.hpp
-Writer.o: Writer.hpp
+ITCH_50_parser.o:
 
 .PHONY: all clean distclean
 clean:
