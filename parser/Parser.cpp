@@ -90,26 +90,26 @@ void Parser::process(){
         // .: end of message. Write "\r\n"
         //
         if('S'==c) writeMessage("S-I2-I2-I6-A1.");
-        if('R'==c) writeMessage("R-I2-I2-I6-A8-A1-A1-I4-A1-A1-A2-A1-A1-A1-A1-A1-I4-A1.");
-        if('H'==c) writeMessage("H-I2-I2-I6-A8-A1-A1-A4.");
-        if('Y'==c) writeMessage("Y-I2-I2-I6-A8-A1.");
-        if('L'==c) writeMessage("L-I2-I2-I6-A4-A8-A1-A1-A1.");
-        if('V'==c) writeMessage("V-I2-I2-I6-P8,8-P8,8-P8,8.");
-        if('W'==c) writeMessage("W-I2-I2-I6-A1.");
-        if('K'==c) writeMessage("K-I2-I2-I6-A8-I4-A1-P4,4.");
-        if('J'==c) writeMessage("J-I2-I2-I6-A8-P4,4-P4,4-P4,4-I4.");
-        if('h'==c) writeMessage("h-I2-I2-I6-A8-A1-A1.");
-        if('A'==c) writeMessage("A-I2-I2-I6-I8-A1-I4-A8-P4,4.");
-        if('F'==c) writeMessage("F-I2-I2-I6-I8-A1-I4-A8-P4,4-A4.");
-        if('E'==c) writeMessage("E-I2-I2-I6-I8-I4-I8.");
-        if('C'==c) writeMessage("C-I2-I2-I6-I8-I4-I8-A1-P4,4.");
-        if('X'==c) writeMessage("X-I2-I2-I6-I8-I4.");
-        if('D'==c) writeMessage("D-I2-I2-I6-I8.");
-        if('U'==c) writeMessage("U-I2-I2-I6-I8-I8-I4-P4,4.");
-        if('P'==c) writeMessage("P-I2-I2-I6-I8-A1-I4-A8-P4,4-I8.");
-        if('Q'==c) writeMessage("Q-I2-I2-I6-I8-A8-P4,4-I8-A1.");
-        if('B'==c) writeMessage("B-I2-I2-I6-I8.");
-        if('I'==c) writeMessage("I-I2-I2-I6-I8-I8-A1-A8-P4,4-P4,4-P4,4-A1,A1.");
+        else if('R'==c) writeMessage("R-I2-I2-I6-A8-A1-A1-I4-A1-A1-A2-A1-A1-A1-A1-A1-I4-A1.");
+        else if('H'==c) writeMessage("H-I2-I2-I6-A8-A1-A1-A4.");
+        else if('Y'==c) writeMessage("Y-I2-I2-I6-A8-A1.");
+        else if('L'==c) writeMessage("L-I2-I2-I6-A4-A8-A1-A1-A1.");
+        else if('V'==c) writeMessage("V-I2-I2-I6-P8,8-P8,8-P8,8.");
+        else if('W'==c) writeMessage("W-I2-I2-I6-A1.");
+        else if('K'==c) writeMessage("K-I2-I2-I6-A8-I4-A1-P4,4.");
+        else if('J'==c) writeMessage("J-I2-I2-I6-A8-P4,4-P4,4-P4,4-I4.");
+        else if('h'==c) writeMessage("h-I2-I2-I6-A8-A1-A1.");
+        else if('A'==c) writeMessage("A-I2-I2-I6-I8-A1-I4-A8-P4,4.");
+        else if('F'==c) writeMessage("F-I2-I2-I6-I8-A1-I4-A8-P4,4-A4.");
+        else if('E'==c) writeMessage("E-I2-I2-I6-I8-I4-I8.");
+        else if('C'==c) writeMessage("C-I2-I2-I6-I8-I4-I8-A1-P4,4.");
+        else if('X'==c) writeMessage("X-I2-I2-I6-I8-I4.");
+        else if('D'==c) writeMessage("D-I2-I2-I6-I8.");
+        else if('U'==c) writeMessage("U-I2-I2-I6-I8-I8-I4-P4,4.");
+        else if('P'==c) writeMessage("P-I2-I2-I6-I8-A1-I4-A8-P4,4-I8.");
+        else if('Q'==c) writeMessage("Q-I2-I2-I6-I8-A8-P4,4-I8-A1.");
+        else if('B'==c) writeMessage("B-I2-I2-I6-I8.");
+        else if('I'==c) writeMessage("I-I2-I2-I6-I8-I8-A1-A8-P4,4-P4,4-P4,4-A1,A1.");
     }
     closeStreams();
 }

@@ -162,7 +162,7 @@ std::string Message::getString()const{
     return string_builder.str();
 }
 
-void Message::print(){
+void Message::print() const {
     std::cout<<"Message type   :" << type <<std::endl;
     std::cout<<"Id             :"<<id<< std::endl;
     std::cout<<"timestamp      :" << timestamp <<std::endl;

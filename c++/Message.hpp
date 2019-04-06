@@ -54,6 +54,6 @@ public:
 
     bool isEmpty()const;
     std::string getString()const;
-    void print();
+    void print()const;
 };
 #endif/*_MESSAGE_H_*/

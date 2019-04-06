@@ -20,17 +20,19 @@ TEST_F(Message_Test, emptynessTest){
 }
 
 TEST_F(Message_Test, getStringEmptyTest){
-    fullMessage->setSide(1);
-    fullMessage->setRemSize(93);
-    fullMessage->setPrice(11.79);
 
     ASSERT_EQ(",,,,,,,,,,\n", emptyMessage->getString());
 }
 
-TEST_F(Message_Test, getStringFullTest){
+TEST_F(Message_Test, getStringAndSettersTest){
     fullMessage->setSide(1);
     fullMessage->setRemSize(93);
     fullMessage->setPrice(11.79);
+    fullMessage->setCancSize(10);
+    fullMessage->setExecSize(20);
+    fullMessage->setOldId(123456);
+    fullMessage->setOldSize(110);
+    fullMessage->setOldPrice(33.333333);
 
-    ASSERT_EQ("A,28800006862979,45749,1,93,11.79,,,,,\n", fullMessage->getString());
+    ASSERT_EQ("A,28800006862979,45749,1,93,11.79,10,20,123456,110,33.3333\n", fullMessage->getString());
 }

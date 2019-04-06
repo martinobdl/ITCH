@@ -7,7 +7,7 @@
 
 class Writer{
 
-    std::string fileName="";
+    std::string fileName;
     std::ofstream file;
 
     public:

@@ -1,5 +1,13 @@
 EXE = BookConstructor
-OBJECTS = Order.o Message.o utility.o main.o BookConstructor.o OrderBook.o OrderPool.o Reader.o Writer.o
+OBJECTS =   Order.o \
+            Message.o \
+            utility.o \
+            main.o \
+            BookConstructor.o \
+            OrderBook.o \
+            OrderPool.o \
+            Reader.o \
+            Writer.o
 CXXFLAGS += -Wall -std=c++11 \
    -Werror \
    -Wextra \

@@ -1,5 +1,10 @@
 EXE = executeTests
-OBJECTS = main_gtest.o Message_test.o Order_test.o ../c++/utility.o
+OBJECTS = 	main_gtest.o \
+			OrderPool_test.o \
+			Message_test.o \
+			Order_test.o \
+			OrderBook_test.o \
+			../c++/utility.o
 CXXFLAGS += -Wall -std=c++11 \
 	-Werror \
 	-Wextra \
@@ -30,7 +35,9 @@ $(EXE): $(OBJECTS)
 
 main_gtest.o: Order_test.o
 Order_test.o: ../c++/Order.hpp ../c++/Message.hpp ../c++/utility.hpp
-Messgae_test.o: ../c++/Message.hpp ../c++/utility.hpp
+Message_test.o: ../c++/Message.hpp ../c++/utility.hpp
+OrderPool_test.o: ../c++/Order.hpp ../c++/utility.hpp ../c++/OrderPool.hpp
+OrderBook_test.o:  ../c++/OrderBook.hpp
 ../c++/utility.o: ../c++/utility.hpp
 
 .PHONY: all clean distclean
