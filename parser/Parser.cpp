@@ -12,104 +12,329 @@ Parser::Parser(const std::string &inFileName, const std::string &outFileName){
     start = time(0);
 }
 
-void Parser::writeChunk(const char *type){
-    //
-    // given a char array type like Ix
-    // interprets and write the following x bytes as indicated by the first keycode
-    // Ix: interprets and write the following x bytes as integers in big-endian order
-    // Ax: interprets and write the following x bytes as alphabetic
-    // Px,n interprets and write the following x bytes as a float number with n decimal digits
-    // *.: writes also a \r\n
-    // X: writes the single letter X to the output file. Should be the message indicator.
-    //
-    if(strlen(type)==1){
-        outFile << type << "," ;
-        return;
-    }
-    std::size_t len = strlen(type);
-    const size_t size = (len>1) ? std::stoul(&type[1]) : 1;
-    const long size_l = (len>1) ? std::stol(&type[1]) : 1;
-    const std::string sep = (len>2 and type[len-1]=='.') ? "\r\n" : ",";
-    std::vector<unsigned char> buffer(size);
-    inFile.read(reinterpret_cast<char *>(&buffer[0]), size_l);
-    if(type[0]=='A'){
-        copy(buffer.cbegin(), buffer.cend(), std::ostreambuf_iterator<char>(outFile));
-    }
-    else if(type[0]=='I' or type[0]=='P'){
-        long num = 0;
-        for(size_t i = 0; i < size; i++){
-            num *= (1<<8);
-            num += buffer[i];
-        }
-        if(type[0]=='P' and len>3){
-            int N = atoi(&(type[3]));
-            outFile << num/pow(10,N) ;
-        }
-        else outFile << num;
-    }
-    outFile << sep;
+void Parser::readMessage(const long &size){
+    // memset(message, 0x00, 64);
+    inFile.read(message, size);
 }
 
-void Parser::writeMessage(const std::string &format){
-    //
-    // splits the format string and calls wrtieChunk with the specified interpretation.
-    //
-    char key = format[0];
-    auto it = format_map.find(key);
-    std::vector<std::string> types;
-    if(it == format_map.end()){
-        types = split(format,"-");
-        format_map.insert(std::make_pair(key,types));
+void Parser::convertMessage(const char &key){
+    printProgress();
+    char str[100] = {0};
+    if(key=='S'){
+        readMessage(11);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        char eventCode = message[10];
+
+        sprintf(str,"%c,%u,%u,%llu,%c\n",key,locateCode,trackingNumb,timeStamp,eventCode);
     }
-    else
-        types = it->second;
-    for(std::string t: types){
-        writeChunk(t.c_str());
+    else if(key=='R'){
+        readMessage(38);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        char stock[9]; strncpy(stock, message+10, 8); stock[8] = 0;
+        char marketCategory = message[18];
+        char financialStatus = message[19];
+        uint32_t numberOfSharesInALot = parse_uint32(message+20);
+        char roundLotsOnly = message[24];
+        char issueClassification = message[25];
+        char subType[3]; strncpy(subType, message+26, 2); subType[2] = 0;
+        char autenticity = message[28];
+        char shortIndicator = message[29];
+        char ipoFlag = message[30];
+        char indicatorLULD = message[31];
+        char flagETP = message[32];
+        uint32_t ETPLevarage = parse_uint32(message+33);
+        char inverseETPFlag = message[37];
+
+        sprintf(str,"%c,%u,%u,%llu,%s,%c,%c,%u,%c,%c,%s,%c,%c,%c,%c,%c,%u,%c\n",
+            key,locateCode,trackingNumb,timeStamp,stock,marketCategory,financialStatus,
+            numberOfSharesInALot,roundLotsOnly,issueClassification,subType,autenticity,
+            shortIndicator,ipoFlag,indicatorLULD,flagETP,ETPLevarage,inverseETPFlag);
     }
-    count ++;
-    if((count % 5000000)==0){
-        std::cout << "Processed " << count/1000000 << "Mio messages. " << count/difftime(time(0), start) << " messages per sec." << std::endl;
+    else if(key=='H'){
+        readMessage(24);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        char stock[9]; strncpy(stock, message+10, 8); stock[8] = 0;
+        char tradingState = message[18];
+        char reserved = message[19];
+        char reason[5]; strncpy(reason, message+20, 4); reason[4] = 0;
+        sprintf(str,"%c,%u,%u,%llu,%s,%c,%c,%s\n",
+            key,locateCode,trackingNumb,timeStamp,stock,tradingState,reserved,reason);
     }
+    else if(key=='Y'){
+        readMessage(19);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        char stock[9]; strncpy(stock, message+10, 8); stock[8] = 0;
+        char regSHO = message[18];
+        sprintf(str,"%c,%u,%u,%llu,%s,%c\n",
+            key,locateCode,trackingNumb,timeStamp,stock,regSHO);
+    }
+    else if(key=='L'){
+        readMessage(25);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        char mpidIdentifier[5]; strncpy(mpidIdentifier, message+10, 4); mpidIdentifier[4] = 0;
+        char stock[9]; strncpy(stock, message+14, 8); stock[8] = 0;
+        char primaryMarketMaker = message[22];
+        char marketMakerMode = message[23];
+        char makerParticipantState = message[24];
+        sprintf(str,"%c,%u,%u,%llu,%s,%s,%c,%c,%c\n",
+            key,locateCode,trackingNumb,timeStamp,mpidIdentifier,stock,
+            primaryMarketMaker,marketMakerMode,makerParticipantState);
+    }
+    else if(key=='V'){
+        readMessage(34);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        uint64_t level1 = parse_uint64(message+10);
+        uint64_t level2 = parse_uint64(message+18);
+        uint64_t level3 = parse_uint64(message+26);
+        sprintf(str,"%c,%u,%u,%llu,%llu.%08llu,%llu.%08llu,%llu.%08llu\n",
+            key,locateCode,trackingNumb,timeStamp,
+            level1/100000000,level1%100000000,
+            level2/100000000,level2%100000000,
+            level3/100000000,level3%100000000);
+    }
+    else if(key=='W'){
+        readMessage(11);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        char breachedLevel = message[10];
+        sprintf(str,"%c,%u,%u,%llu,%c\n",
+            key,locateCode,trackingNumb,timeStamp,breachedLevel);
+    }
+    else if(key=='K'){
+        readMessage(27);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        char stock[9]; strncpy(stock, message+10, 8); stock[8] = 0;
+        uint32_t timeIPO = parse_uint32(message+18);
+        char qualifierIPO = message[22];
+        uint32_t priceIPO = parse_uint32(message+23);
+        sprintf(str,"%c,%u,%u,%llu,%s,%u,%c,%u.%04u\n",
+            key,locateCode,trackingNumb,timeStamp,stock,timeIPO,qualifierIPO,
+            priceIPO/10000,priceIPO%10000);
+    }
+    else if(key=='J'){
+        readMessage(34);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        char stock[9]; strncpy(stock, message+10, 8); stock[8] = 0;
+        uint32_t auctionCollarPrice = parse_uint32(message+18);
+        uint32_t upperAuctionCollarPrice = parse_uint32(message+22);
+        uint32_t lowerAuctionCollarPrice = parse_uint32(message+26);
+        char auctionCollarExtension = message[30];
+        sprintf(str,"%c,%u,%u,%llu,%s,%u.%04u,%u.%04u,%u.%04u,%c\n",
+            key,locateCode,trackingNumb,timeStamp,stock,
+            auctionCollarPrice/10000,auctionCollarPrice%10000,
+            upperAuctionCollarPrice/10000,upperAuctionCollarPrice%10000,
+            lowerAuctionCollarPrice/10000,lowerAuctionCollarPrice%10000,
+            auctionCollarExtension);
+    }
+    else if(key=='h'){
+        readMessage(20);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        char stock[9]; strncpy(stock, message+10, 8); stock[8] = 0;
+        char marketCode = message[18];
+        char haltAction = message[19];
+        sprintf(str,"%c,%u,%u,%llu,%s,%c,%c\n",
+            key,locateCode,trackingNumb,timeStamp,stock,marketCode,haltAction);
+    }
+    else if(key=='A'){
+        readMessage(35);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        uint64_t orderId = parse_uint64(message+10);
+        char direction = message[18];
+        uint32_t size = parse_uint32(message+19);
+        char stock[9]; strncpy(stock, message+23, 8); stock[8] = 0;
+        uint32_t price = parse_uint32(message+31);
+        sprintf(str,"%c,%u,%u,%llu,%llu,%c,%u,%s,%u.%04u\n",
+            key,locateCode,trackingNumb,timeStamp,orderId,
+            direction,size,stock,
+            price/10000,price%1000);
+    }
+    else if(key=='F'){
+        readMessage(39);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        uint64_t orderId = parse_uint64(message+10);
+        char direction = message[18];
+        uint32_t size = parse_uint32(message+19);
+        char stock[9]; strncpy(stock, message+23, 8); stock[8] = 0;
+        uint32_t price = parse_uint32(message+31);
+        char mpid[5]; strncpy(mpid, message+35, 8); mpid[4] = 0;
+        sprintf(str,"%c,%u,%u,%llu,%llu,%c,%u,%s,%u.%04u,%s\n",
+            key,locateCode,trackingNumb,timeStamp,orderId,
+            direction,size,stock,
+            price/10000,price%1000,mpid);
+    }
+    else if(key=='E'){
+        readMessage(30);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        uint64_t orderId = parse_uint64(message+10);
+        uint32_t execSize = parse_uint32(message+18);
+        uint64_t matchNumber = parse_uint64(message+22);
+        sprintf(str,"%c,%u,%u,%llu,%llu,%u,%llu\n",
+            key,locateCode,trackingNumb,timeStamp,orderId,
+            execSize,matchNumber);
+    }
+    else if(key=='C'){
+        readMessage(35);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        uint64_t orderId = parse_uint64(message+10);
+        uint32_t execSize = parse_uint32(message+18);
+        uint64_t matchNumber = parse_uint64(message+22);
+        char printable = message[30];
+        uint32_t price = parse_uint32(message+31);
+        sprintf(str,"%c,%u,%u,%llu,%llu,%u,%llu,%c,%u.%04u\n",
+            key,locateCode,trackingNumb,timeStamp,orderId,
+            execSize,matchNumber,printable,
+            price/10000,price%10000);
+    }
+    else if(key=='X'){
+        readMessage(22);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        uint64_t orderId = parse_uint64(message+10);
+        uint32_t cancSize = parse_uint32(message+18);
+        sprintf(str,"%c,%u,%u,%llu,%llu,%u\n",
+            key,locateCode,trackingNumb,timeStamp,orderId,cancSize);
+    }
+    else if(key=='D'){
+        readMessage(18);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        uint64_t orderId = parse_uint64(message+10);
+        sprintf(str,"%c,%u,%u,%llu,%llu\n",
+            key,locateCode,trackingNumb,timeStamp,orderId);
+    }
+    else if(key=='U'){
+        readMessage(34);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        uint64_t oldOrderId = parse_uint64(message+10);
+        uint64_t newOrderId = parse_uint64(message+18);
+        uint32_t newSize = parse_uint32(message+26);
+        uint32_t newPrice = parse_uint32(message+30);
+        sprintf(str,"%c,%u,%u,%llu,%llu,%llu,%u,%u.%04u\n",
+            key,locateCode,trackingNumb,timeStamp,oldOrderId,
+            newOrderId,newSize,newPrice/10000,newPrice%10000);
+    }
+    else if(key=='P'){
+        readMessage(43);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        uint64_t orderId = parse_uint64(message+10);
+        char direction = message[18];
+        uint32_t size = parse_uint32(message+19);
+        char stock[9]; strncpy(stock, message+23, 8); stock[8] = 0;
+        uint32_t price = parse_uint32(message+31);
+        uint64_t matchId = parse_uint64(message+35);
+        sprintf(str,"%c,%u,%u,%llu,%llu,%c,%u,%s,%u.%04u,%llu\n",
+            key,locateCode,trackingNumb,timeStamp,orderId,
+            direction,size,stock,price/10000,price%10000,matchId);
+    }
+    else if(key=='Q'){
+        readMessage(39);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        uint64_t size = parse_uint64(message+10);
+        char stock[9]; strncpy(stock, message+18, 8); stock[8] = 0;
+        uint32_t price = parse_uint32(message+26);
+        uint64_t matchId = parse_uint64(message+30);
+        char crossType = message[38];
+        sprintf(str,"%c,%u,%u,%llu,%llu,%s,%u.%04u,%llu,%c\n",
+            key,locateCode,trackingNumb,timeStamp,size,
+            stock,price/10000,price%10000,matchId,crossType);
+    }
+    else if(key=='B'){
+        readMessage(18);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        uint64_t matchId = parse_uint64(message+10);
+        sprintf(str,"%c,%u,%u,%llu,%llu\n",
+            key,locateCode,trackingNumb,timeStamp,matchId);
+    }
+    else if(key=='I'){
+        readMessage(49);
+        uint16_t locateCode = parse_uint16(message);
+        uint16_t trackingNumb = parse_uint16(message+2);
+        uint64_t timeStamp = parse_ts(message+4);
+        uint64_t pairedShares = parse_uint64(message+10);
+        uint64_t imbalanceShares = parse_uint64(message+18);
+        char imbalanceDirection = message[26];
+        char stock[9]; strncpy(stock, message+27, 8); stock[8] = 0;
+        uint32_t fairPrice = parse_uint32(message+35);
+        uint32_t nearPrice = parse_uint32(message+39);
+        uint32_t referencePrice = parse_uint32(message+43);
+        char crossType = message[47];
+        char priceVariationIndicator = message[48];
+        sprintf(str,"%c,%u,%u,%llu,%llu,%llu,%c,%s,%u.%04u,%u.%04u,%u.%04u,%c,%c\n",
+            key,locateCode,trackingNumb,timeStamp,pairedShares,
+            imbalanceShares,imbalanceDirection,stock,
+            fairPrice/10000,fairPrice%10000,
+            nearPrice/10000,nearPrice%10000,
+            referencePrice/10000,referencePrice%10000,
+            crossType,priceVariationIndicator);
+    }
+    else{
+        std::cerr << "Type " << key <<" not found @ line: "<< count << std::endl;
+    }
+    writeMessage(std::string(str));
+}
+
+void Parser::writeMessage(const std::string &str){
+    outFile << str;
 }
 
 void Parser::closeStreams(){
     inFile.close();
     outFile.close();
-    std::cout << "Finished, processed " << count << " messages in " << difftime(time(0),start) << "seconds."  << std::endl;
+    std::cout << "Finished, processed " << count << " messages in "
+            << difftime(time(0),start) << " seconds."  << std::endl;
 }
 
 void Parser::process(){
     char c;
-    while(inFile.get(c)){
-        //
-        // First letter is the type of message.
-        // -: separator
-        // Ix: x bytes Integer
-        // Ax: x bytes Alpha
-        // Px,n: x bytes, n decimal precision
-        // .: end of message. Write "\r\n"
-        //
-        if('S'==c) writeMessage("S-I2-I2-I6-A1.");
-        else if('R'==c) writeMessage("R-I2-I2-I6-A8-A1-A1-I4-A1-A1-A2-A1-A1-A1-A1-A1-I4-A1.");
-        else if('H'==c) writeMessage("H-I2-I2-I6-A8-A1-A1-A4.");
-        else if('Y'==c) writeMessage("Y-I2-I2-I6-A8-A1.");
-        else if('L'==c) writeMessage("L-I2-I2-I6-A4-A8-A1-A1-A1.");
-        else if('V'==c) writeMessage("V-I2-I2-I6-P8,8-P8,8-P8,8.");
-        else if('W'==c) writeMessage("W-I2-I2-I6-A1.");
-        else if('K'==c) writeMessage("K-I2-I2-I6-A8-I4-A1-P4,4.");
-        else if('J'==c) writeMessage("J-I2-I2-I6-A8-P4,4-P4,4-P4,4-I4.");
-        else if('h'==c) writeMessage("h-I2-I2-I6-A8-A1-A1.");
-        else if('A'==c) writeMessage("A-I2-I2-I6-I8-A1-I4-A8-P4,4.");
-        else if('F'==c) writeMessage("F-I2-I2-I6-I8-A1-I4-A8-P4,4-A4.");
-        else if('E'==c) writeMessage("E-I2-I2-I6-I8-I4-I8.");
-        else if('C'==c) writeMessage("C-I2-I2-I6-I8-I4-I8-A1-P4,4.");
-        else if('X'==c) writeMessage("X-I2-I2-I6-I8-I4.");
-        else if('D'==c) writeMessage("D-I2-I2-I6-I8.");
-        else if('U'==c) writeMessage("U-I2-I2-I6-I8-I8-I4-P4,4.");
-        else if('P'==c) writeMessage("P-I2-I2-I6-I8-A1-I4-A8-P4,4-I8.");
-        else if('Q'==c) writeMessage("Q-I2-I2-I6-I8-A8-P4,4-I8-A1.");
-        else if('B'==c) writeMessage("B-I2-I2-I6-I8.");
-        else if('I'==c) writeMessage("I-I2-I2-I6-I8-I8-A1-A8-P4,4-P4,4-P4,4-A1,A1.");
+    while(!inFile.eof()){
+        inFile.ignore(2);
+        inFile.get(c);
+        convertMessage(c);
     }
     closeStreams();
+}
+
+void Parser::printProgress(void){
+    count ++;
+    if((count % (5000000))==0){
+        std::cout << "Processed " << count/1000000 << "Mio messages. "
+        << count/difftime(time(0), start) << " messages per sec." << std::endl;
+    }
 }
