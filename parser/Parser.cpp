@@ -167,7 +167,7 @@ void Parser::convertMessage(const char &key){
         sprintf(str,"%c,%u,%u,%llu,%llu,%c,%u,%s,%u.%04u\n",
             key,locateCode,trackingNumb,timeStamp,orderId,
             direction,size,stock,
-            price/10000,price%1000);
+            price/10000,price%10000);
     }
     else if(key=='F'){
         readMessage(39);
@@ -183,7 +183,7 @@ void Parser::convertMessage(const char &key){
         sprintf(str,"%c,%u,%u,%llu,%llu,%c,%u,%s,%u.%04u,%s\n",
             key,locateCode,trackingNumb,timeStamp,orderId,
             direction,size,stock,
-            price/10000,price%1000,mpid);
+            price/10000,price%10000,mpid);
     }
     else if(key=='E'){
         readMessage(30);
