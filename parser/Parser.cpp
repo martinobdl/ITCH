@@ -13,12 +13,10 @@ Parser::Parser(const std::string &inFileName, const std::string &outFileName){
 }
 
 void Parser::readMessage(const long &size){
-    // memset(message, 0x00, 64);
     inFile.read(message, size);
 }
 
 void Parser::convertMessage(const char &key){
-    printProgress();
     char str[100] = {0};
     if(key=='S'){
         readMessage(11);
@@ -122,7 +120,7 @@ void Parser::convertMessage(const char &key){
         uint32_t timeIPO = parse_uint32(message+18);
         char qualifierIPO = message[22];
         uint32_t priceIPO = parse_uint32(message+23);
-        sprintf(str,"%c,%u,%u,%llu,%s,%u,%c,%u.%4u\n",
+        sprintf(str,"%c,%u,%u,%llu,%s,%u,%c,%u.%04u\n",
             key,locateCode,trackingNumb,timeStamp,stock,timeIPO,qualifierIPO,
             priceIPO/10000,priceIPO%10000);
     }
@@ -136,7 +134,7 @@ void Parser::convertMessage(const char &key){
         uint32_t upperAuctionCollarPrice = parse_uint32(message+22);
         uint32_t lowerAuctionCollarPrice = parse_uint32(message+26);
         char auctionCollarExtension = message[30];
-        sprintf(str,"%c,%u,%u,%llu,%s,%u.%4u,%u.%4u,%u.%4u,%c\n",
+        sprintf(str,"%c,%u,%u,%llu,%s,%u.%04u,%u.%04u,%u.%04u,%c\n",
             key,locateCode,trackingNumb,timeStamp,stock,
             auctionCollarPrice/10000,auctionCollarPrice%10000,
             upperAuctionCollarPrice/10000,upperAuctionCollarPrice%10000,
@@ -164,7 +162,7 @@ void Parser::convertMessage(const char &key){
         uint32_t size = parse_uint32(message+19);
         char stock[9]; strncpy(stock, message+23, 8); stock[8] = 0;
         uint32_t price = parse_uint32(message+31);
-        sprintf(str,"%c,%u,%u,%llu,%llu,%c,%u,%s,%u.%4u\n",
+        sprintf(str,"%c,%u,%u,%llu,%llu,%c,%u,%s,%u.%04u\n",
             key,locateCode,trackingNumb,timeStamp,orderId,
             direction,size,stock,
             price/10000,price%10000);
@@ -207,7 +205,7 @@ void Parser::convertMessage(const char &key){
         uint64_t matchNumber = parse_uint64(message+22);
         char printable = message[30];
         uint32_t price = parse_uint32(message+31);
-        sprintf(str,"%c,%u,%u,%llu,%llu,%u,%llu,%c,%u.%4u\n",
+        sprintf(str,"%c,%u,%u,%llu,%llu,%u,%llu,%c,%u.%04u\n",
             key,locateCode,trackingNumb,timeStamp,orderId,
             execSize,matchNumber,printable,
             price/10000,price%10000);
@@ -240,7 +238,7 @@ void Parser::convertMessage(const char &key){
         uint64_t newOrderId = parse_uint64(message+18);
         uint32_t newSize = parse_uint32(message+26);
         uint32_t newPrice = parse_uint32(message+30);
-        sprintf(str,"%c,%u,%u,%llu,%llu,%llu,%u,%u.%4u\n",
+        sprintf(str,"%c,%u,%u,%llu,%llu,%llu,%u,%u.%04u\n",
             key,locateCode,trackingNumb,timeStamp,oldOrderId,
             newOrderId,newSize,newPrice/10000,newPrice%10000);
     }
@@ -255,7 +253,7 @@ void Parser::convertMessage(const char &key){
         char stock[9]; strncpy(stock, message+23, 8); stock[8] = 0;
         uint32_t price = parse_uint32(message+31);
         uint64_t matchId = parse_uint64(message+35);
-        sprintf(str,"%c,%u,%u,%llu,%llu,%c,%u,%s,%u.%4u,%llu\n",
+        sprintf(str,"%c,%u,%u,%llu,%llu,%c,%u,%s,%u.%04u,%llu\n",
             key,locateCode,trackingNumb,timeStamp,orderId,
             direction,size,stock,price/10000,price%10000,matchId);
     }
@@ -269,7 +267,7 @@ void Parser::convertMessage(const char &key){
         uint32_t price = parse_uint32(message+26);
         uint64_t matchId = parse_uint64(message+30);
         char crossType = message[38];
-        sprintf(str,"%c,%u,%u,%llu,%llu,%s,%u.%4u,%llu,%c\n",
+        sprintf(str,"%c,%u,%u,%llu,%llu,%s,%u.%04u,%llu,%c\n",
             key,locateCode,trackingNumb,timeStamp,size,
             stock,price/10000,price%10000,matchId,crossType);
     }
@@ -296,7 +294,7 @@ void Parser::convertMessage(const char &key){
         uint32_t referencePrice = parse_uint32(message+43);
         char crossType = message[47];
         char priceVariationIndicator = message[48];
-        sprintf(str,"%c,%u,%u,%llu,%llu,%llu,%c,%s,%u.%4u,%u.%4u,%u.%4u,%c,%c\n",
+        sprintf(str,"%c,%u,%u,%llu,%llu,%llu,%c,%s,%u.%04u,%u.%04u,%u.%04u,%c,%c\n",
             key,locateCode,trackingNumb,timeStamp,pairedShares,
             imbalanceShares,imbalanceDirection,stock,
             fairPrice/10000,fairPrice%10000,
@@ -311,7 +309,10 @@ void Parser::convertMessage(const char &key){
 }
 
 void Parser::writeMessage(const std::string &str){
-    outFile << str;
+    if(!inFile.eof()){
+        outFile << str;
+        printProgress();
+    }
 }
 
 void Parser::closeStreams(){
