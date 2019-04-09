@@ -1,0 +1,4 @@
+
+*.o
+gtests/executeTests
+parser/ITCH_50_parser
