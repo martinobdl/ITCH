@@ -46,14 +46,14 @@ Message Reader::createMessage(void){
         std::getline(file, cell, ',');
         std::getline(file, cell, ',');
         std::getline(file, cell, ',');
-        msg.setTimeStamp(std::stoll(cell));
+        msg.setTimeStamp(stringConvert(cell, the_type<time_type>()));
         if(typeCell == "A" || typeCell == "F"){
             std::getline(file, cell, ',');
-            msg.setId(std::stol(cell));
+            msg.setId(stringConvert(cell, the_type<id_type>()));
             std::getline(file, cell, ',');
             msg.setSide(cell=="S");
             std::getline(file, cell, ',');
-            msg.setRemSize(std::stol(cell));
+            msg.setRemSize(stringConvert(cell, the_type<size_type>()));
             std::getline(file, cell, ',');
             // check if rigth stock
             if(cell.compare(stock) != 0){
@@ -62,39 +62,39 @@ Message Reader::createMessage(void){
             }
             if(typeCell == "A"){
                 std::getline(file, cell);
-                msg.setPrice(std::stod(cell));
+                msg.setPrice(stringConvert(cell, the_type<price_type>()));
             }
             if(typeCell == "F"){
                 std::getline(file, cell, ',');
-                msg.setPrice(std::stod(cell));
+                msg.setPrice(stringConvert(cell, the_type<price_type>()));
                 std::getline(file, cell);
             }
         }
         if(typeCell=="U"){
             std::getline(file, cell, ',');
-            msg.setOldId(std::stol(cell));
+            msg.setOldId(stringConvert(cell, the_type<id_type>()));
             std::getline(file, cell, ',');
-            msg.setId(std::stol(cell));
+            msg.setId(stringConvert(cell, the_type<id_type>()));
             std::getline(file, cell, ',');
-            msg.setRemSize(std::stol(cell));
+            msg.setRemSize(stringConvert(cell, the_type<size_type>()));
             std::getline(file, cell);
-            msg.setPrice(std::stod(cell));
+            msg.setPrice(stringConvert(cell, the_type<price_type>()));
         }
         if(typeCell == "D"){
             std::getline(file, cell);
-            msg.setId(std::stol(cell));
+            msg.setId(stringConvert(cell, the_type<id_type>()));
         }
         if(typeCell == "X"){
             std::getline(file, cell, ',');
-            msg.setId(std::stol(cell));
+            msg.setId(stringConvert(cell, the_type<id_type>()));
             std::getline(file, cell);
-            msg.setCancSize(std::stol(cell));
+            msg.setCancSize(stringConvert(cell, the_type<size_type>()));
         }
         if(typeCell == "E"){
             std::getline(file, cell, ',');
-            msg.setId(std::stol(cell));
+            msg.setId(stringConvert(cell, the_type<id_type>()));
             std::getline(file, cell, ',');
-            msg.setExecSize(std::stol(cell));
+            msg.setExecSize(stringConvert(cell, the_type<size_type>()));
             std::getline(file, cell);
         }
     }

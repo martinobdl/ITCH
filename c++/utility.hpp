@@ -14,4 +14,11 @@ extern size_type SIZE_DEFAULT;
 extern price_type PRICE_DEFAULT;
 extern std::string NAN_STR;
 
+template<class T>class the_type{};
+
+long stringConvert(std::string input, the_type<long>);
+double stringConvert(std::string input, the_type<double>);
+long long stringConvert(std::string input, the_type<long long>);
+float stringConvert(std::string input, the_type<float>);
+
 #endif
