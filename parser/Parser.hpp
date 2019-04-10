@@ -21,6 +21,7 @@ class Parser{
         time_t start;
         unsigned count;
         char message[64];
+        bool continueReading = 1;
     public:
         Parser(const std::string &inFileName, const std::string &outFileName);
         void writeChunk(const std::string &type);

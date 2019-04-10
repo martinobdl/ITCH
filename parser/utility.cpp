@@ -1,7 +1,7 @@
 #include "utility.hpp"
 
 uint16_t bswap_16(uint16_t value){
-    return (static_cast<uint16_t>(((value) & 0xff) << 8) | ((value) >> 8));
+    return static_cast<uint16_t>(((value) & 0xff) << 8 | ((value) >> 8));
 }
 
 uint32_t bswap_32(uint32_t value){

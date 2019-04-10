@@ -304,12 +304,15 @@ void Parser::convertMessage(const char &key){
     }
     else{
         std::cerr << "Type " << key <<" not found @ line: "<< count << std::endl;
+        continueReading = 0;
+        return;
     }
+    continueReading = !inFile.eof();
     writeMessage(std::string(str));
 }
 
 void Parser::writeMessage(const std::string &str){
-    if(!inFile.eof()){
+    if(continueReading){
         outFile << str;
         printProgress();
     }
@@ -324,7 +327,7 @@ void Parser::closeStreams(){
 
 void Parser::process(){
     char c;
-    while(!inFile.eof()){
+    while(continueReading){
         inFile.ignore(2);
         inFile.get(c);
         convertMessage(c);
