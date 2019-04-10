@@ -2,15 +2,7 @@
 #define PARSER_H_
 
 #include <iostream>
-#include <sstream> // ostringstream
-#include <unordered_map>
 #include <fstream>
-#include <vector>
-#include <set>
-#include <algorithm>
-#include <stdlib.h>
-#include <string>
-#include <math.h>
 #include <time.h>
 #include "utility.hpp"
 #include <inttypes.h> // PRIux

@@ -324,8 +324,10 @@ void Parser::writeMessage(const std::string &str){
 void Parser::closeStreams(){
     inFile.close();
     outFile.close();
-    std::cout << "Finished, processed " << count << " messages in "
-            << difftime(time(0),start) << " seconds."  << std::endl;
+    if(count){
+        std::cout << "Finished, processed " << count << " messages in "
+        << difftime(time(0),start) << " seconds."  << std::endl;
+    }
 }
 
 void Parser::process(){
