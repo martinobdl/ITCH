@@ -40,7 +40,7 @@ OrderPool.o: OrderPool.hpp Order.hpp utility.hpp
 Order.o: Order.hpp Message.hpp utility.hpp
 Message.o: Message.hpp utility.hpp
 utility.o: utility.hpp
-Reader.o: Reader.hpp Message.hpp
+Reader.o: Reader.hpp Message.hpp utility.hpp
 Writer.o: Writer.hpp
 
 .PHONY: all clean distclean
