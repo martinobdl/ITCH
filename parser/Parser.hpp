@@ -13,6 +13,7 @@
 #include <math.h>
 #include <time.h>
 #include "utility.hpp"
+#include <inttypes.h> // PRIux
 
 class Parser{
     private:
@@ -21,7 +22,7 @@ class Parser{
         time_t start;
         unsigned count;
         char message[64];
-        bool continueReading = 1;
+        bool continueReading = 0;
     public:
         Parser(const std::string &inFileName, const std::string &outFileName);
         void writeChunk(const std::string &type);

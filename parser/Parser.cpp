@@ -5,8 +5,10 @@ Parser::Parser(const std::string &inFileName, const std::string &outFileName){
     if(!inFile.is_open()){
         std::cerr << "Can't open input file " << inFileName << std::endl;
     }
-    else
+    else{
         std::cout << "Opened "+inFileName+" to parse." << std::endl;
+        continueReading = 1;
+    }
     outFile.open(outFileName);
     count = 0;
     start = time(0);
@@ -25,7 +27,8 @@ void Parser::convertMessage(const char &key){
         uint64_t timeStamp = parse_ts(message+4);
         char eventCode = message[10];
 
-        sprintf(str,"%c,%u,%u,%llu,%c\n",key,locateCode,trackingNumb,timeStamp,eventCode);
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%c\n",
+            key,locateCode,trackingNumb,timeStamp,eventCode);
     }
     else if(key=='R'){
         readMessage(38);
@@ -47,7 +50,7 @@ void Parser::convertMessage(const char &key){
         uint32_t ETPLevarage = parse_uint32(message+33);
         char inverseETPFlag = message[37];
 
-        sprintf(str,"%c,%u,%u,%llu,%s,%c,%c,%u,%c,%c,%s,%c,%c,%c,%c,%c,%u,%c\n",
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%s,%c,%c,%" PRIu32 ",%c,%c,%s,%c,%c,%c,%c,%c,%" PRIu32 ",%c\n",
             key,locateCode,trackingNumb,timeStamp,stock,marketCategory,financialStatus,
             numberOfSharesInALot,roundLotsOnly,issueClassification,subType,autenticity,
             shortIndicator,ipoFlag,indicatorLULD,flagETP,ETPLevarage,inverseETPFlag);
@@ -61,7 +64,7 @@ void Parser::convertMessage(const char &key){
         char tradingState = message[18];
         char reserved = message[19];
         char reason[5]; strncpy(reason, message+20, 4); reason[4] = 0;
-        sprintf(str,"%c,%u,%u,%llu,%s,%c,%c,%s\n",
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%s,%c,%c,%s\n",
             key,locateCode,trackingNumb,timeStamp,stock,tradingState,reserved,reason);
     }
     else if(key=='Y'){
@@ -71,7 +74,7 @@ void Parser::convertMessage(const char &key){
         uint64_t timeStamp = parse_ts(message+4);
         char stock[9]; strncpy(stock, message+10, 8); stock[8] = 0;
         char regSHO = message[18];
-        sprintf(str,"%c,%u,%u,%llu,%s,%c\n",
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%s,%c\n",
             key,locateCode,trackingNumb,timeStamp,stock,regSHO);
     }
     else if(key=='L'){
@@ -84,7 +87,7 @@ void Parser::convertMessage(const char &key){
         char primaryMarketMaker = message[22];
         char marketMakerMode = message[23];
         char makerParticipantState = message[24];
-        sprintf(str,"%c,%u,%u,%llu,%s,%s,%c,%c,%c\n",
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%s,%s,%c,%c,%c\n",
             key,locateCode,trackingNumb,timeStamp,mpidIdentifier,stock,
             primaryMarketMaker,marketMakerMode,makerParticipantState);
     }
@@ -96,7 +99,7 @@ void Parser::convertMessage(const char &key){
         uint64_t level1 = parse_uint64(message+10);
         uint64_t level2 = parse_uint64(message+18);
         uint64_t level3 = parse_uint64(message+26);
-        sprintf(str,"%c,%u,%u,%llu,%llu.%08llu,%llu.%08llu,%llu.%08llu\n",
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 ".%08" PRIu64 ",%" PRIu64 ".%08" PRIu64 ",%" PRIu64 ".%08" PRIu64 "\n",
             key,locateCode,trackingNumb,timeStamp,
             level1/100000000,level1%100000000,
             level2/100000000,level2%100000000,
@@ -108,7 +111,7 @@ void Parser::convertMessage(const char &key){
         uint16_t trackingNumb = parse_uint16(message+2);
         uint64_t timeStamp = parse_ts(message+4);
         char breachedLevel = message[10];
-        sprintf(str,"%c,%u,%u,%llu,%c\n",
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%c\n",
             key,locateCode,trackingNumb,timeStamp,breachedLevel);
     }
     else if(key=='K'){
@@ -120,7 +123,7 @@ void Parser::convertMessage(const char &key){
         uint32_t timeIPO = parse_uint32(message+18);
         char qualifierIPO = message[22];
         uint32_t priceIPO = parse_uint32(message+23);
-        sprintf(str,"%c,%u,%u,%llu,%s,%u,%c,%u.%04u\n",
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%s,%" PRIu32 ",%c,%" PRIu32 ".%04" PRIu32 "\n",
             key,locateCode,trackingNumb,timeStamp,stock,timeIPO,qualifierIPO,
             priceIPO/10000,priceIPO%10000);
     }
@@ -134,7 +137,7 @@ void Parser::convertMessage(const char &key){
         uint32_t upperAuctionCollarPrice = parse_uint32(message+22);
         uint32_t lowerAuctionCollarPrice = parse_uint32(message+26);
         char auctionCollarExtension = message[30];
-        sprintf(str,"%c,%u,%u,%llu,%s,%u.%04u,%u.%04u,%u.%04u,%c\n",
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%s,%" PRIu32 ".%04" PRIu32 ",%" PRIu32 ".%04" PRIu32 ",%" PRIu32 ".%04" PRIu32 ",%c\n",
             key,locateCode,trackingNumb,timeStamp,stock,
             auctionCollarPrice/10000,auctionCollarPrice%10000,
             upperAuctionCollarPrice/10000,upperAuctionCollarPrice%10000,
@@ -149,7 +152,7 @@ void Parser::convertMessage(const char &key){
         char stock[9]; strncpy(stock, message+10, 8); stock[8] = 0;
         char marketCode = message[18];
         char haltAction = message[19];
-        sprintf(str,"%c,%u,%u,%llu,%s,%c,%c\n",
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%s,%c,%c\n",
             key,locateCode,trackingNumb,timeStamp,stock,marketCode,haltAction);
     }
     else if(key=='A'){
@@ -162,7 +165,7 @@ void Parser::convertMessage(const char &key){
         uint32_t size = parse_uint32(message+19);
         char stock[9]; strncpy(stock, message+23, 8); stock[8] = 0;
         uint32_t price = parse_uint32(message+31);
-        sprintf(str,"%c,%u,%u,%llu,%llu,%c,%u,%s,%u.%04u\n",
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 ",%c,%" PRIu32 ",%s,%" PRIu32 ".%04" PRIu32 "\n",
             key,locateCode,trackingNumb,timeStamp,orderId,
             direction,size,stock,
             price/10000,price%10000);
@@ -178,7 +181,7 @@ void Parser::convertMessage(const char &key){
         char stock[9]; strncpy(stock, message+23, 8); stock[8] = 0;
         uint32_t price = parse_uint32(message+31);
         char mpid[5]; strncpy(mpid, message+35, 4); mpid[4] = 0;
-        sprintf(str,"%c,%u,%u,%llu,%llu,%c,%u,%s,%u.%04u,%s\n",
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 ",%c,%" PRIu32 ",%s,%" PRIu32 ".%04" PRIu32 ",%s\n",
             key,locateCode,trackingNumb,timeStamp,orderId,
             direction,size,stock,
             price/10000,price%10000,mpid);
@@ -191,7 +194,7 @@ void Parser::convertMessage(const char &key){
         uint64_t orderId = parse_uint64(message+10);
         uint32_t execSize = parse_uint32(message+18);
         uint64_t matchNumber = parse_uint64(message+22);
-        sprintf(str,"%c,%u,%u,%llu,%llu,%u,%llu\n",
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 ",%" PRIu32 ",%" PRIu64 "\n",
             key,locateCode,trackingNumb,timeStamp,orderId,
             execSize,matchNumber);
     }
@@ -205,7 +208,7 @@ void Parser::convertMessage(const char &key){
         uint64_t matchNumber = parse_uint64(message+22);
         char printable = message[30];
         uint32_t price = parse_uint32(message+31);
-        sprintf(str,"%c,%u,%u,%llu,%llu,%u,%llu,%c,%u.%04u\n",
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 ",%" PRIu32 ",%" PRIu64 ",%c,%" PRIu32 ".%04" PRIu32 "\n",
             key,locateCode,trackingNumb,timeStamp,orderId,
             execSize,matchNumber,printable,
             price/10000,price%10000);
@@ -217,7 +220,7 @@ void Parser::convertMessage(const char &key){
         uint64_t timeStamp = parse_ts(message+4);
         uint64_t orderId = parse_uint64(message+10);
         uint32_t cancSize = parse_uint32(message+18);
-        sprintf(str,"%c,%u,%u,%llu,%llu,%u\n",
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 ",%" PRIu32 "\n",
             key,locateCode,trackingNumb,timeStamp,orderId,cancSize);
     }
     else if(key=='D'){
@@ -226,7 +229,7 @@ void Parser::convertMessage(const char &key){
         uint16_t trackingNumb = parse_uint16(message+2);
         uint64_t timeStamp = parse_ts(message+4);
         uint64_t orderId = parse_uint64(message+10);
-        sprintf(str,"%c,%u,%u,%llu,%llu\n",
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 "\n",
             key,locateCode,trackingNumb,timeStamp,orderId);
     }
     else if(key=='U'){
@@ -238,7 +241,7 @@ void Parser::convertMessage(const char &key){
         uint64_t newOrderId = parse_uint64(message+18);
         uint32_t newSize = parse_uint32(message+26);
         uint32_t newPrice = parse_uint32(message+30);
-        sprintf(str,"%c,%u,%u,%llu,%llu,%llu,%u,%u.%04u\n",
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 ",%" PRIu64 ",%" PRIu32 ",%" PRIu32 ".%04" PRIu32 "\n",
             key,locateCode,trackingNumb,timeStamp,oldOrderId,
             newOrderId,newSize,newPrice/10000,newPrice%10000);
     }
@@ -253,7 +256,7 @@ void Parser::convertMessage(const char &key){
         char stock[9]; strncpy(stock, message+23, 8); stock[8] = 0;
         uint32_t price = parse_uint32(message+31);
         uint64_t matchId = parse_uint64(message+35);
-        sprintf(str,"%c,%u,%u,%llu,%llu,%c,%u,%s,%u.%04u,%llu\n",
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 ",%c,%" PRIu32 ",%s,%" PRIu32 ".%04" PRIu32 ",%" PRIu64 "\n",
             key,locateCode,trackingNumb,timeStamp,orderId,
             direction,size,stock,price/10000,price%10000,matchId);
     }
@@ -267,7 +270,7 @@ void Parser::convertMessage(const char &key){
         uint32_t price = parse_uint32(message+26);
         uint64_t matchId = parse_uint64(message+30);
         char crossType = message[38];
-        sprintf(str,"%c,%u,%u,%llu,%llu,%s,%u.%04u,%llu,%c\n",
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 ",%s,%" PRIu32 ".%04" PRIu32 ",%" PRIu64 ",%c\n",
             key,locateCode,trackingNumb,timeStamp,size,
             stock,price/10000,price%10000,matchId,crossType);
     }
@@ -277,7 +280,7 @@ void Parser::convertMessage(const char &key){
         uint16_t trackingNumb = parse_uint16(message+2);
         uint64_t timeStamp = parse_ts(message+4);
         uint64_t matchId = parse_uint64(message+10);
-        sprintf(str,"%c,%u,%u,%llu,%llu\n",
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 "\n",
             key,locateCode,trackingNumb,timeStamp,matchId);
     }
     else if(key=='I'){
@@ -294,7 +297,7 @@ void Parser::convertMessage(const char &key){
         uint32_t referencePrice = parse_uint32(message+43);
         char crossType = message[47];
         char priceVariationIndicator = message[48];
-        sprintf(str,"%c,%u,%u,%llu,%llu,%llu,%c,%s,%u.%04u,%u.%04u,%u.%04u,%c,%c\n",
+        sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 ",%" PRIu64 ",%c,%s,%" PRIu32 ".%04" PRIu32 ",%" PRIu32 ".%04" PRIu32 ",%" PRIu32 ".%04" PRIu32 ",%c,%c\n",
             key,locateCode,trackingNumb,timeStamp,pairedShares,
             imbalanceShares,imbalanceDirection,stock,
             fairPrice/10000,fairPrice%10000,
