@@ -17,7 +17,6 @@ class Parser{
         bool continueReading = 0;
     public:
         Parser(const std::string &inFileName, const std::string &outFileName);
-        void writeChunk(const std::string &type);
         void writeMessage(const std::string &str);
         void closeStreams();
         void process();

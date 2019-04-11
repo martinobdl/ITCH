@@ -8,14 +8,21 @@ Message::Message(const std::string& _type,
         timestamp(_timestamp){};
 
 void Message::setType(const std::string& _type){
-    if(_type =="A" || _type == "F")
+    if(_type =="A" || _type == "F"){
         type = "A"; // add
-    else if (_type == "D" || _type == "X")
+    }
+    else if (_type == "D" || _type == "X"){
         type = "D"; // delete
-    else if (_type == "U")
+    }
+    else if (_type == "U"){
         type = "R"; // replace
-    else if (_type == "E")
+    }
+    else if (_type == "E"){
         type = _type; // execute
+    }
+    else if (_type == "P"){
+        type = _type; // execute
+    }
     else{
         std::cerr << "Message with wrong type (" << _type << ") has been found!"<< std::endl;
     }
