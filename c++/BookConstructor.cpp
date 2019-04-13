@@ -28,7 +28,7 @@ bool BookConstructor::updateMessage(){
 
     std::string typeMsg = message.getType();
 
-    if(typeMsg == "A"){
+    if(typeMsg == "A" or typeMsg == "P"){
         return 1;
     }
     // If we have "(R)eplace" message, we are searching the order oldId.

@@ -5,7 +5,7 @@
 
 typedef double price_type;
 typedef long size_type;
-typedef long id_type;
+typedef uint64_t id_type;
 typedef long long time_type;
 typedef bool side_type;
 

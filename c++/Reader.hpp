@@ -8,22 +8,28 @@
 #include "Message.hpp"
 
 class Reader{
-    private:
+private:
     std::string fileName;
     std::ifstream file;
-    std::string messageToFilter = "AFEXDU"; // PQC
+    // std::string messageToFilter = "AFEXDU"; // QC
     std::string stock;
-    bool finished = 0;
     unsigned count = 0;
     char message[64];
     time_t start;
-    public:
+public:
+    Reader() = default;
     Reader(const std::string &fileName, const std::string &stock);
-    ~Reader();
+    Reader(const std::string &_stock);
+    virtual ~Reader();
     Message createMessage(void);
     bool eof();
     void printProgress(void);
-    void readBytes(const long &size);
+    virtual void readBytesIntoMessage(const long &size);
+    virtual void skipBytes(const long &size);
+    void setMessage(const char* str);
+    virtual char getKey(void);
+    std::string getFileName(void) const;
+    std::string getStock(void) const;
 };
 
 #endif

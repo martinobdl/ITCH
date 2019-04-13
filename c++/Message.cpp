@@ -21,7 +21,7 @@ void Message::setType(const std::string& _type){
         type = _type; // execute
     }
     else if (_type == "P"){
-        type = _type; // execute
+        type = _type; // execute hidden
     }
     else{
         std::cerr << "Message with wrong type (" << _type << ") has been found!"<< std::endl;

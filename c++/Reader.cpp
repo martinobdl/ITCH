@@ -12,6 +12,9 @@ Reader::Reader(const std::string &_fileName, const std::string &_stock):
     start = time(0);
     }
 
+Reader::Reader(const std::string &_stock):
+    stock(_stock){}
+
 void Reader::printProgress(void){
     count ++;
     if((count % 5000000)==0){
@@ -19,203 +22,223 @@ void Reader::printProgress(void){
     }
 }
 
-void Reader::readBytes(const long &size){
+void Reader::readBytesIntoMessage(const long &size){
     file.read(message, size);
+}
+
+void Reader::skipBytes(const long &size){
+    file.ignore(size);
+}
+
+char Reader::getKey(void){
+    char key;
+    file.get(key);
+    return key;
 }
 
 Message Reader::createMessage(void){
     printProgress();
     Message msg;
-    char key;
-    file.ignore(2);
-    file.get(key);
+    skipBytes(2);
+    char key = getKey();
 
-    if(key=='S'){
-        readBytes(11);
-    }
-    else if(key=='R'){
-        readBytes(38);
-    }
-    else if(key=='H'){
-        readBytes(24);
-    }
-    else if(key=='Y'){
-        readBytes(19);
-    }
-    else if(key=='L'){
-        readBytes(25);
-    }
-    else if(key=='V'){
-        readBytes(34);
-    }
-    else if(key=='W'){
-        readBytes(11);
-    }
-    else if(key=='K'){
-        readBytes(27);
-    }
-    else if(key=='J'){
-        readBytes(34);
-    }
-    else if(key=='h'){
-        readBytes(20);
-    }
-    else if(key=='A'){
-        readBytes(35);
-        char ticker[9]; strncpy(ticker, message+23, 8); ticker[8] = 0;
-        if(strcmp(ticker,stock.c_str())){
-            return msg;
-        }
-        // uint16_t locateCode = parse_uint16(message);
-        // uint16_t trackingNumb = parse_uint16(message+2);
-        uint64_t timeStamp = parse_ts(message+4);
-        uint64_t orderId = parse_uint64(message+10);
-        char direction = message[18];
-        uint32_t size = parse_uint32(message+19);
-        uint32_t price = parse_uint32(message+31);
-        msg.setType(std::string(1,key));
-        msg.setTimeStamp(static_cast<time_type>(timeStamp));
-        msg.setId(static_cast<id_type>(orderId));
-        msg.setSide(static_cast<side_type>(direction == 'S'));
-        msg.setRemSize(static_cast<size_type>(size));
-        msg.setPrice(static_cast<price_type>(price)/10000);
-    }
-    else if(key=='F'){
-        readBytes(39);
-        char ticker[9]; strncpy(ticker, message+23, 8); ticker[8] = 0;
-        if(strcmp(ticker,stock.c_str())){
-            return msg;
-        }
-        // uint16_t locateCode = parse_uint16(message);
-        // uint16_t trackingNumb = parse_uint16(message+2);
-        uint64_t timeStamp = parse_ts(message+4);
-        uint64_t orderId = parse_uint64(message+10);
-        char direction = message[18];
-        uint32_t size = parse_uint32(message+19);
-        uint32_t price = parse_uint32(message+31);
-        char mpid[5]; strncpy(mpid, message+35, 4); mpid[4] = 0;
-        msg.setType(std::string(1,key));
-        msg.setTimeStamp(static_cast<time_type>(timeStamp));
-        msg.setId(static_cast<id_type>(orderId));
-        msg.setSide(static_cast<side_type>(direction == 'S'));
-        msg.setRemSize(static_cast<size_type>(size));
-        msg.setPrice(static_cast<price_type>(price)/10000);
-    }
-    else if(key=='E'){
-        readBytes(30);
-        // uint16_t locateCode = parse_uint16(message);
-        // uint16_t trackingNumb = parse_uint16(message+2);
-        uint64_t timeStamp = parse_ts(message+4);
-        uint64_t orderId = parse_uint64(message+10);
-        uint32_t execSize = parse_uint32(message+18);
-        // uint64_t matchNumber = parse_uint64(message+22);
-        msg.setType(std::string(1,key));
-        msg.setTimeStamp(static_cast<time_type>(timeStamp));
-        msg.setId(static_cast<id_type>(orderId));
-        msg.setExecSize(static_cast<size_type>(execSize));
-    }
-    else if(key=='C'){
-        readBytes(35);
-        // uint16_t locateCode = parse_uint16(message);
-        // uint16_t trackingNumb = parse_uint16(message+2);
-        // uint64_t timeStamp = parse_ts(message+4);
-        // uint64_t orderId = parse_uint64(message+10);
-        // uint32_t execSize = parse_uint32(message+18);
-        // // uint64_t matchNumber = parse_uint64(message+22);
-        // char printable = message[30];
-        // uint32_t price = parse_uint32(message+31);
+    switch(key){
 
-        // Check how to use C.
+        uint64_t timeStamp;
+        uint64_t orderId;
+        char direction;
+        char ticker[9];
+        uint32_t size;
+        uint32_t price;
+        uint32_t execSize;
+        uint32_t cancSize;
+        uint64_t oldOrderId;
+        uint64_t newOrderId;
+        uint32_t newSize;
+        uint32_t newPrice;
 
-    }
-    else if(key=='X'){
-        readBytes(22);
-        // uint16_t locateCode = parse_uint16(message);
-        // uint16_t trackingNumb = parse_uint16(message+2);
-        uint64_t timeStamp = parse_ts(message+4);
-        uint64_t orderId = parse_uint64(message+10);
-        uint32_t cancSize = parse_uint32(message+18);
-        msg.setType(std::string(1,key));
-        msg.setTimeStamp(static_cast<time_type>(timeStamp));
-        msg.setId(static_cast<id_type>(orderId));
-        msg.setCancSize(static_cast<size_type>(cancSize));
-    }
-    else if(key=='D'){
-        readBytes(18);
-        // uint16_t locateCode = parse_uint16(message);
-        // uint16_t trackingNumb = parse_uint16(message+2);
-        uint64_t timeStamp = parse_ts(message+4);
-        uint64_t orderId = parse_uint64(message+10);
-        msg.setType(std::string(1,key));
-        msg.setTimeStamp(static_cast<time_type>(timeStamp));
-        msg.setId(static_cast<id_type>(orderId));
-    }
-    else if(key=='U'){
-        readBytes(34);
-        // uint16_t locateCode = parse_uint16(message);
-        // uint16_t trackingNumb = parse_uint16(message+2);
-        uint64_t timeStamp = parse_ts(message+4);
-        uint64_t oldOrderId = parse_uint64(message+10);
-        uint64_t newOrderId = parse_uint64(message+18);
-        uint32_t newSize = parse_uint32(message+26);
-        uint32_t newPrice = parse_uint32(message+30);
-        msg.setType(std::string(1,key));
-        msg.setTimeStamp(static_cast<time_type>(timeStamp));
-        msg.setId(static_cast<id_type>(newOrderId));
-        msg.setOldId(static_cast<id_type>(oldOrderId));
-        msg.setRemSize(static_cast<size_type>(newSize));
-        msg.setPrice(static_cast<price_type>(newPrice)/10000);
-    }
-    else if(key=='P'){
-        readBytes(43);
-        char ticker[9]; strncpy(ticker, message+23, 8); ticker[8] = 0;
-        if(strcmp(ticker,stock.c_str())){
-            return msg;
-        }
-        // uint16_t locateCode = parse_uint16(message);
-        // uint16_t trackingNumb = parse_uint16(message+2);
-        // uint64_t timeStamp = parse_ts(message+4);
-        // uint64_t orderId = parse_uint64(message+10);
-        // char direction = message[18];
-        // uint32_t size = parse_uint32(message+19);
-        // uint32_t price = parse_uint32(message+31);
-        // // uint64_t matchId = parse_uint64(message+35);
-        // msg.setType(std::string(1,key));
-        // msg.setTimeStamp(static_cast<time_type>(timeStamp));
-        // msg.setId(static_cast<id_type>(orderId));
-        // msg.setSide(static_cast<side_type>(direction == 'S'));
-        // msg.setExecSize(static_cast<size_type>(size));
-        // msg.setPrice(static_cast<price_type>(price)/10000);
+        case 'S':
+            readBytesIntoMessage(11);
+            break;
+        case 'R':
+            readBytesIntoMessage(38);
+            break;
+        case 'H':
+            readBytesIntoMessage(24);
+            break;
+        case 'Y':
+            readBytesIntoMessage(19);
+            break;
+        case 'L':
+            readBytesIntoMessage(25);
+            break;
+        case 'V':
+            readBytesIntoMessage(34);
+            break;
+        case 'W':
+            readBytesIntoMessage(11);
+            break;
+        case 'K':
+            readBytesIntoMessage(27);
+            break;
+        case 'J':
+            readBytesIntoMessage(34);
+            break;
+        case 'h':
+            readBytesIntoMessage(20);
+            break;
+        case 'A':
+            readBytesIntoMessage(35);
+            strncpy(ticker, message+23, 8); ticker[8] = 0;
+            if(strcmp(ticker,stock.c_str())){
+                return msg;
+            }
+            timeStamp = parse_ts(message+4);
+            orderId = parse_uint64(message+10);
+            direction = message[18];
+            size = parse_uint32(message+19);
+            price = parse_uint32(message+31);
+            msg.setType(std::string(1,key));
+            msg.setTimeStamp(static_cast<time_type>(timeStamp));
+            msg.setId(static_cast<id_type>(orderId));
+            msg.setSide(static_cast<side_type>(direction == 'S'));
+            msg.setRemSize(static_cast<size_type>(size));
+            msg.setPrice(static_cast<price_type>(price)/10000);
+            break;
+        case 'F':
+            readBytesIntoMessage(39);
+            strncpy(ticker, message+23, 8); ticker[8] = 0;
+            if(strcmp(ticker,stock.c_str())){
+                return msg;
+            }
+            timeStamp = parse_ts(message+4);
+            orderId = parse_uint64(message+10);
+            direction = message[18];
+            size = parse_uint32(message+19);
+            price = parse_uint32(message+31);
+            // char mpid[5]; strncpy(mpid, message+35, 4); mpid[4] = 0;
+            msg.setType(std::string(1,key));
+            msg.setTimeStamp(static_cast<time_type>(timeStamp));
+            msg.setId(static_cast<id_type>(orderId));
+            msg.setSide(static_cast<side_type>(direction == 'S'));
+            msg.setRemSize(static_cast<size_type>(size));
+            msg.setPrice(static_cast<price_type>(price)/10000);
+            break;
+        case 'E':
+            readBytesIntoMessage(30);
+            timeStamp = parse_ts(message+4);
+            orderId = parse_uint64(message+10);
+            execSize = parse_uint32(message+18);
+            msg.setType(std::string(1,key));
+            msg.setTimeStamp(static_cast<time_type>(timeStamp));
+            msg.setId(static_cast<id_type>(orderId));
+            msg.setExecSize(static_cast<size_type>(execSize));
+            break;
+        case 'C':
+            readBytesIntoMessage(35);
+            // uint16_t locateCode = parse_uint16(message);
+            // uint16_t trackingNumb = parse_uint16(message+2);
+            // uint64_t timeStamp = parse_ts(message+4);
+            // uint64_t orderId = parse_uint64(message+10);
+            // uint32_t execSize = parse_uint32(message+18);
+            // // uint64_t matchNumber = parse_uint64(message+22);
+            // char printable = message[30];
+            // uint32_t price = parse_uint32(message+31);
 
-    }
-    else if(key=='Q'){
-        readBytes(39);
-        // // uint16_t locateCode = parse_uint16(message);
-        // // uint16_t trackingNumb = parse_uint16(message+2);
-        // uint64_t timeStamp = parse_ts(message+4);
-        // uint64_t size = parse_uint64(message+10);
-        // char stock[9]; strncpy(stock, message+18, 8); stock[8] = 0;
-        // uint32_t price = parse_uint32(message+26);
-        // // uint64_t matchId = parse_uint64(message+30);
-        // char crossType = message[38];
+            // Check how to use C.
+            break;
+        case 'X':
+            readBytesIntoMessage(22);
+            // uint16_t locateCode = parse_uint16(message);
+            // uint16_t trackingNumb = parse_uint16(message+2);
+            timeStamp = parse_ts(message+4);
+            orderId = parse_uint64(message+10);
+            cancSize = parse_uint32(message+18);
+            msg.setType(std::string(1,key));
+            msg.setTimeStamp(static_cast<time_type>(timeStamp));
+            msg.setId(static_cast<id_type>(orderId));
+            msg.setCancSize(static_cast<size_type>(cancSize));
+            break;
+        case 'D':
+            readBytesIntoMessage(18);
+            timeStamp = parse_ts(message+4);
+            orderId = parse_uint64(message+10);
+            msg.setType(std::string(1,key));
+            msg.setTimeStamp(static_cast<time_type>(timeStamp));
+            msg.setId(static_cast<id_type>(orderId));
+            break;
+        case 'U':
+            readBytesIntoMessage(34);
+            timeStamp = parse_ts(message+4);
+            oldOrderId = parse_uint64(message+10);
+            newOrderId = parse_uint64(message+18);
+            newSize = parse_uint32(message+26);
+            newPrice = parse_uint32(message+30);
+            msg.setType(std::string(1,key));
+            msg.setTimeStamp(static_cast<time_type>(timeStamp));
+            msg.setId(static_cast<id_type>(newOrderId));
+            msg.setOldId(static_cast<id_type>(oldOrderId));
+            msg.setRemSize(static_cast<size_type>(newSize));
+            msg.setPrice(static_cast<price_type>(newPrice)/10000);
+            break;
+        case 'P':
+            readBytesIntoMessage(43);
+            strncpy(ticker, message+23, 8); ticker[8] = 0;
+            if(strcmp(ticker,stock.c_str())){
+                return msg;
+            }
+            timeStamp = parse_ts(message+4);
+            orderId = parse_uint64(message+10);
+            direction = message[18];
+            size = parse_uint32(message+19);
+            price = parse_uint32(message+31);
+            msg.setType(std::string(1,key));
+            msg.setTimeStamp(static_cast<time_type>(timeStamp));
+            msg.setId(static_cast<id_type>(orderId));
+            msg.setSide(static_cast<side_type>(direction == 'S'));
+            msg.setExecSize(static_cast<size_type>(size));
+            msg.setPrice(static_cast<price_type>(price)/10000);
+            break;
+        case 'Q':
+            readBytesIntoMessage(39);
+            // // uint16_t locateCode = parse_uint16(message);
+            // // uint16_t trackingNumb = parse_uint16(message+2);
+            // uint64_t timeStamp = parse_ts(message+4);
+            // uint64_t size = parse_uint64(message+10);
+            // char stock[9]; strncpy(stock, message+18, 8); stock[8] = 0;
+            // uint32_t price = parse_uint32(message+26);
+            // // uint64_t matchId = parse_uint64(message+30);
+            // char crossType = message[38];
 
-        // Check how to use Q.
-
-    }
-    else if(key=='B'){
-        readBytes(18);
-    }
-    else if(key=='I'){
-        readBytes(49);
-    }
-    else{
-        std::cerr << "Type " << key <<" not found @ line: "<< count << std::endl;
+            // Check how to use Q.
+            break;
+        case 'B':
+            readBytesIntoMessage(18);
+            break;
+        case 'I':
+            readBytesIntoMessage(49);
+            break;
+        default:
+            std::cerr << "Type " << key <<" not found @ line: "<< count << std::endl;
+            break;
     }
     return msg;
 }
 
 bool Reader::eof(){
     return file.eof();
+}
+
+std::string Reader::getFileName(void) const{
+    return fileName;
+}
+
+std::string Reader::getStock(void) const{
+    return stock;
+}
+
+void Reader::setMessage(const char* str){
+    memcpy(message, str, 64);
 }
 
 Reader::~Reader(){

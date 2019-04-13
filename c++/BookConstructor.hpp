@@ -9,6 +9,7 @@
 #include "Writer.hpp"
 
 class BookConstructor{
+private:
     Message message;
     OrderBook book;
     OrderPool pool;
@@ -16,8 +17,7 @@ class BookConstructor{
     Writer messageWriter;
     Writer bookWriter;
     size_t levels;
-
-    public:
+public:
     BookConstructor(const std::string &inputMessageCSV,
                     const std::string &outputMessageCSV,
                     const std::string &outputBookCSV,
