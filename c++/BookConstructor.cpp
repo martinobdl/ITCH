@@ -10,7 +10,20 @@ BookConstructor::BookConstructor(const std::string &inputMessageCSV,
     bookWriter(outputBookCSV),
     levels(_levels){
         messageWriter.writeLine("type,time,id,side,size,price,cancSize,execSize,oldId,oldSize,oldPrice\n");
+        std::string bookHeader = "time,";
+        for(size_t i = 1; i<=levels; i++){
+            std::string num = std::to_string(i);
+            bookHeader += num+"_bid_price,"+num+"_ask_vol,"+num+"_ask_price,"+num+"_bid_vol\n";
+        }
+        bookWriter.writeLine(bookHeader);
     }
+
+BookConstructor::~BookConstructor(){
+    if(!pool.isEmpty()){
+        std::cout << "Residual Orders ids: ";
+        pool.printIds();
+    }
+}
 
 void BookConstructor::next(void){
     message = message_reader.createMessage();
@@ -127,7 +140,9 @@ void BookConstructor::WriteBookAndMessage(){
 }
 
 void BookConstructor::start(){
-    while(!message_reader.eof()){
+    while(!message_reader.eof() and message_reader.isGood()){
         next();
     }
 }
+
+

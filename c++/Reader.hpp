@@ -15,11 +15,13 @@ private:
     std::string stock;
     unsigned count = 0;
     char message[64];
+    bool goodFile = 0;
     time_t start;
 public:
     Reader() = default;
     Reader(const std::string &fileName, const std::string &stock);
     Reader(const std::string &_stock);
+    bool isGood(void) const;
     virtual ~Reader();
     Message createMessage(void);
     bool eof();

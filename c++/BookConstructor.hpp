@@ -23,6 +23,7 @@ public:
                     const std::string &outputBookCSV,
                     const std::string &_stock,
                     const size_t &_levels);
+    ~BookConstructor();
     void next();
     void WriteBookAndMessage();
     bool updateMessage();

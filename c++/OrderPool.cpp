@@ -30,3 +30,12 @@ void OrderPool::modifyOrder(id_type idOrder, size_type size=0){
     return;
 }
 
+bool OrderPool::isEmpty(void) const{
+    return pool.empty();
+}
+
+void OrderPool::printIds(void) const{
+    for(auto items: pool){
+        std::cout << items.first << std::endl;
+    }
+};

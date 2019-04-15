@@ -8,6 +8,7 @@ Reader::Reader(const std::string &_fileName, const std::string &_stock):
             }
         else{
             std::cout << "Opened " << fileName << " to read ITCH 5.0. messages." << std::endl;
+            goodFile = 1;
         }
     start = time(0);
     }
@@ -219,7 +220,9 @@ Message Reader::createMessage(void){
             readBytesIntoMessage(49);
             break;
         default:
-            std::cerr << "Type " << key <<" not found @ line: "<< count << std::endl;
+            if(!eof()){
+                std::cerr << "Type " << key <<" not found @ line: " << std::endl;
+            }
             break;
     }
     return msg;
@@ -227,6 +230,10 @@ Message Reader::createMessage(void){
 
 bool Reader::eof(){
     return file.eof();
+}
+
+bool Reader::isGood() const{
+    return goodFile;
 }
 
 std::string Reader::getFileName(void) const{
