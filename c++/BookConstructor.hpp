@@ -16,13 +16,15 @@ private:
     Reader message_reader;
     Writer messageWriter;
     Writer bookWriter;
+    Writer parserWriter;
     size_t levels;
 public:
     BookConstructor(const std::string &inputMessageCSV,
                     const std::string &outputMessageCSV,
                     const std::string &outputBookCSV,
                     const std::string &_stock,
-                    const size_t &_levels);
+                    const size_t &_levels,
+                    const bool debug);
     ~BookConstructor();
     void next();
     void WriteBookAndMessage();

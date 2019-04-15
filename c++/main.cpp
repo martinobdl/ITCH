@@ -4,15 +4,21 @@
 
 int main(int argc, char * argv[]){
     size_t levels;
+    bool debug = 0;
     if(argc < 3){
-        std::cerr << "Call it with: path to ITCH Parsed, Stock name, [optional] number of levels" << std::endl;
+        std::cerr << "Call it with: path to ITCH Parsed, Stock name, [optional] number of levels, [optional] -D" << std::endl;
         return 0;
     }
     else if(argc == 3){
         levels = 1;
+        debug = 0;
     }
-    else{
+    else if(argc == 4){
         levels = std::stoul(argv[3]);
+    }
+    else if(argc == 5){
+        levels = std::stoul(argv[3]);
+        debug = (std::string(argv[4])=="-D");
     }
     std::string pathFile = argv[1];
     std::string stock = argv[2];
@@ -25,7 +31,8 @@ int main(int argc, char * argv[]){
         outMessageFileName,
         outBookFileName,
         stockPadded,
-        levels);
+        levels,
+        debug);
 
     BookConstructor.start();
 }

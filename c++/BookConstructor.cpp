@@ -4,8 +4,9 @@ BookConstructor::BookConstructor(const std::string &inputMessageCSV,
     const std::string &outputMessageCSV,
     const std::string &outputBookCSV,
     const std::string &_stock,
-    const size_t &_levels):
-    message_reader(inputMessageCSV, _stock),
+    const size_t &_levels,
+    const bool debug):
+    message_reader(inputMessageCSV, _stock, debug),
     messageWriter(outputMessageCSV),
     bookWriter(outputBookCSV),
     levels(_levels){

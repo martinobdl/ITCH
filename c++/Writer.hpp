@@ -12,8 +12,10 @@ class Writer{
 
     public:
     Writer(const std::string& fileName);
+    Writer() = default;
     ~Writer();
     void writeLine(std::string stringToWrite);
+    std::string getFileName(void) const;
 };
 
 #endif

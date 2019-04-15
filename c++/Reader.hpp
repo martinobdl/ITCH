@@ -5,7 +5,9 @@
 #include <iostream>
 #include <string>
 #include <time.h>
+#include <inttypes.h> // PRIux
 #include "Message.hpp"
+#include "Writer.hpp"
 
 class Reader{
 private:
@@ -17,9 +19,11 @@ private:
     char message[64];
     bool goodFile = 0;
     time_t start;
+    bool debug = 0;
+    Writer parserWriter;
 public:
     Reader() = default;
-    Reader(const std::string &fileName, const std::string &stock);
+    Reader(const std::string &fileName, const std::string &stock, const bool debug);
     Reader(const std::string &_stock);
     bool isGood(void) const;
     virtual ~Reader();

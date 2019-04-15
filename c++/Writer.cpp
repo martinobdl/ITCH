@@ -22,3 +22,7 @@ Writer::~Writer(){
          std::cout<<"file "<<fileName<<" has been closed"<<std::endl;
     };
 };
+
+std::string Writer::getFileName(void) const{
+  return fileName;
+}
