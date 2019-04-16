@@ -44,6 +44,7 @@ Message Reader::createMessage(void){
     char key = getKey();
     char str[100] = {0};
     char ticker[9];
+    strncpy(ticker, stock.c_str(), 8); ticker[8] = 0;
     switch(key){
 
         uint64_t timeStamp;

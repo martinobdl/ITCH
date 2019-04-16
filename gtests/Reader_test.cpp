@@ -1,4 +1,5 @@
 #include "../c++/Reader.cpp"
+#include "../c++/Writer.cpp"
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 

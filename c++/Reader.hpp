@@ -22,7 +22,6 @@ private:
     bool debug = 0;
     Writer parserWriter;
 public:
-    Reader() = default;
     Reader(const std::string &fileName, const std::string &stock, const bool debug);
     Reader(const std::string &_stock);
     bool isGood(void) const;
