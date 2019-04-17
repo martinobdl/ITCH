@@ -1,6 +1,6 @@
-#include "../c++/OrderPool.cpp"
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include "ITCH/OrderPool.hpp"
 
 struct OrderPool_Test : public testing::Test{
     OrderPool *pool;

@@ -1,7 +1,8 @@
-#include "../c++/Reader.cpp"
-#include "../c++/Writer.cpp"
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include "ITCH/Reader.hpp"
+#include "ITCH/Message.hpp"
+#include "ITCH/Writer.hpp"
 
 class MockReader: public Reader{
 public:

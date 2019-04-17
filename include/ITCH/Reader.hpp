@@ -6,8 +6,9 @@
 #include <string>
 #include <time.h>
 #include <inttypes.h> // PRIux
-#include "Message.hpp"
-#include "Writer.hpp"
+#include <cstring>
+#include <ITCH/Message.hpp>
+#include <ITCH/Writer.hpp>
 
 class Reader{
 private:

@@ -1,6 +1,7 @@
-#include "../c++/Order.cpp"
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include "ITCH/Order.hpp"
+#include "ITCH/utility.hpp"
 
 struct Order_Test : public testing::Test{
     Order *emptyOrder;

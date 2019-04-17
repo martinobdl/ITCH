@@ -1,4 +1,4 @@
-#include "Reader.hpp"
+#include <ITCH/Reader.hpp>
 
 Reader::Reader(const std::string &_fileName, const std::string &_stock, const bool _debug):
     fileName(_fileName), stock(_stock), debug(_debug),parserWriter(_fileName+"_parsed.csv"){
@@ -47,16 +47,10 @@ Message Reader::createMessage(void){
     strncpy(ticker, stock.c_str(), 8); ticker[8] = 0;
     switch(key){
 
-        uint64_t timeStamp;
-        uint16_t locateCode;
-        uint16_t trackingNumb;
-        uint64_t orderId;
+        uint64_t timeStamp, orderId, oldOrderId;
+        uint16_t locateCode, trackingNumb;
         char direction;
-        uint32_t size;
-        uint32_t price;
-        uint32_t execSize;
-        uint32_t cancSize;
-        uint64_t oldOrderId;
+        uint32_t size, price, execSize, cancSize;
         uint64_t newOrderId;
         uint32_t newSize;
         uint32_t newPrice;

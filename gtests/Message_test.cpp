@@ -1,6 +1,7 @@
-#include "../c++/Message.cpp"
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <ITCH/Message.hpp>
+#include <ITCH/utility.hpp>
 
 struct Message_Test : public testing::Test{
     Message *emptyMessage;

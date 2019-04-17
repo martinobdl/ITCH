@@ -1,6 +1,6 @@
-#include "../c++/OrderBook.cpp"
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include "ITCH/OrderBook.hpp"
 
 struct OrderBook_Test : public testing::Test{
     OrderBook *book;

@@ -1,4 +1,4 @@
-#include "utility.hpp"
+#include <ITCH/utility.hpp>
 
 std::string NAN_STR = "";
 id_type ID_DEFAULT = 72057594037927934;
