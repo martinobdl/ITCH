@@ -60,21 +60,6 @@ $(BIN_DIR)/%.o : $(SCR_DIR)/%.cpp
 $(BIN_DIR)/%.o : $(TEST_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -I$(INC_DIR) -c $< -o $@
 
-# $(EXE_TEST): $(OBJECTS)
-# 	$(CXX) $(CXXFLAGS) $^ $(LDFLAGS) -o $@
-
-
-# $(BIN_DIR)/main.o: $(INC_DIR)/ITCH/BookConstructor.hpp $(INC_DIR)/ITCH/OrderBook.hpp $(INC_DIR)/ITCH/OrderPool.hpp $(INC_DIR)/ITCH/Order.hpp $(INC_DIR)/ITCH/utility.hpp $(INC_DIR)/ITCH/Message.hpp $(INC_DIR)/ITCH/Writer.hpp $(INC_DIR)/ITCH/Reader.hpp
-# $(BIN_DIR)/BookConstructor.o: $(INC_DIR)/ITCH/OrderBook.hpp $(INC_DIR)/ITCH/OrderPool.hpp $(INC_DIR)/ITCH/Order.hpp $(INC_DIR)/ITCH/utility.hpp $(INC_DIR)/ITCH/Message.hpp $(INC_DIR)/ITCH/Writer.hpp $(INC_DIR)/ITCH/Reader.hpp
-# $(BIN_DIR)/OrderBook.o: $(INC_DIR)/ITCH/OrderBook.hpp $(INC_DIR)/ITCH/utility.hpp
-# $(BIN_DIR)/OrderPool.o: $(INC_DIR)/ITCH/OrderPool.hpp $(INC_DIR)/ITCH/Order.hpp $(INC_DIR)/ITCH/utility.hpp
-# $(BIN_DIR)/Order.o: $(INC_DIR)/ITCH/Order.hpp $(INC_DIR)/ITCH/Message.hpp $(INC_DIR)/ITCH/utility.hpp
-# $(BIN_DIR)/Message.o: $(INC_DIR)/ITCH/Message.hpp $(INC_DIR)/ITCH/utility.hpp
-# $(BIN_DIR)/utility.o: $(INC_DIR)/ITCH/utility.hpp
-# $(BIN_DIR)/Reader.o: $(INC_DIR)/ITCH/Writer.hpp $(INC_DIR)/ITCH/Reader.hpp $(INC_DIR)/ITCH/Message.hpp $(INC_DIR)/ITCH/utility.hpp
-# $(BIN_DIR)/Writer.o: $(INC_DIR)/ITCH/Writer.hpp
-
-
 clean:
 	$(RM) $(BIN_DIR)/*.o
 
