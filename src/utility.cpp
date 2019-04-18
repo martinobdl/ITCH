@@ -1,6 +1,6 @@
 #include <ITCH/utility.hpp>
 
-std::string NAN_STR = "";
+side_type SIDE_DEFAULT = 0;
 id_type ID_DEFAULT = 72057594037927934;
 price_type PRICE_DEFAULT = -1;
 size_type SIZE_DEFAULT = -1;

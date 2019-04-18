@@ -55,10 +55,12 @@ $(EXE_TEST): $(OBJECTS_T)
 # --------------------------------------------------------------
 
 $(BIN_DIR)/%.o : $(SCR_DIR)/%.cpp
-	$(CXX) $(CXXFLAGS) -I$(INC_DIR) -c $< -o $@
+	$(CXX) -MD $(CXXFLAGS) -I$(INC_DIR) -c $< -o $@
 
 $(BIN_DIR)/%.o : $(TEST_DIR)/%.cpp
-	$(CXX) $(CXXFLAGS) -I$(INC_DIR) -c $< -o $@
+	$(CXX) -MD $(CXXFLAGS) -I$(INC_DIR) -c $< -o $@
+
+# --------------------------------------------------------------
 
 clean:
 	$(RM) $(BIN_DIR)/*.o

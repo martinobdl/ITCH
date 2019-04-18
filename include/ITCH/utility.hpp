@@ -10,9 +10,9 @@ typedef long long time_type;
 typedef bool side_type;
 
 extern id_type ID_DEFAULT;
+extern side_type SIDE_DEFAULT;
 extern size_type SIZE_DEFAULT;
 extern price_type PRICE_DEFAULT;
-extern std::string NAN_STR;
 
 template<class T>class the_type{};
 

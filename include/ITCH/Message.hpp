@@ -9,11 +9,11 @@
 
 class Message{
 private:
-    std::string type = NAN_STR;
+    std::string type = "";
     id_type id=ID_DEFAULT;
     time_type timestamp=0;
 
-    side_type side;
+    side_type side=SIDE_DEFAULT;
     price_type price=PRICE_DEFAULT;
     size_type remSize=SIZE_DEFAULT;
     size_type cancSize=SIZE_DEFAULT;
