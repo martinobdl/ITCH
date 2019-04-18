@@ -6,7 +6,6 @@
 #include <fstream>
 
 class Writer{
-
     std::string fileName;
     std::ofstream file;
 

@@ -1,4 +1,4 @@
-#include <ITCH/BookConstructor.hpp>
+#include <BookConstructor.hpp>
 
 BookConstructor::BookConstructor(const std::string &inputMessageCSV,
     const std::string &outputMessageCSV,
@@ -145,5 +145,3 @@ void BookConstructor::start(){
         next();
     }
 }
-
-

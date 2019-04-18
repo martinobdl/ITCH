@@ -1,11 +1,3 @@
-EXE = BookConstructor
-EXE_TEST = executeTests
-
-SCR_DIR = src
-TEST_DIR = gtests
-BIN_DIR = bin
-INC_DIR = include
-
 CXXFLAGS += -Wall -std=c++11 \
    -Werror \
    -Wextra \
@@ -24,7 +16,10 @@ CXXFLAGS += -Wall -std=c++11 \
    -Wsign-promo \
    -Wswitch-enum \
    -Wswitch-default \
-   -Wundef
+   -Wundef \
+   -MMD
+
+CPPFLAGS += -I$(INC_DIR)
 
 LDFLAGS += 	-lgtest_main \
 			-lgtest \
@@ -32,15 +27,33 @@ LDFLAGS += 	-lgtest_main \
 			-pthread \
 			-lgmock
 
+EXE = BookConstructor
+EXE_TEST = executeTests
+
+SCR_DIR = src
+INC_DIR = include
+BUILD_DIR = build
+TEST_DIR = gtests
+
 SOURCES=$(wildcard $(SCR_DIR)/*.cpp)
-OBJECTS=$(SOURCES:$(SCR_DIR)/%.cpp=$(BIN_DIR)/%.o)
+OBJECTS=$(SOURCES:$(SCR_DIR)/%.cpp=$(BUILD_DIR)/%.o)
 
 SOURCES_T=$(wildcard $(TEST_DIR)/*.cpp)
-OBJECTS_T=$(SOURCES_T:$(TEST_DIR)/%.cpp=$(BIN_DIR)/%.o) $(filter-out $(BIN_DIR)/main.o, $(OBJECTS))
+OBJECTS_T=$(SOURCES_T:$(TEST_DIR)/%.cpp=$(BUILD_DIR)/%.o) $(filter-out $(BUILD_DIR)/main.o, $(OBJECTS))
 
 # --------------------------------------------------------------
 
-all: $(EXE)
+.PHONY: all clean distclean
+
+.DEFAULT_GOAL:= all
+
+all: directories $(EXE)
+
+#Make the Directories
+directories:
+	@mkdir -p $(BUILD_DIR)
+
+# --------------------------------------------------------------
 
 $(EXE): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
@@ -50,18 +63,20 @@ $(EXE): $(OBJECTS)
 test: $(EXE_TEST)
 
 $(EXE_TEST): $(OBJECTS_T)
-	$(CXX) $(CXXFLAGS) $^ $(LDFLAGS) -o $@
+	$(CXX) $(CXXFLAGS) $^ $(LDFLAGS) -o $@ #put LDFLAGS before objects and LDLIBS after
 
 # --------------------------------------------------------------
 
-$(BIN_DIR)/%.o : $(SCR_DIR)/%.cpp
-	$(CXX) $(CXXFLAGS) -I$(INC_DIR) -c $< -o $@
+$(BUILD_DIR)/%.o : $(SCR_DIR)/%.cpp #$(SCR_DIR)/%.h $(SCR_DIR)/%.d
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 
-$(BIN_DIR)/%.o : $(TEST_DIR)/%.cpp
-	$(CXX) $(CXXFLAGS) -I$(INC_DIR) -c $< -o $@
+$(BUILD_DIR)/%.o : $(TEST_DIR)/%.cpp
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
+
+-include $(OBJECTS:%.o=%.d) #(.d are dependency files automatically produced by -MMD flag)
 
 clean:
-	$(RM) $(BIN_DIR)/*.o
+	$(RM) $(BUILD_DIR)/* #delete all files(.o, .d)
 
 distclean: clean
 	$(RM) $(EXE)

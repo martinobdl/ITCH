@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <ITCH/BookConstructor.hpp>
+#include <BookConstructor.hpp>
 
 int main(int argc, char * argv[]){
     size_t levels;

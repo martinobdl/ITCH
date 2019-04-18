@@ -1,4 +1,4 @@
-#include <ITCH/Writer.hpp>
+#include <Writer.hpp>
 
 Writer::Writer(const std::string& _fileName):fileName(_fileName){
   file.open(_fileName);
