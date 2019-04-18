@@ -73,12 +73,14 @@ $(BUILD_DIR)/%.o : $(SCR_DIR)/%.cpp #$(SCR_DIR)/%.h $(SCR_DIR)/%.d
 $(BUILD_DIR)/%.o : $(TEST_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 
+# --------------------------------------------------------------
+
 -include $(OBJECTS:%.o=%.d) #(.d are dependency files automatically produced by -MMD flag)
 
 clean:
 	$(RM) $(BUILD_DIR)/* #delete all files(.o, .d)
 
 distclean: clean
-	$(RM) $(EXE)
+	$(RM) $(EXE) $(EXE_TEST)
 
 print-%  : ; @echo $* = $($*)

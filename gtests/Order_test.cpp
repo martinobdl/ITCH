@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include "ITCH/Order.hpp"
-#include "ITCH/utility.hpp"
+#include <Order.hpp>
+#include <utility.hpp>
 
 struct Order_Test : public testing::Test{
     Order *emptyOrder;

@@ -1,7 +1,3 @@
 
 *.o
-gtests/executeTests
-parser/ITCH_50_parser
-.DS_Store
-c++/BookConstructor
-gtests/executeTests
+*.d
