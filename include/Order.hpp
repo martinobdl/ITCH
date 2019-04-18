@@ -2,8 +2,8 @@
 #define _ORDER_H_
 
 #include <iostream>
-#include <ITCH/utility.hpp>
-#include <ITCH/Message.hpp>
+#include <utility.hpp>
+#include <Message.hpp>
 
 class Order{
     id_type id=ID_DEFAULT;

@@ -1,4 +1,4 @@
-#include <ITCH/Reader.hpp>
+#include <Reader.hpp>
 
 Reader::Reader(const std::string &_fileName, const std::string &_stock, const bool _debug):
     fileName(_fileName), stock(_stock), debug(_debug),parserWriter(_fileName+"_parsed.csv"){

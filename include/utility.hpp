@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+
 typedef double price_type;
 typedef long size_type;
 typedef uint64_t id_type;

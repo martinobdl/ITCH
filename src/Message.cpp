@@ -1,4 +1,4 @@
-#include "ITCH/Message.hpp"
+#include "Message.hpp"
 
 Message::Message(const std::string& _type,
     const id_type& _id,

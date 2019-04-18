@@ -1,12 +1,12 @@
 #ifndef BOOKCONSTRUCTOR_H_
 #define BOOKCONSTRUCTOR_H_
 
-#include <ITCH/Message.hpp>
-#include <ITCH/Order.hpp>
-#include <ITCH/OrderPool.hpp>
-#include <ITCH/OrderBook.hpp>
-#include <ITCH/Reader.hpp>
-#include <ITCH/Writer.hpp>
+#include <Message.hpp>
+#include <Order.hpp>
+#include <OrderPool.hpp>
+#include <OrderBook.hpp>
+#include <Reader.hpp>
+#include <Writer.hpp>
 
 class BookConstructor{
 private:

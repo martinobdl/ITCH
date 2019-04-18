@@ -1,4 +1,4 @@
-#include <ITCH/utility.hpp>
+#include <utility.hpp>
 
 side_type SIDE_DEFAULT = 0;
 id_type ID_DEFAULT = 72057594037927934;

@@ -5,7 +5,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-#include <ITCH/utility.hpp>
+#include <utility.hpp>
 
 class Message{
 private:
