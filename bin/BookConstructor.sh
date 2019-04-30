@@ -194,7 +194,7 @@ if display_list | grep --quiet "$STR_DATE_VENUE"; then
             echo
             exit
         else
-            ~/Documents/gitHub/ITCH/bin/BookConstructor $DECOMPRESSED_INPUT_FILE_PATH $TMP $TMP $LEVELS $STOCK
+            ./bin/BookConstructor $DECOMPRESSED_INPUT_FILE_PATH $TMP $TMP $LEVELS $STOCK
             echo
             echo moving output files to $BOOK_DIR and $MESS_DIR
             echo
