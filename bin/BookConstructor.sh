@@ -198,8 +198,8 @@ if display_list | grep --quiet "$STR_DATE_VENUE"; then
             echo
             echo moving output files to $BOOK_DIR and $MESS_DIR
             echo
-            mv $TMP$BOOK_FILE_NAME $BOOK_DIR
-            mv $TMP$MESS_FILE_NAME $MESS_DIR
+            yes | mv $TMP$BOOK_FILE_NAME $BOOK_DIR
+            yes | mv $TMP$MESS_FILE_NAME $MESS_DIR
             if [ -e $TMP$FILE_NAME ]; then
                 rm $TMP$FILE_NAME
             fi

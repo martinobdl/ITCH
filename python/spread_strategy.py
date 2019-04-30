@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
 from tqdm import tqdm
-from fixed_spread import fixed_spread
+from Algo_fixedSpread import fixed_spread
 
 fileName = "~/Documents/ITCH/20180830.PSX_ITCH_50_AAPL_out_message.csv"
 

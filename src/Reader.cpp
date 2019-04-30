@@ -407,6 +407,17 @@ Message Reader::createMessage(void){
             //         crossType,priceVariationIndicator);
             // }
             break;
+        case 'N':
+            readBytesIntoMessage(19);
+            // if(debug){
+            //     locateCode = parse_uint16(message);
+            //     trackingNumb = parse_uint16(message+2);
+            //     timeStamp = parse_ts(message+4);
+            //     strncpy(ticker, message+10, 8); ticker[8] = 0;
+            //     interest = message[18];
+            //     sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%s,%c\n", key, locateCode,trackingNumb,timeStamp,ticker,interest);
+            // }
+            break;
         default:
             if(!eof()){
                 std::cerr << "Type " << key <<" not found: abort" << std::endl;
