@@ -47,11 +47,11 @@ Message Reader::createMessage(void){
     strncpy(ticker, stock.c_str(), 8); ticker[8] = 0;
     switch(key){
 
-        uint64_t timeStamp, orderId, oldOrderId, newOrderId, matchId;
-        uint16_t locateCode, trackingNumb;
+        uint64_t timeStamp, orderId, oldOrderId, newOrderId;
         uint32_t size, price, execSize, cancSize, newSize, newPrice;
+        // uint16_t locateCode, trackingNumb;
         // uint32_t upperAuctionCollarPrice, lowerAuctionCollarPrice, fairPrice, nearPrice, referencePrice, numberOfSharesInALot, ETPLevarage, timeIPO, priceIPO, auctionCollarPrice;
-        // uint64_t level1, level2, level3, matchNumber, size64, pairedShares, imbalanceShares;
+        // uint64_t level1, level2, level3, matchNumber, size64, pairedShares, imbalanceShares, matchId;
         char direction;
         // char auctionCollarExtension, eventCode, marketCategory, financialStatus, roundLotsOnly, issueClassification, subType[3], autenticity, shortIndicator, ipoFlag, indicatorLULD, flagETP, inverseETPFlag, tradingState, reserved, reason[5], regSHO, mpidIdentifier[5], primaryMarketMaker, marketMakerMode, makerParticipantState, breachedLevel, qualifierIPO, marketCode, haltAction, mpid[5], printable, crossType, imbalanceDirection, priceVariationIndicator;
 
@@ -198,8 +198,6 @@ Message Reader::createMessage(void){
             break;
         case 'A':
             readBytesIntoMessage(35);
-            locateCode = parse_uint16(message);
-            trackingNumb = parse_uint16(message+2);
             timeStamp = parse_ts(message+4);
             orderId = parse_uint64(message+10);
             direction = message[18];
@@ -207,6 +205,8 @@ Message Reader::createMessage(void){
             strncpy(ticker, message+23, 8); ticker[8] = 0;
             price = parse_uint32(message+31);
             // if(debug){
+            //    locateCode = parse_uint16(message);
+            //    trackingNumb = parse_uint16(message+2);
             //     sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 ",%c,%" PRIu32 ",%s,%" PRIu32 ".%04" PRIu32 "\n",
             //         key,locateCode,trackingNumb,timeStamp,orderId,
             //         direction,size,ticker,
@@ -221,8 +221,6 @@ Message Reader::createMessage(void){
             break;
         case 'F':
             readBytesIntoMessage(39);
-            locateCode = parse_uint16(message);
-            trackingNumb = parse_uint16(message+2);
             timeStamp = parse_ts(message+4);
             orderId = parse_uint64(message+10);
             direction = message[18];
@@ -230,6 +228,8 @@ Message Reader::createMessage(void){
             strncpy(ticker, message+23, 8); ticker[8] = 0;
             price = parse_uint32(message+31);
             // if(debug){
+            //    locateCode = parse_uint16(message);
+            //    trackingNumb = parse_uint16(message+2);
             //     strncpy(mpid, message+35, 4); mpid[4] = 0;
             //     sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 ",%c,%" PRIu32 ",%s,%" PRIu32 ".%04" PRIu32 ",%s\n",
             //     key,locateCode,trackingNumb,timeStamp,orderId,
@@ -245,12 +245,12 @@ Message Reader::createMessage(void){
             break;
         case 'E':
             readBytesIntoMessage(30);
-            locateCode = parse_uint16(message);
-            trackingNumb = parse_uint16(message+2);
             timeStamp = parse_ts(message+4);
             orderId = parse_uint64(message+10);
             execSize = parse_uint32(message+18);
             // if(debug){
+            //    locateCode = parse_uint16(message);
+            //    trackingNumb = parse_uint16(message+2);
             //     matchNumber = parse_uint64(message+22);
             //     sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 ",%" PRIu32 ",%" PRIu64 "\n",
             //     key,locateCode,trackingNumb,timeStamp,orderId,
@@ -263,13 +263,13 @@ Message Reader::createMessage(void){
             break;
         case 'C':
             readBytesIntoMessage(35);
-            locateCode = parse_uint16(message);
-            trackingNumb = parse_uint16(message+2);
             timeStamp = parse_ts(message+4);
             orderId = parse_uint64(message+10);
             execSize = parse_uint32(message+18);
             price = parse_uint32(message+31);
             // if(debug){
+            //    locateCode = parse_uint16(message);
+            //    trackingNumb = parse_uint16(message+2);
             //     matchNumber = parse_uint64(message+22);
             //     printable = message[30];
             //     sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 ",%" PRIu32 ",%" PRIu64 ",%c,%" PRIu32 ".%04" PRIu32 "\n",
@@ -282,12 +282,12 @@ Message Reader::createMessage(void){
             break;
         case 'X':
             readBytesIntoMessage(22);
-            locateCode = parse_uint16(message);
-            trackingNumb = parse_uint16(message+2);
             timeStamp = parse_ts(message+4);
             orderId = parse_uint64(message+10);
             cancSize = parse_uint32(message+18);
             // if(debug){
+            //    locateCode = parse_uint16(message);
+            //    trackingNumb = parse_uint16(message+2);
             //     sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 ",%" PRIu32 "\n",
             //     key,locateCode,trackingNumb,timeStamp,orderId,cancSize);
             // }
@@ -298,11 +298,11 @@ Message Reader::createMessage(void){
             break;
         case 'D':
             readBytesIntoMessage(18);
-            locateCode = parse_uint16(message);
-            trackingNumb = parse_uint16(message+2);
             timeStamp = parse_ts(message+4);
             orderId = parse_uint64(message+10);
             // if(debug){
+            //    locateCode = parse_uint16(message);
+            //    trackingNumb = parse_uint16(message+2);
             //     sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 "\n",
             //     key,locateCode,trackingNumb,timeStamp,orderId);
             // }
@@ -312,14 +312,14 @@ Message Reader::createMessage(void){
             break;
         case 'U':
             readBytesIntoMessage(34);
-            locateCode = parse_uint16(message);
-            trackingNumb = parse_uint16(message+2);
             timeStamp = parse_ts(message+4);
             oldOrderId = parse_uint64(message+10);
             newOrderId = parse_uint64(message+18);
             newSize = parse_uint32(message+26);
             newPrice = parse_uint32(message+30);
             // if(debug){
+            //    locateCode = parse_uint16(message);
+            //    trackingNumb = parse_uint16(message+2);
             //     sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 ",%" PRIu64 ",%" PRIu32 ",%" PRIu32 ".%04" PRIu32 "\n",
             //     key,locateCode,trackingNumb,timeStamp,oldOrderId,
             //     newOrderId,newSize,newPrice/10000,newPrice%10000);
@@ -333,16 +333,16 @@ Message Reader::createMessage(void){
             break;
         case 'P':
             readBytesIntoMessage(43);
-            locateCode = parse_uint16(message);
-            trackingNumb = parse_uint16(message+2);
             timeStamp = parse_ts(message+4);
             orderId = parse_uint64(message+10);
             direction = message[18];
             size = parse_uint32(message+19);
             strncpy(ticker, message+23, 8); ticker[8] = 0;
             price = parse_uint32(message+31);
-            matchId = parse_uint64(message+35);
             // if(debug){
+            //    locateCode = parse_uint16(message);
+            //    trackingNumb = parse_uint16(message+2);
+            //    matchId = parse_uint64(message+35);
             //     sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 ",%c,%" PRIu32 ",%s,%" PRIu32 ".%04" PRIu32 ",%" PRIu64 "\n",
             //     key,locateCode,trackingNumb,timeStamp,orderId,
             //     direction,size,ticker,price/10000,price%10000,matchId);

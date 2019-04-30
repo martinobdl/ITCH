@@ -73,6 +73,13 @@ case $key in
     shift
     exit
     ;;
+    -*)
+    echo
+    echo Unrecognied option: $key
+    echo
+    display_usage
+    exit
+    ;;
     *)
     POSITIONAL+=("$1")
     shift
@@ -106,7 +113,7 @@ fi
 # add trailing backslah if needed
 [[ "${STR}" != */ ]] && STR="${STR}/"
 
-if [ -e $DATA_FOLDER ]; then
+if [[ ! -z $DATA_FOLDER ]]; then
     :
 else
     echo No directory named $DATA_FOLDER
