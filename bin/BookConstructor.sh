@@ -104,7 +104,7 @@ DATE=${POSITIONAL[1]}
 VENUE=${POSITIONAL[2]}
 STOCK=${POSITIONAL[3]}
 
-if [ -e $TMPDIR ]; then
+if [[ ! -z $TMPDIR ]]; then
     TMP=$TMPDIR
 else
     TMP=/tmp/
