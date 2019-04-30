@@ -1,7 +1,5 @@
-• gtests: we need to implement google tests (google provides a testing framework for testing functions). Install gtets and gmock on yu machine (I wasnt able to on vagrant)
+• C(maybe also Q) orders. Max priority.
 
-• UML class graph
+• python part.
 
-• PQC orders
-
-• python plots (after all the above)
+• LaTeX: presentation in beamer for Ardagna and documentation.

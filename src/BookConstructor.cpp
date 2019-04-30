@@ -4,9 +4,8 @@ BookConstructor::BookConstructor(const std::string &inputMessageCSV,
     const std::string &outputMessageCSV,
     const std::string &outputBookCSV,
     const std::string &_stock,
-    const size_t &_levels,
-    const bool debug):
-    message_reader(inputMessageCSV, _stock, debug),
+    const size_t &_levels):
+    message_reader(inputMessageCSV, _stock),
     messageWriter(outputMessageCSV),
     bookWriter(outputBookCSV),
     levels(_levels){
@@ -14,9 +13,9 @@ BookConstructor::BookConstructor(const std::string &inputMessageCSV,
         std::string bookHeader = "time,";
         for(size_t i = 1; i<=levels; i++){
             std::string num = std::to_string(i);
-            bookHeader += num+"_bid_price,"+num+"_ask_vol,"+num+"_ask_price,"+num+"_bid_vol\n";
+            bookHeader += num+"_bid_price,"+num+"_ask_vol,"+num+"_ask_price,"+num+"_bid_vol,";
         }
-        bookWriter.writeLine(bookHeader);
+        bookWriter.writeLine(bookHeader.substr(0, bookHeader.size()-1)+'\n');
     }
 
 BookConstructor::~BookConstructor(){
@@ -126,11 +125,11 @@ void BookConstructor::updatePool(){
         pool.addToOrderPool(message.getId(), message.getSide(), message.getRemSize(), message.getPrice());
     }
     if(typeMsg=="D"){
-        // Deleat partially or totally
+        // Deleat partially or totally an order
         pool.modifyOrder(message.getId(), message.getCancSize());
     }
     if(typeMsg=="E"){
-        // Take out parto of total size of order.
+        // Execution of part or total size of order.
         pool.modifyOrder(message.getId(), message.getExecSize());
     }
 }

@@ -7,6 +7,8 @@
 #include <time.h>
 #include <inttypes.h> // PRIux
 #include <cstring>
+#include <algorithm> // min
+#include <cmath> // sqrt
 #include <Message.hpp>
 #include <Writer.hpp>
 
@@ -20,10 +22,10 @@ private:
     char message[64];
     bool goodFile = 0;
     time_t start;
-    bool debug = 0;
-    Writer parserWriter;
+    // bool debug = 0;
+    // Writer parserWriter;
 public:
-    Reader(const std::string &fileName, const std::string &stock, const bool debug);
+    Reader(const std::string &fileName, const std::string &stock);
     Reader(const std::string &_stock);
     bool isGood(void) const;
     virtual ~Reader();

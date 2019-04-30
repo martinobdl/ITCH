@@ -31,6 +31,7 @@ EXE = BookConstructor
 EXE_TEST = executeTests
 
 SCR_DIR = src
+BIN_DIR = bin
 INC_DIR = include
 BUILD_DIR = build
 TEST_DIR = gtests
@@ -47,22 +48,22 @@ OBJECTS_T=$(SOURCES_T:$(TEST_DIR)/%.cpp=$(BUILD_DIR)/%.o) $(filter-out $(BUILD_D
 
 .DEFAULT_GOAL:= all
 
-all: directories $(EXE)
+all: directories $(BIN_DIR)/$(EXE)
 
 #Make the Directories
 directories:
-	@mkdir -p $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR) $(BIN_DIR)
 
 # --------------------------------------------------------------
 
-$(EXE): $(OBJECTS)
+$(BIN_DIR)/$(EXE): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
 # --------------------------------------------------------------
 
-test: $(EXE_TEST)
+test: directories $(BIN_DIR)/$(EXE_TEST)
 
-$(EXE_TEST): $(OBJECTS_T)
+$(BIN_DIR)/$(EXE_TEST): $(OBJECTS_T)
 	$(CXX) $(CXXFLAGS) $^ $(LDFLAGS) -o $@ #put LDFLAGS before objects and LDLIBS after
 
 # --------------------------------------------------------------
@@ -81,6 +82,6 @@ clean:
 	$(RM) $(BUILD_DIR)/* #delete all files(.o, .d)
 
 distclean: clean
-	$(RM) $(EXE) $(EXE_TEST)
+	$(RM) $(BIN_DIR)/$(EXE) $(BIN_DIR)/$(EXE_TEST)
 
 print-%  : ; @echo $* = $($*)

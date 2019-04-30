@@ -5,6 +5,22 @@ id_type ID_DEFAULT = 72057594037927934;
 price_type PRICE_DEFAULT = -1;
 size_type SIZE_DEFAULT = -1;
 
+std::string getFileName(const std::string& s) {
+
+   char sep = '/';
+
+#ifdef _WIN32
+   sep = '\\';
+#endif
+
+   size_t i = s.rfind(sep, s.length());
+   if (i != std::string::npos) {
+      return(s.substr(i+1, s.length() - i));
+   }
+
+   return("");
+}
+
 long stringConvert(std::string input, the_type<long> ){
     long ret=std::stol(input);
     //std::cout<<"It's a long";

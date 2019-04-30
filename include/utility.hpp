@@ -29,5 +29,6 @@ uint16_t parse_uint16(char * a);
 uint32_t parse_uint32(char * a);
 uint64_t parse_uint64(char * a);
 uint64_t parse_ts(char * a);
+std::string getFileName(const std::string& s);
 
 #endif

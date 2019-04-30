@@ -11,7 +11,7 @@ if __name__ == "__main__":
     outFile = ".".join(fileName.split('.')[:-1])+'_Executions.csv'
     try:
         print "Reading file " + fileName
-        df = pd.read_csv(fileName);
+        df = pd.read_csv(fileName)
     except:
         print "Error in reading the file."
     try:

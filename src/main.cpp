@@ -3,27 +3,20 @@
 #include <BookConstructor.hpp>
 
 int main(int argc, char * argv[]){
-    size_t levels;
-    bool debug = 0;
-    if(argc < 3){
-        std::cerr << "Call it with: path to ITCH Parsed, Stock name, [optional] number of levels, [optional] -D" << std::endl;
+
+    if(argc<5){
+        std::cerr << "Should be called with: ./BookConstructor path_input_file dir_book dir_mex levels stock" << std::endl;
         return 0;
     }
-    else if(argc == 3){
-        levels = 1;
-        debug = 0;
-    }
-    else if(argc == 4){
-        levels = std::stoul(argv[3]);
-    }
-    else if(argc == 5){
-        levels = std::stoul(argv[3]);
-        debug = (std::string(argv[4])=="-D");
-    }
+
     std::string pathFile = argv[1];
-    std::string stock = argv[2];
-    std::string outBookFileName = pathFile+"_"+stock+"_out_book.csv";
-    std::string outMessageFileName = pathFile+"_"+stock+"_out_message.csv";
+    std::string outBookDirectory = argv[2];
+    std::string outMessageDirectory = argv[3];
+    size_t levels = std::stoul(argv[4]);
+    std::string stock = argv[5];
+    std::string nameFile = getFileName(pathFile);
+    std::string outBookFileName = outBookDirectory+nameFile+"_"+stock+"_book_"+std::to_string(levels)+".csv";
+    std::string outMessageFileName = outMessageDirectory+nameFile+"_"+stock+"_message.csv";
     std::string stockPadded = stock;
     stockPadded.insert(stockPadded.end(), 8 - stockPadded.size(), ' ');
 
@@ -31,8 +24,7 @@ int main(int argc, char * argv[]){
         outMessageFileName,
         outBookFileName,
         stockPadded,
-        levels,
-        debug);
+        levels);
 
     BookConstructor.start();
 }
