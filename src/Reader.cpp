@@ -277,7 +277,11 @@ Message Reader::createMessage(void){
             //     execSize,matchNumber,printable,
             //     price/10000,price%10000);
             // }
-
+            msg.setType(std::string(1,key));
+            msg.setTimeStamp(static_cast<time_type>(timeStamp));
+            msg.setId(static_cast<id_type>(orderId));
+            msg.setExecSize(static_cast<size_type>(execSize));
+            msg.setPrice(static_cast<price_type>(price)/10000);
             // Check how to use C.
             break;
         case 'X':

@@ -20,6 +20,7 @@ class OrderBook{
     std::string getString(const size_t &level) const; // "bestBidPrice,bestBidSize,bestAskPrice,bestAskSize,..."
     void modifySize(price_type price, size_type size, side_type side); // size also negative
     void setTimeStamp(const time_type &t);
+    bool checkBidAsk();
 };
 
 

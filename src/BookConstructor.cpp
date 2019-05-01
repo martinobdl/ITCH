@@ -9,7 +9,7 @@ BookConstructor::BookConstructor(const std::string &inputMessageCSV,
     messageWriter(outputMessageCSV),
     bookWriter(outputBookCSV),
     levels(_levels){
-        messageWriter.writeLine("type,time,id,side,size,price,cancSize,execSize,oldId,oldSize,oldPrice\n");
+        messageWriter.writeLine("time,type,id,side,size,price,cancSize,execSize,oldId,oldSize,oldPrice\n");
         std::string bookHeader = "time,";
         for(size_t i = 1; i<=levels; i++){
             std::string num = std::to_string(i);
@@ -53,6 +53,7 @@ bool BookConstructor::updateMessage(){
         return 0;
     }
 
+    // for all messages
     message.setSide(order.getSide());
 
     if(typeMsg == "D"){
@@ -79,8 +80,16 @@ bool BookConstructor::updateMessage(){
         message.setRemSize(remainingSize);
     }
 
+    else if(typeMsg == "C"){
+        //Execution at different price
+        size_type remainingSize = order.getSize() - message.getExecSize();
+        message.setRemSize(remainingSize);
+        message.setOldPrice(order.getPrice());
+    }
+
     else{
         std::cerr << "Unexpected type found! " << typeMsg << std::endl;
+        return 0;
     }
     return 1;
 }
@@ -111,6 +120,13 @@ void BookConstructor::updateBook(){
         // Execute order.
         book.modifySize(message.getPrice(),-message.getExecSize(),message.getSide());
     }
+    if(typeMsg=="C"){
+        // Execute order at different price.
+        book.modifySize(message.getOldPrice(),-message.getExecSize(),message.getSide());
+    }
+    if(!book.checkBidAsk()){
+        std::cerr << "Bid is greater or equal then ask.";
+    }
 }
 
 void BookConstructor::updatePool(){
@@ -130,6 +146,10 @@ void BookConstructor::updatePool(){
     }
     if(typeMsg=="E"){
         // Execution of part or total size of order.
+        pool.modifyOrder(message.getId(), message.getExecSize());
+    }
+    if(typeMsg=="C"){
+        // Execution at different price.
         pool.modifyOrder(message.getId(), message.getExecSize());
     }
 }

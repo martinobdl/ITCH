@@ -2,11 +2,10 @@ from Algo import Algo
 
 class fixed_spread(Algo):
 
-    def __init__(self,tick,spread_ticks,width):
+    def __init__(self,tick,spread_ticks):
         super(fixed_spread, self).__init__()
         self.spread_ticks = spread_ticks
         self.spread = spread_ticks*tick
-        self.width = width
         self.tick = tick
 
     def init_run(self):

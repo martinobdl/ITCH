@@ -23,6 +23,9 @@ void Message::setType(const std::string& _type){
     else if (_type == "P"){
         type = _type; // execute hidden
     }
+    else if (_type == "C"){
+        type = _type; // execute hidden
+    }
     else{
         std::cerr << "Message with wrong type (" << _type << ") has been found!"<< std::endl;
     }
@@ -119,10 +122,10 @@ bool Message::isEmpty()const{
 
 std::string Message::getString()const{
     std::ostringstream string_builder;
-    string_builder  << type << ",";
+    string_builder  << timestamp << ",";
 
     if(!isEmpty()){
-        string_builder  << timestamp  << ","
+        string_builder  << type  << ","
                         << id << ","
                         << side << ",";
     }

@@ -16,11 +16,11 @@ class Algo(object):
     # fixec commission for execution
     COMMISSIONS = 0.002
 
-    def __init__(self, letency=0):
+    def __init__(self, latency=0):
         """ Subclass to define algo specific parameters here.
         :param latency: algorith latency in execution
         """
-        self.letency = letency
+        self.latency = latency
 
     def init_orders(self):
         """ Set initial orders.
@@ -47,7 +47,9 @@ class Algo(object):
             self.step(pt,data.iloc[:i])
 
     def step(self, pt):
-        """ Get startegy for next tick. """
+        """ Get startegy for next tick.
+        Should update orders.
+        """
         raise NotImplementedError('Subclass must implement this!')
 
     def collect_from_orders(self,pt):

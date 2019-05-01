@@ -1,5 +1,8 @@
-• C(maybe also Q) orders. Max priority.
+• comments
 
 • python part.
+    introduce sending latency
 
 • LaTeX: presentation in beamer for Ardagna and documentation.
+
+• (maybe also Q) orders. Low priority.

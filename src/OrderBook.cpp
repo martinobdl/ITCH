@@ -52,6 +52,11 @@ void OrderBook::modifySize(price_type price, size_type size, side_type side){
     }
 }
 
+bool OrderBook::checkBidAsk(){
+    // check if bid smaller then ask
+    return ((buySide.rbegin()->first) < (sellSide.begin()->first) or (buySide.empty() or sellSide.empty()));
+}
+
 void OrderBook::setTimeStamp(const time_type &t){
     timestamp = t;
 }

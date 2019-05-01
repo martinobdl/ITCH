@@ -42,7 +42,6 @@ display_list() {
     sed -n 's/[0-9]\{2\}/&-/p' |
     sed -n 's/[0-9]\{2\}-[0-9]\{2\}/&-/p' |
     sed -n 's/\([0-9]\{2\}-[0-9]\{2\}-[0-9]\{4\}\)\.\([^_]*\)_ITCH50.gz/\1\t\2/p' | tr t $'\t'
-    echo
 }
 
 POSITIONAL=()
@@ -104,11 +103,7 @@ DATE=${POSITIONAL[1]}
 VENUE=${POSITIONAL[2]}
 STOCK=${POSITIONAL[3]}
 
-if [[ ! -z $TMPDIR ]]; then
-    TMP=$TMPDIR
-else
-    TMP=/tmp/
-fi
+TMP=/tmp/
 
 # add trailing backslah if needed
 [[ "${STR}" != */ ]] && STR="${STR}/"
@@ -194,7 +189,8 @@ if display_list | grep --quiet "$STR_DATE_VENUE"; then
             echo
             exit
         else
-            ./bin/BookConstructor $DECOMPRESSED_INPUT_FILE_PATH $TMP $TMP $LEVELS $STOCK
+            DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+            "$DIR"/bin/BookConstructor $DECOMPRESSED_INPUT_FILE_PATH $TMP $TMP $LEVELS $STOCK
             echo
             echo moving output files to $BOOK_DIR and $MESS_DIR
             echo
