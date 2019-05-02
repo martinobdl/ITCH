@@ -1,4 +1,4 @@
-#ifndef UTILITY_H
+#ifndef UTILIY_HT
 #define UTILITY_H
 
 #include <iostream>
@@ -15,8 +15,6 @@ extern side_type SIDE_DEFAULT;
 extern size_type SIZE_DEFAULT;
 extern price_type PRICE_DEFAULT;
 
-template<class T>class the_type{};
-
 long stringConvert(std::string input, the_type<long>);
 double stringConvert(std::string input, the_type<double>);
 long long stringConvert(std::string input, the_type<long long>);
@@ -31,4 +29,4 @@ uint64_t parse_uint64(char * a);
 uint64_t parse_ts(char * a);
 std::string getFileName(const std::string& s);
 
-#endif
+#endif /* UTILITY_H */

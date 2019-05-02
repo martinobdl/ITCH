@@ -9,6 +9,7 @@ BookConstructor::BookConstructor(const std::string &inputMessageCSV,
     messageWriter(outputMessageCSV),
     bookWriter(outputBookCSV),
     levels(_levels){
+        // Write headers of output files.
         messageWriter.writeLine("time,type,id,side,size,price,cancSize,execSize,oldId,oldSize,oldPrice\n");
         std::string bookHeader = "time,";
         for(size_t i = 1; i<=levels; i++){
@@ -20,8 +21,14 @@ BookConstructor::BookConstructor(const std::string &inputMessageCSV,
 
 BookConstructor::~BookConstructor(){
     if(!pool.isEmpty()){
-        std::cout << "Residual Orders ids: ";
+        std::cout << "Ids of orders remaining in the book after the market closure: ";
         pool.printIds();
+    }
+}
+
+void BookConstructor::start(void){
+    while(!message_reader.eof() and message_reader.isGood()){
+        next();
     }
 }
 
@@ -37,130 +44,137 @@ void BookConstructor::next(void){
     }
 }
 
-bool BookConstructor::updateMessage(){
-
+bool BookConstructor::updateMessage(void){
     std::string typeMsg = message.getType();
 
     if(typeMsg == "A" or typeMsg == "P"){
+        // All information about the message has been read from input file.
         return 1;
     }
-    // If we have "(R)eplace" message, we are searching the order oldId.
+
+    // The information about other type of messages has to be recovered from preceding processed messages with same ID.
+    // Matching (R)eplace message is done by comparing its oldID with the IDs of preceding processed messages.
     id_type messageId = (typeMsg == "R") ? message.getOldId() : message.getId();
 
-    // Find message in pool.
-    Order order = pool.findOrderPool(messageId);
-    if(order.isEmpty()){
+    // Find order in pool corresponding to the same ID as currently processing message.
+    Order matchedOrder = pool.searchOrderPool(messageId);
+    if(matchedOrder.isEmpty()){
         return 0;
     }
 
-    // for all messages
-    message.setSide(order.getSide());
+    message.setSide(matchedOrder.getSide());
 
     if(typeMsg == "D"){
        // (D)elete: adding remSize, Price
         if (message.getCancSize() == SIZE_DEFAULT){
-            // We do not have CancSize hence we are in complete deletion of order.
-            message.setCancSize(order.getSize());
+            // CancSize has default value, meaning the complete deletion has taken place.
+            // Retrive the information about size to be canceled from matched order.
+            message.setCancSize(matchedOrder.getSize());
         }
-        size_type remainingSize = order.getSize() - message.getCancSize();
+
+        size_type remainingSize = matchedOrder.getSize() - message.getCancSize();
         message.setRemSize(remainingSize);
-        message.setPrice(order.getPrice());
+        message.setPrice(matchedOrder.getPrice());
     }
 
     else if(typeMsg == "R"){
-        //(R)eplace: adding oldSize, oldPrice
-        message.setOldSize(order.getSize());
-        message.setOldPrice(order.getPrice());
+        // (R)eplace: adding oldSize, oldPrice
+        message.setOldSize(matchedOrder.getSize());
+        message.setOldPrice(matchedOrder.getPrice());
     }
 
     else if(typeMsg == "E"){
-        //(E)xecution: adding remSize, price
-        message.setPrice(order.getPrice());
-        size_type remainingSize = order.getSize() - message.getExecSize();
+        // (E)xecution: adding remSize, price
+        message.setPrice(matchedOrder.getPrice());
+        size_type remainingSize = matchedOrder.getSize() - message.getExecSize();
         message.setRemSize(remainingSize);
     }
 
     else if(typeMsg == "C"){
-        //Execution at different price
-        size_type remainingSize = order.getSize() - message.getExecSize();
+        // Execution at different price
+        size_type remainingSize = matchedOrder.getSize() - message.getExecSize();
         message.setRemSize(remainingSize);
-        message.setOldPrice(order.getPrice());
+        message.setOldPrice(matchedOrder.getPrice());
     }
 
     else{
-        std::cerr << "Unexpected type found! " << typeMsg << std::endl;
+        std::cerr << "Unexpected type of message has been found while updating message! " << typeMsg << std::endl;
         return 0;
     }
     return 1;
 }
 
-void BookConstructor::updateBook(){
+void BookConstructor::updateBook(void){
     book.setTimeStamp(message.getTimeStamp());
     std::string typeMsg = message.getType();
-    if(typeMsg=="A"){
-        // Add the order to the pool. If key in the map is already there
+
+    if(typeMsg == "A"){
+        // Add the order to the pool. If key in the map (price) is already there
         // just add the size. Otherwise add the key with corresponding size.
-        // Whatever side of the book I'm looking at.
         book.modifySize(message.getPrice(),message.getRemSize(),message.getSide());
     }
-    if(typeMsg=="R"){
-        // Take away the corrisponding size and add a new order.
+    else if(typeMsg == "R"){
+        // Replace existing order in the pool.
         //
-        // cancel.
+        // Completely cancel the existing order.
         book.modifySize(message.getOldPrice(),-message.getOldSize(),message.getSide());
         //
-        // add.
+        // Add new order.
         book.modifySize(message.getPrice(),message.getRemSize(),message.getSide());
     }
-    if(typeMsg=="D"){
+    else if(typeMsg == "D"){
         // Cancel order. Totally or partially.
         book.modifySize(message.getPrice(),-message.getCancSize(),message.getSide());
     }
-    if(typeMsg=="E"){
+    else if(typeMsg == "E"){
         // Execute order.
         book.modifySize(message.getPrice(),-message.getExecSize(),message.getSide());
     }
-    if(typeMsg=="C"){
+    else if(typeMsg == "C"){
         // Execute order at different price.
         book.modifySize(message.getOldPrice(),-message.getExecSize(),message.getSide());
     }
-    if(!book.checkBidAsk()){
-        std::cerr << "Bid is greater or equal then ask.";
+
+    else{
+        std::cerr << "Unexpected type of message has been found while updating book! " << typeMsg << std::endl;
+    }
+
+    if(!book.checkBookConsistency()){
+        std::cerr << "There is a bid price greater than ask." << std::endl;
     }
 }
 
-void BookConstructor::updatePool(){
+void BookConstructor::updatePool(void){
     std::string typeMsg = message.getType();
-    if(typeMsg=="A"){
-        // Add order to to order pool.
+
+    if(typeMsg == "A"){
+        // Add order to order pool.
         pool.addToOrderPool(message.getId(), message.getSide(), message.getRemSize(), message.getPrice());
     }
-    if(typeMsg=="R"){
+    else if(typeMsg=="R"){
         // Delete old order and add new one.
         pool.modifyOrder(message.getOldId(), message.getOldSize());
         pool.addToOrderPool(message.getId(), message.getSide(), message.getRemSize(), message.getPrice());
     }
-    if(typeMsg=="D"){
-        // Deleat partially or totally an order
+    else if(typeMsg=="D"){
+        // Delete (partially or totally) order.
         pool.modifyOrder(message.getId(), message.getCancSize());
     }
-    if(typeMsg=="E"){
-        // Execution of part or total size of order.
+    else if(typeMsg=="E"){
+        // Execute (partially or totally) order.
         pool.modifyOrder(message.getId(), message.getExecSize());
     }
-    if(typeMsg=="C"){
-        // Execution at different price.
+    else if(typeMsg=="C"){
+        // Execute order at different price.
         pool.modifyOrder(message.getId(), message.getExecSize());
+    }
+    else{
+        std::cerr << "Unexpected type of message has been found while updating pool! " << typeMsg << std::endl;
     }
 }
 
-void BookConstructor::WriteBookAndMessage(){
+void BookConstructor::WriteBookAndMessage(void){
     bookWriter.writeLine(book.getString(levels));
     messageWriter.writeLine(message.getString());
 }
 
-void BookConstructor::start(){
-    while(!message_reader.eof() and message_reader.isGood()){
-        next();
-    }
-}

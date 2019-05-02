@@ -21,10 +21,10 @@ void Message::setType(const std::string& _type){
         type = _type; // execute
     }
     else if (_type == "P"){
-        type = _type; // execute hidden
+        type = _type; // execute hidden message
     }
     else if (_type == "C"){
-        type = _type; // execute hidden
+        type = _type;
     }
     else{
         std::cerr << "Message with wrong type (" << _type << ") has been found!"<< std::endl;
@@ -32,43 +32,43 @@ void Message::setType(const std::string& _type){
 }
 
 void Message::setId(const id_type& _id){
-    id=_id;
+    id = _id;
 }
 
 void Message::setTimeStamp(const time_type& _timestamp){
-    timestamp=_timestamp;
+    timestamp = _timestamp;
 }
 
 void Message::setSide(const side_type& _side){
-    side=_side;
+    side = _side;
 }
 
 void Message::setPrice(const price_type& _price){
-    price=_price;
+    price = _price;
 }
 
 void Message::setRemSize(const size_type& _size){
-    remSize=_size;
+    remSize = _size;
 }
 
 void Message::setCancSize(const size_type& _size){
-    cancSize=_size;
+    cancSize = _size;
 }
 
 void Message::setExecSize(const size_type& _size){
-    execSize=_size;
+    execSize = _size;
 }
 
 void Message::setOldId(const id_type& _id){
-    oldId=_id;
+    oldId = _id;
 }
 
 void Message::setOldPrice(const price_type& _price){
-    oldPrice=_price;
+    oldPrice = _price;
 }
 
 void Message::setOldSize(const size_type& _size){
-    oldSize=_size;
+    oldSize = _size;
 }
 
 // getters
@@ -173,22 +173,22 @@ std::string Message::getString()const{
 }
 
 void Message::print() const {
-    std::cout<<"Message type   :" << type <<std::endl;
-    std::cout<<"Id             :"<<id<< std::endl;
-    std::cout<<"timestamp      :" << timestamp <<std::endl;
-    std::cout<<"side           :" << side <<std::endl;
-    std::cout<<"price          :"<<price<<std::endl;
-    std::cout<<"remaining size :" << remSize <<std::endl;
+    std::cout << "Message type   :" << type <<std::endl;
+    std::cout << "Id             :"<< id << std::endl;
+    std::cout << "timestamp      :" << timestamp << std::endl;
+    std::cout << "Side           :" << side << std::endl;
+    std::cout << "Price          :"<< price << std::endl;
+    std::cout << "Remaining size :" << remSize << std::endl;
     if (type == "D"){
-        std::cout<<"deletion size  :" << cancSize <<std::endl;
+        std::cout << "Deletion size  :" << cancSize << std::endl;
     }
     if (type == "E"){
-        std::cout<<"execution size :" << execSize <<std::endl;
+        std::cout << "Execution size :" << execSize << std::endl;
     }
-    if (type =="U"){
-        std::cout<< "old Id         :" << oldId <<std::endl;
-        std::cout<< "old size       :"<< oldSize <<std::endl;
-        std::cout<< "old price      :" << oldPrice <<std::endl;
+    if (type == "U"){
+        std::cout << "Old Id         :" << oldId << std::endl;
+        std::cout << "Old size       :"<< oldSize << std::endl;
+        std::cout << "Old price      :" << oldPrice << std::endl;
     }
-    std::cout<< "" <<std::endl;
+    std::cout << " " << std::endl;
 }

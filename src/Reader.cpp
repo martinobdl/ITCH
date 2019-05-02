@@ -4,17 +4,16 @@ Reader::Reader(const std::string &_fileName, const std::string &_stock):
     fileName(_fileName), stock(_stock){
         file.open(fileName);
         if(!file.is_open()){
-            std::cerr << "Can't open input file " << fileName << std::endl;
+            std::cerr << "The input file: " << fileName << " cannot be open! " << std::endl;
             }
         else{
             std::cout << "Opened " << fileName << " to read ITCH 5.0. messages." << std::endl;
-            goodFile = 1;
+            validFile = 1;
         }
         start = time(0);
     }
 
-Reader::Reader(const std::string &_stock):
-    stock(_stock){}
+Reader::Reader(const std::string &_stock): stock(_stock){}
 
 void Reader::printProgress(void){
     count ++;
@@ -46,7 +45,6 @@ Message Reader::createMessage(void){
     char ticker[9];
     strncpy(ticker, stock.c_str(), 8); ticker[8] = 0;
     switch(key){
-
         uint64_t timeStamp, orderId, oldOrderId, newOrderId;
         uint32_t size, price, execSize, cancSize, newSize, newPrice;
         // uint16_t locateCode, trackingNumb;
@@ -282,7 +280,6 @@ Message Reader::createMessage(void){
             msg.setId(static_cast<id_type>(orderId));
             msg.setExecSize(static_cast<size_type>(execSize));
             msg.setPrice(static_cast<price_type>(price)/10000);
-            // Check how to use C.
             break;
         case 'X':
             readBytesIntoMessage(22);
@@ -425,7 +422,7 @@ Message Reader::createMessage(void){
         default:
             if(!eof()){
                 std::cerr << "Type " << key <<" not found: abort" << std::endl;
-                goodFile = 0;
+                validFile = 0;
             }
             break;
     }
@@ -438,12 +435,12 @@ Message Reader::createMessage(void){
     return msg;
 }
 
-bool Reader::eof(){
+bool Reader::eof(void){
     return file.eof();
 }
 
-bool Reader::isGood() const{
-    return goodFile;
+bool Reader::isValid(void) const{
+    return validFile;
 }
 
 std::string Reader::getFileName(void) const{
@@ -461,7 +458,7 @@ void Reader::setMessage(const char* str){
 Reader::~Reader(){
     if (file.is_open()){
         file.close();
-        std::cout<<"file "<<fileName<<" has been closed"<<std::endl;
+        std::cout<<"File "<<fileName<<" has been closed"<<std::endl;
         std::cout << "Finished, processed " << count << " messages in " << difftime(time(0),start) << "seconds."  << std::endl;
     }
 }

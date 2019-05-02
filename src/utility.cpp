@@ -22,25 +22,25 @@ std::string getFileName(const std::string& s) {
 }
 
 long stringConvert(std::string input, the_type<long> ){
-    long ret=std::stol(input);
+    long ret = std::stol(input);
     //std::cout<<"It's a long";
     return ret;
 }
 
 double stringConvert(std::string input, the_type<double> ){
-    double ret=std::stod(input);
+    double ret = std::stod(input);
     //std::cout<<"It's a double";
     return ret;
 }
 
 long long stringConvert(std::string input, the_type<long long> ){
-    long long ret=std::stoll(input);
+    long long ret = std::stoll(input);
     //std::cout<<"It's a long long";
     return ret;
 }
 
 float stringConvert(std::string input, the_type<float> ){
-    float ret=std::stof(input);
+    float ret = std::stof(input);
     //std::cout<<"It's a float";
     return ret;
 }

@@ -13,7 +13,7 @@ class Writer{
     Writer(const std::string& fileName);
     Writer() = default;
     ~Writer();
-    void writeLine(std::string stringToWrite);
+    void writeLine(std::string);
     std::string getFileName(void) const;
 };
 

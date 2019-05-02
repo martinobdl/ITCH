@@ -1,33 +1,31 @@
 #include <OrderPool.hpp>
 
-Order OrderPool::findOrderPool(id_type idOrder){
-    auto found=pool.find(idOrder);
-    Order ret;
-    if (found!=pool.end()){
-        ret=found->second;
+Order OrderPool::searchOrderPool(id_type idOrder){
+    auto foundElement = pool.find(idOrder);
+    Order foundOrder;
+    if (foundElement != pool.end()){
+        foundOrder = foundElement->second;
     }
-    return ret;
+    return foundOrder;
 }
 
 void OrderPool::addToOrderPool(id_type idOrder, bool side, size_type size, price_type price){
     Order orderToAdd(idOrder, side, size, price);
-    pool[idOrder]=orderToAdd;
-    return;
+    pool[idOrder] = orderToAdd;
 }
 
-void OrderPool::modifyOrder(id_type idOrder, size_type size=0){
-    // size is to be removed from the order
-    if (size==0){
+void OrderPool::modifyOrder(id_type idOrder, size_type size = 0){
+    // Delete the order if its size reaches 0
+    if (size == 0){
         pool.erase(idOrder);
-        std::cout<<"size = 0"<<std::endl;
+        std::cout << "size = 0" << std::endl;
     }
     else{
         pool[idOrder].addSize(-size);
-        if( pool[idOrder].getSize()==0 ){
+        if( pool[idOrder].getSize() == 0 ){
             pool.erase(idOrder);
         }
     }
-    return;
 }
 
 bool OrderPool::isEmpty(void) const{

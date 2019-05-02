@@ -9,18 +9,17 @@
 
 class OrderBook{
     time_type timestamp;
-    std::map<price_type,size_type> buySide;
-    std::map<price_type,size_type> sellSide;
+    std::map<price_type, size_type> buySide;
+    std::map<price_type, size_type> sellSide;
 
     public:
     OrderBook(void) = default;
-    // since this should be done at every time,
-    // the datastructure of buySide/sellSide sould
-    // be done accordingly (not sure map is the right one).
-    std::string getString(const size_t &level) const; // "bestBidPrice,bestBidSize,bestAskPrice,bestAskSize,..."
-    void modifySize(price_type price, size_type size, side_type side); // size also negative
-    void setTimeStamp(const time_type &t);
-    bool checkBidAsk();
+
+    std::string getString(const size_t &) const; // ??? "bestBidPrice,bestBidSize,bestAskPrice,bestAskSize,..." 
+
+    void modifySize(price_type, size_type, side_type);  
+    void setTimeStamp(const time_type &);
+    bool checkBookConsistency(void); // Bid prices have to be less than ask prices.
 };
 
 
