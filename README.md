@@ -1,46 +1,161 @@
-# ITCH
+# NASDAQ ITCH 50 Book Constructor
+> Given the NASDAQ Total View ITCH 50 data feed, reconstruct the full depth order book adn related messages.
 
-<b>Nasdaq Total View ITCH 5.0 Book Reconstructor.</b>
+This is an efficient c++ implementation of reconstructing a Limit Order Book from data feed messages issued by NASDAQ accordin the ITCH 50 data protocol specified at <https://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHSpecification.pdf>. Samples data is publicly available trought NASDAQ public ftp at <ftp://emi.nasdaq.com/ITCH/>. The program will output two csv files containing the messages and related limit order book for the relative stock.
 
-Nasdaq Total View is the data feed distributed from Nasdaq to clients in order to reconstuct the full depth order book. The data feed is in bynary format and the specifications are listed below.
+This program aims to facilitates research in HFT providing in a handy way the maximum amout of data realeased by NASDAQ.
+NASDAQ recives orders by traders and market makers, then his matching engine construct the order book, and sells to clients either the data feed composed by messages that can be used to reconstruct the book or directly the reconstructed order book together with visualization tools.
+We used the first one to reconstuct the book.
+Important to notice is that the messages do not coincides with the orders recived by NASDAQ, i.e. we do not need a matching engine to match supply and demand, but we are already given the result of the matching engine. Apart from interpreting the binary data according to the specification of the portocol we have to retrive information of past orders that new messages are referring to.
+We can see this difficulty in the following simple add and delete of an order, according to the specifications the add and delete order would be:
 
-The aim of the project is to have a set of tools to transform the data feed into analyzable data.
+| Message Type | Locate | Tracking | ns since 00:00 | Order id | Buy/Sell | Size | Stock | Price   |
+|--------------|--------|----------|----------------|----------|----------|------|-------|---------|
+| A            | 8007   | 0        | 28802131792425 | 45785    | B        | 3000 | USO   | 14.7200 |
+| ...          |        |          |                |          |          |      |       |         |
+| D            | 8007   | 0        | 28802131843697 | 45785    |          |      |       |         |
 
-############################################################################################
+As we can see once we observe the deletion order no information about the direction, size, stock and price are reported. Hence at each time we have to keep tracks of all the active orders in the book, in order to know what to do one we encounter the deletion order.
 
-<b>parser</b>
+The output of the progrm would be two .csv file withe the following structure:
 
-The parser just transform bynary data in a csv file, following the specifications listed below.
+##### messages of 08/30/2018 PSX AAPL
 
-specs @: https://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHspecification.pdf
+| time           | type | id    | side | size | price  | cancSize | execSize | oldId | oldSize | oldPrice |
+|----------------|------|-------|------|------|--------|----------|----------|-------|---------|----------|
+| 29041353544851 | A    | 49816 | 1    | 100  | 223.39 |          |          |       |         |          |
+| 29041495720727 | D    | 49816 | 1    | 0    | 223.39 | 100      |          |       |         |          |
+| ...            | ...  |       |      |      |        |          |          |       |         |          |
 
-ITCH data: ftp://emi.nasdaq.com/ITCH/
+##### book of 08/30/2018 PSX AAPL
 
-############################################################################################
+| time           | 1_bid_price | 1_bid_vol | 1_ask_price | 1_ask_vol | ... | n_ask_vol |
+|----------------|-------------|-----------|-------------|-----------|-----|-----------|
+| 29041353544851 |             |           | 223.39      | 100       | ... | ...       |
+| 29041495720727 |             |           |             |           |     |           |
+| ...            |             |           |             |           |     |           |
 
-<b>Book ReConstructor</b>
 
-Main tool. From a single parsed csv (coming from the parser) it outputs two csv for the specified security.
+![](coolPicture.png)
 
-1) Message.csv: which is a user friendly format of the input data. Nasdaq data feed is optimized for space and hence it is not easy to analyze, e.g. a cancellation order ( type D in the specification ) refer to an already existing order without reporting neither the name of the security, size of the order or its price.
-In the output message of the reconstructor the data is indiced by the columns:
+## Installation
 
-type    time    id  side    size    price   cancSize    execSize    oldId   oldSize oldPrice
+OS X & Linux:
 
-type:
-time:
-id:
-side:
-size:
-price:
-cancSize:
-execSize:
-oldId:
-oldSize:
-oldPrice:
+```sh
+git clone https://github.com/martinobdl/ITCH
+cd ITCH
+make
 
-2) Book.csv: contains the order book up to the specified number of levels. The structure is:
+# to get some data needed to run the program (800 Mb)
 
-time    bestBidPrice    bestBidSize bestAskPrice    bestAskSize     2ndBestBidPrice    2ndBestBidSize ....
+wget ftp://anonymous:@emi.nasdaq.com/ITCH/PSX_ITCH/20190327.PSX_ITCH_50.gz -P ./data/binary
 
-###########################################################################################
+# this file exists at date 05/02/2019
+# otherwise download manually from the ftp and put the
+# .gz file in ITCH/data/binary
+```
+
+## Usage example
+
+To reconstruct the book we can use the bash wrapper BookConstructor.sh which has the following usage:
+
+```
+usage: ./BookConstructor.sh [-lf] [-n #] data_folder mm/dd/yyyy venue ticker
+
+ -h, --help		Display usage instructions
+ -l, --list		Display all the date venues available at data_folder/binary
+ -f, --force	To force program execution if output files already exists
+ -n,			Number of levels to sotre for the book, default is 5
+```
+
+this will produced two csv files:
+```
+data_folder/book/mmddyyyy.venue_ITCH50_ticker_book_#.csv
+data_folder/messages/mmddyyyy.venue_ITCH50_ticker_message.csv
+```
+
+###### example
+``` sh
+cd /../../ITCH
+./BookConstructor.sh ./data 03/27/2019 PSX SPY
+```
+
+this will create two output .csv files, namely:
+``` sh
+/../../ITCH/data/book/03272019.PSX_ITCH50_AAPL_book_5.csv
+/../../ITCH/data/messages/03272019.PSX_ITCH50_AAPL_message.csv
+```
+
+_For more examples and usage, please refer to the [Wiki][wiki]._
+
+## Development setup
+
+In the gtest folders there are unit tests in order to test the principal components of the software, they are the Google c++ unittesting libraries. To compile and run the tests you would need the gtests and gmock libraries.
+They can be installed in the following way. Refer to <https://github.com/google/googletest/blob/master/googletest/README.md> for more details about the installation.
+
+To install gtest-gmock Ubuntu 18.10
+(Ubuntu 18.10 includes gtets and gmock in the default repositories. For past releases this should be done manually)
+```sh
+# gtests
+sudo apt-get install libgtest-dev
+sudo apt-get install cmake
+cd /usr/src/gtest
+sudo cmake CMakeLists.txt
+sudo make
+sudo cp *.a /usr/lib
+
+#gmock
+sudo apt-get install libgmock-dev
+cd /usr/src/gmock
+sudo mkdir build
+sudo cmake ..
+sudo make
+sudo cp *.a /usr/lib
+```
+
+To run the tests:
+```sh
+cd /../../ITCH
+make test
+./bin/executeTests
+```
+
+## Release History
+
+* 0.2.1
+    * CHANGE: Update docs (module code remains unchanged)
+* 0.2.0
+    * CHANGE: Remove `setDefaultXYZ()`
+    * ADD: Add `init()`
+* 0.1.1
+    * FIX: Crash when calling `baz()` (Thanks @GenerousContributorName!)
+* 0.1.0
+    * The first proper release
+    * CHANGE: Rename `foo()` to `bar()`
+* 0.0.1
+    * Work in progress
+
+## Meta
+
+Your Name – [@YourTwitter](https://twitter.com/dbader_org) – YourEmail@example.com
+
+Distributed under the XYZ license. See ``LICENSE`` for more information.
+
+[https://github.com/yourname/github-link](https://github.com/dbader/)
+
+## Contributing
+
+1. Fork it (<https://github.com/yourname/yourproject/fork>)
+2. Create your feature branch (`git checkout -b feature/fooBar`)
+3. Commit your changes (`git commit -am 'Add some fooBar'`)
+4. Push to the branch (`git push origin feature/fooBar`)
+5. Create a new Pull Request
+
+<!-- Markdown link & img dfn's -->
+[npm-image]: https://img.shields.io/npm/v/datadog-metrics.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/datadog-metrics
+[npm-downloads]: https://img.shields.io/npm/dm/datadog-metrics.svg?style=flat-square
+[travis-image]: https://img.shields.io/travis/dbader/node-datadog-metrics/master.svg?style=flat-square
+[travis-url]: https://travis-ci.org/dbader/node-datadog-metrics
+[wiki]: https://github.com/yourname/yourproject/wiki

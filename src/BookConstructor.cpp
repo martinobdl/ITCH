@@ -13,7 +13,7 @@ BookConstructor::BookConstructor(const std::string &inputMessageCSV,
         std::string bookHeader = "time,";
         for(size_t i = 1; i<=levels; i++){
             std::string num = std::to_string(i);
-            bookHeader += num+"_bid_price,"+num+"_ask_vol,"+num+"_ask_price,"+num+"_bid_vol,";
+            bookHeader += num+"_bid_price,"+num+"_bid_vol,"+num+"_ask_price,"+num+"_ask_vol,";
         }
         bookWriter.writeLine(bookHeader.substr(0, bookHeader.size()-1)+'\n');
     }

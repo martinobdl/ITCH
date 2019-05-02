@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.dates as dates
+import matplotlib
 import subprocess
 import os
 import pickle
@@ -21,7 +23,7 @@ class ts:
         try:
 
             PKfile = open(pk_folderPath+self.PKfileName,'rb')
-            [self.book, self.messages] = pickle.load(PKfile)
+            [self.time, self.book, self.messages] = pickle.load(PKfile)
 
         except:
 
@@ -42,17 +44,41 @@ class ts:
             print("parsing time into datetime objects...")
             print
 
-            self.messages.time = self.messages.time.map(lambda t: utility.parseNanosecondsToDateTime(self.date,t))
-            self.book.time = self.book.time.map(lambda t: utility.parseNanosecondsToDateTime(self.date,t))
+            self.time = self.messages.time
+            self.messages.time = self.messages.time.map(lambda t: utility.parseNanosecondsToDateTime(self.date,t).to_pydatetime())
+            self.book.time = self.book.time.map(lambda t: utility.parseNanosecondsToDateTime(self.date,t).to_pydatetime())
 
             with open(pk_folderPath+self.PKfileName, 'wb') as file:
                 print("pickling...")
-                pickle.dump([self.book, self.messages], file)
+                pickle.dump([self.time, self.book, self.messages], file)
 
     def plot_liquidity_heatmap(self):
-        plt.figure()
-        mid = (self.book['1_bid_price']+self.book['1_ask_price'])/2
-        plt.plot(self.book.time, mid, c='black')
-        plt.scatter([d.to_pydatetime() for d in self.book.time], self.book['1_bid_price'], c=self.book['1_bid_vol'])
+
+        tgrid = self.time[4000:4500]
+        pgrid = list(set(self.messages.price))
+        pgrid.sort()
+        tgrid2, pgrid2 = np.meshgrid(tgrid, pgrid)
+        heat = np.zeros_like(tgrid2)
+
+        for t in range(len(self.time)):
+            for k in range(1,self.levels+1):
+                price = self.book.iloc[t][str(k)+'_bid_price']
+                if not np.isnan(price):
+                    p = pgrid.index(self.book.iloc[t][str(k)+'_bid_price'])
+                    heat[p][t] = self.book.iloc[t][str(k)+'_bid_vol']
+                price = self.book.iloc[t][str(k)+'_ask_price']
+                if not np.isnan(price):
+                    p = pgrid.index(self.book.iloc[t][str(k)+'_ask_price'])
+                    heat[p][t] = self.book.iloc[t][str(k)+'_ask_vol']
+
+
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        # ax.plot(self.book.time, self.book['1_bid_price'], c='green')
+        # ax.plot(self.book.time, self.book['1_ask_price'], c='red')
+        ax.pcolormesh(tgrid, pgrid, heat, cmap='PuRd')
         plt.show()
 
+# importlib.reload(environment)
+# a = environment.ts('08302018','PSX','FF', 6)
+# a.plot_liquidity_heatmap()
