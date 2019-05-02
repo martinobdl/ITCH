@@ -2,7 +2,7 @@
 
 <b>Nasdaq Total View ITCH 5.0 Book Reconstructor.</b>
 
-Nasdaq Total View is the data feed distributed from Nasdaq to clients in order to reconstuct the full depth order book. The data feed is in bynary format and the specifications are listed below.
+Nasdaq Total View is the data feed distributed from Nasdaq to clients in order to reconstuct the full depth order book. The data feed is in binary format and the specifications are listed below.
 
 The aim of the project is to have a set of tools to transform the data feed into analyzable data.
 
