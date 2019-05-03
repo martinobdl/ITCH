@@ -21,30 +21,6 @@ std::string getFileName(const std::string& s) {
    return("");
 }
 
-long stringConvert(std::string input, the_type<long> ){
-    long ret=std::stol(input);
-    //std::cout<<"It's a long";
-    return ret;
-}
-
-double stringConvert(std::string input, the_type<double> ){
-    double ret=std::stod(input);
-    //std::cout<<"It's a double";
-    return ret;
-}
-
-long long stringConvert(std::string input, the_type<long long> ){
-    long long ret=std::stoll(input);
-    //std::cout<<"It's a long long";
-    return ret;
-}
-
-float stringConvert(std::string input, the_type<float> ){
-    float ret=std::stof(input);
-    //std::cout<<"It's a float";
-    return ret;
-}
-
 uint16_t bswap_16(uint16_t value){
     return static_cast<uint16_t>(((value) & 0xff) << 8 | ((value) >> 8));
 }
