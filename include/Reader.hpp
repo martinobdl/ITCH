@@ -20,21 +20,21 @@ private:
     std::string stock;
     unsigned count = 0;
     char message[64];
-    bool goodFile = 0;
+    bool validFile = 0;
     time_t start;
     // bool debug = 0;
     // Writer parserWriter;
 public:
     Reader(const std::string &fileName, const std::string &stock);
     Reader(const std::string &_stock);
-    bool isGood(void) const;
+    bool isValid(void) const;
     virtual ~Reader();
     Message createMessage(void);
-    bool eof();
+    bool eof(void);
     void printProgress(void);
-    virtual void readBytesIntoMessage(const long &size);
-    virtual void skipBytes(const long &size);
-    void setMessage(const char* str);
+    virtual void readBytesIntoMessage(const long &);
+    virtual void skipBytes(const long &);
+    void setMessage(const char*);
     virtual char getKey(void);
     std::string getFileName(void) const;
     std::string getStock(void) const;

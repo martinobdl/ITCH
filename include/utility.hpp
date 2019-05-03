@@ -1,4 +1,4 @@
-#ifndef UTILITY_H
+#ifndef UTILIY_HT
 #define UTILITY_H
 
 #include <iostream>
@@ -24,4 +24,4 @@ uint64_t parse_uint64(char * a);
 uint64_t parse_ts(char * a);
 std::string getFileName(const std::string& s);
 
-#endif
+#endif /* UTILITY_H */

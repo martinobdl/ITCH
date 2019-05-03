@@ -11,9 +11,9 @@ class OrderPool{
 
     public:
     OrderPool() = default;
-    Order findOrderPool(id_type id);
-    void addToOrderPool(id_type id, bool side, size_type size, price_type price);
-    void modifyOrder(id_type idOrder, size_type size);
+    Order searchOrderPool(id_type);
+    void addToOrderPool(id_type, bool, size_type, price_type);
+    void modifyOrder(id_type, size_type);
     bool isEmpty(void) const;
     void printIds(void) const;
 };

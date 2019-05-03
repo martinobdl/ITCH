@@ -8,6 +8,7 @@
 #include <Reader.hpp>
 #include <Writer.hpp>
 
+
 class BookConstructor{
 private:
     Message message;
@@ -25,12 +26,12 @@ public:
                     const std::string &_stock,
                     const size_t &_levels);
     ~BookConstructor();
-    void next();
-    void WriteBookAndMessage();
-    bool updateMessage();
-    void updateBook();
-    void updatePool();
-    void start();
+    void start(void); 
+    void next(void); // Processing a single line from input file.
+    bool updateMessage(void);
+    void updateBook(void);
+    void updatePool(void);
+    void WriteBookAndMessage(void);
 };
 
-#endif
+#endif /* BOOKCONSTRUCTOR_H_ */
