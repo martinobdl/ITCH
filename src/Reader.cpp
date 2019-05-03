@@ -458,7 +458,7 @@ void Reader::setMessage(const char* str){
 Reader::~Reader(){
     if (file.is_open()){
         file.close();
-        std::cout << "File " << fileName << " has been closed"<<std::endl;
+        std::cout << "File " << fileName << " has been closed" << std::endl;
         std::cout << "Finished, processed " << count << " messages in " << difftime(time(0),start) << "seconds."  << std::endl;
     }
 }
