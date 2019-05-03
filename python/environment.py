@@ -5,6 +5,7 @@ import matplotlib.dates as dates
 import matplotlib
 import subprocess
 import os
+import tqdm
 import pickle
 import utility
 
@@ -12,6 +13,24 @@ PATH = os.path.dirname(os.path.realpath(__file__))
 PROTOCOL_NAME = "_ITCH50_"
 
 class ts:
+    """ Class to handle full depth order book
+    and messages data taken from the BookReconstructor
+    application. Looks for picked data in ../data/pk
+    if the data cannot not found calls the BookConstructor
+    application in order to reconstruct the book.
+
+    Parameters
+    ----------
+    date : string
+        date in mmddyyyy format
+    venue : string
+        NASDAQ venue (PSX,NASDAQ,BX)
+    stock : string
+        ticker in capital letter traded on the vanue
+    levels : int, optional
+        specify the maximum depth of the order book
+
+    """
     def __init__(self, date, venue, stock, levels=5):
         self.date = date
         self.venue = venue
@@ -52,31 +71,47 @@ class ts:
                 print("pickling...")
                 pickle.dump([self.time, self.book, self.messages], file)
 
-    def plot_liquidity_heatmap(self):
+    def plot_liquidity_heatmap(self,t_min=34200000000000,t_max=57600000000000,p_min=0,p_max=999999,n_t=400,n_p=500,levels=100):
 
-        tgrid = self.time[4000:4500]
-        pgrid = list(set(self.messages.price))
+        mask = (self.time > t_min) & (self.time <= t_max)
+
+        if(p_min==0): p_min = self.book['1_bid_price'].loc[mask].min()-0.1
+        if(p_max==999999): p_max = self.book['1_bid_price'].loc[mask].max()+0.1
+
+        tgrid = np.linspace(t_min,t_max,n_t)
+        pgrid = np.linspace(p_min,p_max,n_p)
         pgrid.sort()
         tgrid2, pgrid2 = np.meshgrid(tgrid, pgrid)
-        heat = np.zeros_like(tgrid2)
+        heat = np.zeros(tgrid2.shape)
 
-        for t in range(len(self.time)):
-            for k in range(1,self.levels+1):
-                price = self.book.iloc[t][str(k)+'_bid_price']
-                if not np.isnan(price):
-                    p = pgrid.index(self.book.iloc[t][str(k)+'_bid_price'])
-                    heat[p][t] = self.book.iloc[t][str(k)+'_bid_vol']
-                price = self.book.iloc[t][str(k)+'_ask_price']
-                if not np.isnan(price):
-                    p = pgrid.index(self.book.iloc[t][str(k)+'_ask_price'])
-                    heat[p][t] = self.book.iloc[t][str(k)+'_ask_vol']
+        max_levels = min(self.levels+1,levels)
 
+        for t,ti in tqdm.tqdm(zip(tgrid,range(len(tgrid)))):
+            cut = self.book.iloc[np.abs(self.time-t).idxmin()].iloc[1:]
+            for k in range(1,max_levels):
+                price = cut[str(k)+'_bid_price']
+                if not np.isnan(price):
+                    p = np.abs(pgrid-price).argmin()
+                    vol = cut[str(k)+'_ask_vol']
+                    if not np.isnan(vol): heat[p][ti] += vol
+                price = cut[str(k)+'_ask_price']
+                if not np.isnan(price):
+                    p = np.abs(pgrid-price).argmin()
+                    vol = cut[str(k)+'_ask_vol']
+                    if not np.isnan(vol): heat[p][ti] += vol
+
+        heat[heat==0] = np.nan
 
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        # ax.plot(self.book.time, self.book['1_bid_price'], c='green')
-        # ax.plot(self.book.time, self.book['1_ask_price'], c='red')
-        ax.pcolormesh(tgrid, pgrid, heat, cmap='PuRd')
+        ax.plot(self.time.loc[mask], self.book['1_bid_price'].loc[mask], c='crimson',linewidth=0.7)
+        ax.plot(self.time.loc[mask], self.book['1_ask_price'].loc[mask], c='teal',linewidth=0.7)
+        cs = ax.pcolormesh(tgrid2, pgrid2, heat, cmap='plasma', norm=matplotlib.colors.LogNorm(vmin=np.nanmin(heat), vmax=np.nanmax(heat)))
+        fig.colorbar(cs, ax=ax,
+                        orientation='vertical',
+                        fraction=.1,
+                        extend='both',
+                        extendfrac='auto')
         plt.show()
 
 # importlib.reload(environment)

@@ -1,12 +1,14 @@
 # NASDAQ ITCH 50 Book Constructor
-> Given the NASDAQ Total View ITCH 50 data feed, reconstruct the full depth order book adn related messages.
+> Given the NASDAQ Total View ITCH 50 data feed, reconstruct the full depth order book and related messages.
 
-This is an efficient c++ implementation of reconstructing a Limit Order Book from data feed messages issued by NASDAQ accordin the ITCH 50 data protocol specified at <https://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHSpecification.pdf>. Samples data is publicly available trought NASDAQ public ftp at <ftp://emi.nasdaq.com/ITCH/>. The program will output two csv files containing the messages and related limit order book for the relative stock.
+This is an efficient c++ implementation of reconstructing a Limit Order Book from data feed messages issued by NASDAQ according the ITCH 50 data protocol specified at <https://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHSpecification.pdf>. Samples data is publicly available trough NASDAQ public ftp at <ftp://emi.nasdaq.com/ITCH/>. The program will output two csv files containing the messages and related limit order book for the relative stock.
 
-This program aims to facilitates research in HFT providing in a handy way the maximum amout of data realeased by NASDAQ.
-NASDAQ recives orders by traders and market makers, then his matching engine construct the order book, and sells to clients either the data feed composed by messages that can be used to reconstruct the book or directly the reconstructed order book together with visualization tools.
-We used the first one to reconstuct the book.
-Important to notice is that the messages do not coincides with the orders recived by NASDAQ, i.e. we do not need a matching engine to match supply and demand, but we are already given the result of the matching engine. Apart from interpreting the binary data according to the specification of the portocol we have to retrive information of past orders that new messages are referring to.
+# Small Description
+
+This program aims to facilitates research in HFT providing in a handy way the maximum amount of data released by NASDAQ.\
+NASDAQ receives orders by traders and market makers, then his matching engine construct the order book, and sells to clients either the data feed composed by messages that can be used to reconstruct the book or directly the reconstructed order book together with visualization tools.\
+We used the first one to reconstruct the book. \
+Important to notice is that the messages do not coincides with the orders received by NASDAQ, i.e. we do not need a matching engine to match supply and demand, but we are already given the result of the matching engine. Apart from interpreting the binary data according to the specification of the protocol we have to retrieve information of past orders that new messages are referring to.\
 We can see this difficulty in the following simple add and delete of an order, according to the specifications the add and delete order would be:
 
 | Message Type | Locate | Tracking | ns since 00:00 | Order id | Buy/Sell | Size | Stock | Price   |
@@ -17,7 +19,7 @@ We can see this difficulty in the following simple add and delete of an order, a
 
 As we can see once we observe the deletion order no information about the direction, size, stock and price are reported. Hence at each time we have to keep tracks of all the active orders in the book, in order to know what to do one we encounter the deletion order.
 
-The output of the progrm would be two .csv file withe the following structure:
+The output of the program would be two .csv file withe the following structure:
 
 ##### messages of 08/30/2018 PSX AAPL
 
@@ -36,7 +38,7 @@ The output of the progrm would be two .csv file withe the following structure:
 | ...            |             |           |             |           |     |           |
 
 
-![](coolPicture.png)
+![](images/OB.png)
 
 ## Installation
 
@@ -63,19 +65,27 @@ To reconstruct the book we can use the bash wrapper BookConstructor.sh which has
 ```
 usage: ./BookConstructor.sh [-lf] [-n #] data_folder mm/dd/yyyy venue ticker
 
- -h, --help		Display usage instructions
- -l, --list		Display all the date venues available at data_folder/binary
- -f, --force	To force program execution if output files already exists
- -n,			Number of levels to sotre for the book, default is 5
+ -h, --help     Display usage instructions
+ -l, --list     Display all the date venues available at data_folder/binary
+ -f, --force    To force program execution if output files already exists
+ -n,            Number of levels to sotre for the book, default is 5
 ```
 
-this will produced two csv files:
+for example
+``` sh
+./BookConstructor.sh data_folder mm/dd/yyyy venue ticker -n N
 ```
-data_folder/book/mmddyyyy.venue_ITCH50_ticker_book_#.csv
+will produce two output files named:
+
+```
+data_folder/book/mmddyyyy.venue_ITCH50_ticker_book_N.csv
 data_folder/messages/mmddyyyy.venue_ITCH50_ticker_message.csv
 ```
 
 ###### example
+
+Given that you have in ```/../../ITCH/data/binary``` the file ```PSX_ITCH/20190327.PSX_ITCH_50.gz```
+
 ``` sh
 cd /../../ITCH
 ./BookConstructor.sh ./data 03/27/2019 PSX SPY
@@ -159,3 +169,4 @@ Distributed under the XYZ license. See ``LICENSE`` for more information.
 [travis-image]: https://img.shields.io/travis/dbader/node-datadog-metrics/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/dbader/node-datadog-metrics
 [wiki]: https://github.com/yourname/yourproject/wiki
+
