@@ -27,7 +27,7 @@ BookConstructor::~BookConstructor(){
 }
 
 void BookConstructor::start(void){
-    while(!message_reader.eof() and message_reader.isGood()){
+    while(!message_reader.eof() and message_reader.isValid()){
         next();
     }
 }
