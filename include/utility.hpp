@@ -1,5 +1,6 @@
-#ifndef UTILITY_H_
-#define UTILITY_H_
+
+#ifndef UTILITY_H
+#define UTILITY_H
 
 #include <iostream>
 

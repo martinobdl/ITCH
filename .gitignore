@@ -5,3 +5,5 @@
 *.gz
 *.csv
 *.pk
+data/*
+bin/*
