@@ -27,7 +27,7 @@ BookConstructor::~BookConstructor(){
 }
 
 void BookConstructor::start(void){
-    while(!message_reader.eof() and message_reader.isGood()){
+    while(!message_reader.eof() and message_reader.isValid()){
         next();
     }
 }
@@ -134,6 +134,9 @@ void BookConstructor::updateBook(void){
         // Execute order at different price.
         book.modifySize(message.getOldPrice(),-message.getExecSize(),message.getSide());
     }
+    else if(typeMsg=="P"){
+        // Execute hidden order. Does not affect the book.
+    }
 
     else{
         std::cerr << "Unexpected type of message has been found while updating book! " << typeMsg << std::endl;
@@ -167,6 +170,9 @@ void BookConstructor::updatePool(void){
     else if(typeMsg=="C"){
         // Execute order at different price.
         pool.modifyOrder(message.getId(), message.getExecSize());
+    }
+    else if(typeMsg=="P"){
+        // Execute hidden order. Does not affect the book.
     }
     else{
         std::cerr << "Unexpected type of message has been found while updating pool! " << typeMsg << std::endl;

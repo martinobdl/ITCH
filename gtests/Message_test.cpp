@@ -35,5 +35,5 @@ TEST_F(Message_Test, getStringAndSettersTest){
     fullMessage->setOldSize(110);
     fullMessage->setOldPrice(33.333333);
 
-    ASSERT_EQ("A,28800006862979,45749,1,93,11.79,10,20,123456,110,33.3333\n", fullMessage->getString());
+    ASSERT_EQ("28800006862979,A,45749,1,93,11.79,10,20,123456,110,33.3333\n", fullMessage->getString());
 }

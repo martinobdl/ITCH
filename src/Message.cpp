@@ -122,7 +122,12 @@ bool Message::isEmpty()const{
 
 std::string Message::getString()const{
     std::ostringstream string_builder;
-    string_builder  << timestamp << ",";
+    if(!isEmpty()){
+        string_builder  << timestamp << ",";
+    }
+    else{
+        string_builder  << ",";
+    }
 
     if(!isEmpty()){
         string_builder  << type  << ","

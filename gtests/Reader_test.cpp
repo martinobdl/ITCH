@@ -52,7 +52,7 @@ TEST_F(Reader_Test, conversion_A_F) {
     // Act
     Message createdMsg = mk_reader->createMessage();
     // Assert
-    ASSERT_EQ("A,28800006862979,45749,1,93,11.79,,,,,\n",createdMsg.getString());
+    ASSERT_EQ("28800006862979,A,45749,1,93,11.79,,,,,\n",createdMsg.getString());
 }
 
 TEST_F(Reader_Test, conversion_E) {
@@ -68,7 +68,7 @@ TEST_F(Reader_Test, conversion_E) {
     // Act
     Message createdMsg = mk_reader->createMessage();
     // Assert
-    ASSERT_EQ("E,34202171981170,261497,0,,,,200,,,\n",createdMsg.getString());
+    ASSERT_EQ("34202171981170,E,261497,0,,,,200,,,\n",createdMsg.getString());
 }
 
 TEST_F(Reader_Test, conversion_X) {
@@ -84,7 +84,7 @@ TEST_F(Reader_Test, conversion_X) {
     // Act
     Message createdMsg = mk_reader->createMessage();
     // Assert
-    ASSERT_EQ("D,281474976710654,18446744073709551614,0,,,4294967294,,,,\n",createdMsg.getString());
+    ASSERT_EQ("281474976710654,D,18446744073709551614,0,,,4294967294,,,,\n",createdMsg.getString());
 }
 
 TEST_F(Reader_Test, conversion_D) {
@@ -100,7 +100,7 @@ TEST_F(Reader_Test, conversion_D) {
     // Act
     Message createdMsg = mk_reader->createMessage();
     // Assert
-    ASSERT_EQ("R,1099511628031,255,0,1,1.1,,,1099511628031,,\n",createdMsg.getString());
+    ASSERT_EQ("1099511628031,R,255,0,1,1.1,,,1099511628031,,\n",createdMsg.getString());
 }
 
 TEST_F(Reader_Test, conversion_P) {
@@ -116,5 +116,5 @@ TEST_F(Reader_Test, conversion_P) {
     // Act
     Message createdMsg = mk_reader->createMessage();
     // Assert
-    ASSERT_EQ("P,1099511628031,255,1,,0.6528,,255,,,\n",createdMsg.getString());
+    ASSERT_EQ("1099511628031,P,255,1,,0.6528,,255,,,\n",createdMsg.getString());
 }
