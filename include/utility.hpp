@@ -1,4 +1,4 @@
-#ifndef UTILIY_HT
+#ifndef UTILIY_H
 #define UTILITY_H
 
 #include <iostream>
