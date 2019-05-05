@@ -152,58 +152,88 @@ PROTOCOL_FORMAT=_ITCH50
 # date and venue strign to check if the combination is available n the data file
 STR_DATE_VENUE=${DATE:0:2}-${DATE:2:2}-${DATE:4}$'\t'$VENUE
 
+
+# Check if choosen stock exists in corresponding file
+STR_STOCK_DATE=${DATE:4}${DATE:0:2}${DATE:2:2}
+
+# 1. option is to download data and then check in specific folder
+# FILE_STOCK_LOCATE="$DATA_FOLDER"stock_locate_codes/"$VENUE"_stocklocate_"$STR_STOCK_DATE".txt
+
+# 2. option is check it directly on server
+NAME=$VENUE"_stocklocate_"$STR_STOCK_DATE".txt"
+BASE_URL=ftp://anonymous:@emi.nasdaq.com/ITCH/Stock_Locate_Codes/
+URL=$BASE_URL$NAME
+
+
 if display_list | grep --quiet "$STR_DATE_VENUE"; then
+    # 2. option condition:
+    if curl --silent $URL 2>&1 | grep -cq $STOCK ; then
 
-    FILE_NAME=$DATE.$VENUE$PROTOCOL_FORMAT.gz
-    INPUT_FILE_PATH="$DATA_FOLDER"binary/$FILE_NAME
+    # 1. option condition :
+    #if cat $FILE_STOCK_LOCATE | grep -cq $STOCK; then
 
-    DECOMPRESSED_INPUT_FILE_PATH=$TMP$DATE.$VENUE$PROTOCOL_FORMAT
+        FILE_NAME=$DATE.$VENUE$PROTOCOL_FORMAT.gz
+        INPUT_FILE_PATH="$DATA_FOLDER"binary/$FILE_NAME
 
-    if [ -e $DECOMPRESSED_INPUT_FILE_PATH ]; then
-        :
-    else
-        echo
-        echo copying $INPUT_FILE_PATH into a temporary folder
-        cp $INPUT_FILE_PATH $TMP
-        echo
-    fi
+        DECOMPRESSED_INPUT_FILE_PATH=$TMP$DATE.$VENUE$PROTOCOL_FORMAT
 
-    if [ -e $DECOMPRESSED_INPUT_FILE_PATH ]; then
-        echo
-        echo $DECOMPRESSED_INPUT_FILE_PATH already exists. Skipping decompression
-        echo
-    else
-        echo decompressing $FILE_NAME
-        gzip -d $TMP$FILE_NAME
-    fi
-
-    GZIP_STATUS=$?
-    BOOK_DIR="$DATA_FOLDER"book/
-    MESS_DIR="$DATA_FOLDER"messages/
-
-    if (($GZIP_STATUS==0)); then
-        BOOK_FILE_NAME="$DATE.$VENUE$PROTOCOL_FORMAT"_"$STOCK"_book_$LEVELS.csv
-        MESS_FILE_NAME="$DATE.$VENUE$PROTOCOL_FORMAT"_"$STOCK"_message.csv
-        if [ -e $BOOK_DIR$BOOK_FILE_NAME -a -e $MESS_DIR$MESS_FILE_NAME -a $FORCE_FLAG -eq 0 ]; then
-            echo
-            echo $BOOK_FILE_NAME and $MESS_FILE_NAME already exists. To force Execution run with -f option.
-            echo
-            exit
+        if [ -e $DECOMPRESSED_INPUT_FILE_PATH ]; then
+            :
         else
-            DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-            "$DIR"/bin/BookConstructor $DECOMPRESSED_INPUT_FILE_PATH $TMP $TMP $LEVELS $STOCK
             echo
-            echo moving output files to $BOOK_DIR and $MESS_DIR
+            echo copying $INPUT_FILE_PATH into a temporary folder
+            cp $INPUT_FILE_PATH $TMP
             echo
-            yes | mv $TMP$BOOK_FILE_NAME $BOOK_DIR
-            yes | mv $TMP$MESS_FILE_NAME $MESS_DIR
-            if [ -e $TMP$FILE_NAME ]; then
-                rm $TMP$FILE_NAME
+        fi
+
+        if [ -e $DECOMPRESSED_INPUT_FILE_PATH ]; then
+            echo
+            echo $DECOMPRESSED_INPUT_FILE_PATH already exists. Skipping decompression
+            echo
+        else
+            echo decompressing $FILE_NAME
+            gzip -d $TMP$FILE_NAME
+        fi
+
+        GZIP_STATUS=$?
+        BOOK_DIR="$DATA_FOLDER"book/
+        MESS_DIR="$DATA_FOLDER"messages/
+
+        if (($GZIP_STATUS==0)); then
+            BOOK_FILE_NAME="$DATE.$VENUE$PROTOCOL_FORMAT"_"$STOCK"_book_$LEVELS.csv
+            MESS_FILE_NAME="$DATE.$VENUE$PROTOCOL_FORMAT"_"$STOCK"_message.csv
+            if [ -e $BOOK_DIR$BOOK_FILE_NAME -a -e $MESS_DIR$MESS_FILE_NAME -a $FORCE_FLAG -eq 0 ]; then
+                echo
+                echo $BOOK_FILE_NAME and $MESS_FILE_NAME already exists. To force Execution run with -f option.
+                echo
+                exit
+            else
+                DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+                "$DIR"/bin/BookConstructor $DECOMPRESSED_INPUT_FILE_PATH $TMP $TMP $LEVELS $STOCK
+                echo
+                echo moving output files to $BOOK_DIR and $MESS_DIR
+                echo
+                yes | mv $TMP$BOOK_FILE_NAME $BOOK_DIR
+                yes | mv $TMP$MESS_FILE_NAME $MESS_DIR
+                if [ -e $TMP$FILE_NAME ]; then
+                    rm $TMP$FILE_NAME
+                fi
             fi
+        else
+            echo Decompression of $TMP$FILE_NAME not sucsesfull
         fi
     else
-        echo Decompression of $TMP$FILE_NAME not sucsesfull
-    fi
+        echo
+        echo Non-existing stock ticker has been inserted. 
+        echo For more information on existing tickers refer to:
+        # 1.option
+        #echo $FILE_STOCK_LOCATE
+
+        # 2. option
+        echo $URL
+        echo
+        exit
+    fi     
 else
     echo
     echo $STR_DATE_VENUE not available
