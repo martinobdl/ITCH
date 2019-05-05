@@ -94,6 +94,7 @@ if [ ${#POSITIONAL[@]} -lt 4 -a $DISPLAY_LIST_FLAG -eq 0 ]; then
     exit
 elif [ $DISPLAY_LIST_FLAG -eq 1 -a ${#POSITIONAL[@]} -eq 1 ]; then
     DATA_FOLDER=${POSITIONAL[0]}
+    [[ "${DATA_FOLDER}" != */ ]] && DATA_FOLDER=${DATA_FOLDER}"/"
     display_list
     exit
 fi
@@ -105,8 +106,8 @@ STOCK=${POSITIONAL[3]}
 
 TMP=/tmp/
 
-# add trailing backslash if needed
-[[ "${STR}" != */ ]] && STR="${STR}/"
+# add trailing backslah if needed
+[[ "${DATA_FOLDER}" != */ ]] && DATA_FOLDER=${DATA_FOLDER}"/"
 
 if [[ ! -z $DATA_FOLDER ]]; then
     :
@@ -115,7 +116,7 @@ else
     exit
 fi
 
-# delete backslash from date
+# delete backshlash from date
 read DATE < <(echo $DATE | tr -d /)
 
 if [ -e "$DATA_FOLDER"binary -a -e "$DATA_FOLDER"messages -a -e "$DATA_FOLDER"book ]; then
@@ -129,7 +130,6 @@ else
     echo "|-binary"
     echo "|-messages"
     echo "|-book"
-    echo "|-stock_locate_codes"
     exit
 fi
 
@@ -149,9 +149,8 @@ fix_naming
 # check if date and venues combination is present
 PROTOCOL_FORMAT=_ITCH50
 
-# date and venue string to check if the combination is available n the data file
+# date and venue strign to check if the combination is available n the data file
 STR_DATE_VENUE=${DATE:0:2}-${DATE:2:2}-${DATE:4}$'\t'$VENUE
-
 
 
 # Check if choosen stock exists in corresponding file
@@ -164,7 +163,6 @@ STR_STOCK_DATE=${DATE:4}${DATE:0:2}${DATE:2:2}
 NAME=$VENUE"_stocklocate_"$STR_STOCK_DATE".txt"
 BASE_URL=ftp://anonymous:@emi.nasdaq.com/ITCH/Stock_Locate_Codes/
 URL=$BASE_URL$NAME
-
 
 
 if display_list | grep --quiet "$STR_DATE_VENUE"; then
@@ -206,8 +204,7 @@ if display_list | grep --quiet "$STR_DATE_VENUE"; then
             MESS_FILE_NAME="$DATE.$VENUE$PROTOCOL_FORMAT"_"$STOCK"_message.csv
             if [ -e $BOOK_DIR$BOOK_FILE_NAME -a -e $MESS_DIR$MESS_FILE_NAME -a $FORCE_FLAG -eq 0 ]; then
                 echo
-                echo $BOOK_FILE_NAME and $MESS_FILE_NAME already exists.
-                echo To force Execution run with -f option.
+                echo $BOOK_FILE_NAME and $MESS_FILE_NAME already exists. To force Execution run with -f option.
                 echo
                 exit
             else
@@ -223,9 +220,8 @@ if display_list | grep --quiet "$STR_DATE_VENUE"; then
                 fi
             fi
         else
-            echo Decompression of $TMP$FILE_NAME not successful
+            echo Decompression of $TMP$FILE_NAME not sucsesfull
         fi
-
     else
         echo
         echo Non-existing stock ticker has been inserted. 
