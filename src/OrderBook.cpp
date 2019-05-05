@@ -1,7 +1,7 @@
 #include <OrderBook.hpp>
 
 std::string OrderBook::getString(const size_t &level) const {
-    // Make comma-separated string from information available 
+    // Make comma-separated string from information available
     // in the book about the best bid/ask prices and corresponding sizes up to number of levels :
     // "1.BidPrice, 1.BidSize,1.AskPrice,1.AskSize,..,level.BidPrice, level.BidSize,level.AskPrice,level.AskSize"
 
@@ -61,8 +61,13 @@ void OrderBook::modifySize(price_type price, size_type size, side_type side){
 }
 
 bool OrderBook::checkBookConsistency(){
-    // Check if the biggest bid price is less than smallest ask 
-    return ((buySide.rbegin()->first) <= (sellSide.begin()->first) or (buySide.empty() or sellSide.empty()));
+    // Check if the biggest bid price is less than smallest ask
+    if (!(buySide.empty() or sellSide.empty())){
+        return ((buySide.rbegin()->first) <= (sellSide.begin()->first));
+    }
+    else{
+        return 1;
+    }
 }
 
 void OrderBook::setTimeStamp(const time_type &t){

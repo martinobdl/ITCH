@@ -94,6 +94,7 @@ if [ ${#POSITIONAL[@]} -lt 4 -a $DISPLAY_LIST_FLAG -eq 0 ]; then
     exit
 elif [ $DISPLAY_LIST_FLAG -eq 1 -a ${#POSITIONAL[@]} -eq 1 ]; then
     DATA_FOLDER=${POSITIONAL[0]}
+    [[ "${DATA_FOLDER}" != */ ]] && DATA_FOLDER=${DATA_FOLDER}"/"
     display_list
     exit
 fi
@@ -106,7 +107,7 @@ STOCK=${POSITIONAL[3]}
 TMP=/tmp/
 
 # add trailing backslah if needed
-[[ "${STR}" != */ ]] && STR="${STR}/"
+[[ "${DATA_FOLDER}" != */ ]] && DATA_FOLDER=${DATA_FOLDER}"/"
 
 if [[ ! -z $DATA_FOLDER ]]; then
     :
