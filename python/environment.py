@@ -65,12 +65,15 @@ class ts:
             print
 
             self.time = self.messages.time
+
             self.messages.time = self.messages.time.map(lambda t: utility.parseNanosecondsToDateTime(self.date,t).to_pydatetime())
             self.book.time = self.book.time.map(lambda t: utility.parseNanosecondsToDateTime(self.date,t).to_pydatetime())
 
             with open(pk_folderPath+self.PKfileName, 'wb') as file:
                 print("pickling...")
                 pickle.dump([self.time, self.book, self.messages], file)
+
+        self.ticksize = np.diff(np.unique(self.messages.price)).min()
 
     def get_heat_map(self,t_boud,p_boud,n_t,n_p,levels):
         """ Get the heat map and the mask parameter
@@ -111,6 +114,7 @@ class ts:
         t_min, t_max = t_boud
         p_min, p_max = p_boud
         mask = (self.time > t_min) & (self.time <= t_max)
+        n_p = min(n_p,(p_max-p_min)/self.ticksize)*2
 
         if(p_min==0): p_min = self.book['1_bid_price'].loc[mask].min()-0.1
         if(p_max==999999): p_max = self.book['1_bid_price'].loc[mask].max()+0.1
@@ -238,5 +242,5 @@ class ts:
         plt.show()
 
 if __name__ == '__main__':
-    a = ts('08302018','PSX','CSCO', 5)
+    a = ts('08302018','PSX','INTC', 5)
     a.plot_liquidity_heatmap()

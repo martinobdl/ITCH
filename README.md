@@ -3,7 +3,40 @@
 
 This is an efficient c++ implementation of reconstructing a Limit Order Book from data feed messages issued by NASDAQ according the ITCH 50 data protocol specified at <https://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHSpecification.pdf>. Samples data is publicly available trough NASDAQ public ftp at <ftp://emi.nasdaq.com/ITCH/>. The program will output two csv files containing the messages and related limit order book for the relative stock.
 
-# Small Description
+# Folder Structure
+
+```
+ITCH
+│
+└───bin     (c++ executable)
+│
+└───build   (dipendency and object files)
+│
+└───data
+│   │
+│   └───binary      (ITCH binary gzip compressed files from NASDAQ)
+│   │
+│   └───book        (output of book csv)
+│   │
+│   └───messages    (output of messages csv)
+│   │
+│   └───pk          (pickle object files)
+│
+└───gtests  (.cpp for tests)
+│
+└───images  (images for README.md Markdown)
+│
+└───include (.hpp for main program)
+│
+└───python  (python implementation of some application example)
+│
+└───src     (.cpp for main program)
+
+```
+
+# Brief Description
+
+![](images/OB.png)
 
 This program aims to facilitates research in HFT providing in a handy way the maximum amount of data released by NASDAQ.\
 NASDAQ receives orders by traders and market makers, then his matching engine construct the order book, and sells to clients either the data feed composed by messages that can be used to reconstruct the book or directly the reconstructed order book together with visualization tools.\
@@ -37,9 +70,6 @@ The output of the program would be two .csv file withe the following structure:
 | 29041495720727 |             |           |             |           |     |           |
 | ...            |             |           |             |           |     |           |
 
-
-![](images/OB.png)
-
 ## Installation
 
 OS X & Linux:
@@ -68,7 +98,7 @@ usage: ./BookConstructor.sh [-lf] [-n #] data_folder mm/dd/yyyy venue ticker
  -h, --help     Display usage instructions
  -l, --list     Display all the date venues available at data_folder/binary
  -f, --force    To force program execution if output files already exists
- -n,            Number of levels to sotre for the book, default is 5
+ -n,            Number of levels to store for the book, default is 5
 ```
 
 for example
@@ -96,8 +126,6 @@ this will create two output .csv files, namely:
 /../../ITCH/data/book/03272019.PSX_ITCH50_AAPL_book_5.csv
 /../../ITCH/data/messages/03272019.PSX_ITCH50_AAPL_message.csv
 ```
-
-_For more examples and usage, please refer to the [Wiki][wiki]._
 
 ## Development setup
 
@@ -131,7 +159,9 @@ make test
 ./bin/executeTests
 ```
 
-## Release History
+## Example Application
+
+In the python folder
 
 * 0.2.1
     * CHANGE: Update docs (module code remains unchanged)
