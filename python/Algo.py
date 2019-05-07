@@ -15,6 +15,7 @@ class Algo(object):
 
     # fixec commission for execution
     COMMISSIONS = 0.002
+    LATENCY = 70*1e-3*1e-9 #70 ms
 
     def __init__(self, latency=0):
         """ Subclass to define algo specific parameters here.

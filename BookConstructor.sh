@@ -4,7 +4,9 @@
 
 display_usage() {
     echo
-    echo "usage: $0 [-lf] [-n #] data_folder mm/dd/yyyy venue ticker"
+    echo "usage:    $0 [-lfh] [-n #] data_folder mm/dd/yyyy venue ticker"
+    echo "          $0 [-l] data_folder"
+    echo "          $0 [-h]"
     echo
     echo " -h, --help     Display usage instructions"
     echo " -l, --list     Display all the date venues available at data_folder/binary"
@@ -164,10 +166,23 @@ NAME=$VENUE"_stocklocate_"$STR_STOCK_DATE".txt"
 BASE_URL=ftp://anonymous:@emi.nasdaq.com/ITCH/Stock_Locate_Codes/
 URL=$BASE_URL$NAME
 
+FOUND_URL=0;
+
+if curl --output /dev/null --silent --head --fail $URL; then
+  FOUND_URL=1
+  URL_OUT=$(curl --silent $URL 2>&1)
+else
+  echo Unable to chack if stock $STOCK is present on URL: $URL, baceuse invalid URL.
+  echo Still reconstructing the book. Attention: it might be empty.
+  echo
+
+  URL_OUT=$STOCK
+fi
+
 
 if display_list | grep --quiet "$STR_DATE_VENUE"; then
     # 2. option condition:
-    if curl --silent $URL 2>&1 | grep -cq $STOCK ; then
+    if echo $URL_OUT | grep -cq $STOCK ; then
 
     # 1. option condition :
     #if cat $FILE_STOCK_LOCATE | grep -cq $STOCK; then
@@ -224,7 +239,7 @@ if display_list | grep --quiet "$STR_DATE_VENUE"; then
         fi
     else
         echo
-        echo Non-existing stock ticker has been inserted. 
+        echo Non-existing stock ticker has been inserted.
         echo For more information on existing tickers refer to:
         # 1.option
         #echo $FILE_STOCK_LOCATE
@@ -233,7 +248,7 @@ if display_list | grep --quiet "$STR_DATE_VENUE"; then
         echo $URL
         echo
         exit
-    fi     
+    fi
 else
     echo
     echo $STR_DATE_VENUE not available

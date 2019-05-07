@@ -44,6 +44,7 @@ class ts:
 
             PKfile = open(pk_folderPath+self.PKfileName,'rb')
             [self.time, self.book, self.messages] = pickle.load(PKfile)
+            self.ticksize = np.diff(np.unique(self.messages.price)).min()
 
         except:
 
@@ -52,28 +53,36 @@ class ts:
 
             shellScriptPath = os.path.dirname(PATH)+"/BookConstructor.sh"
 
-            subprocess.run([shellScriptPath, os.path.dirname(PATH)+"/data/", self.date, self.venue, self.stock, "-n", str(self.levels)])
+            try:
 
-            bookDir = os.path.dirname(PATH)+"/data/book/"
-            messDir = os.path.dirname(PATH)+"/data/messages/"
-            nameFile = self.date+"."+self.venue+PROTOCOL_NAME+self.stock
+                subprocess.run([shellScriptPath, os.path.dirname(PATH)+"/data/", self.date, self.venue, self.stock, "-n", str(self.levels)])
 
-            self.book = pd.read_csv(bookDir+nameFile+"_book_"+str(levels)+".csv");
-            self.messages = pd.read_csv(messDir+nameFile+"_message.csv");
+                bookDir = os.path.dirname(PATH)+"/data/book/"
+                messDir = os.path.dirname(PATH)+"/data/messages/"
+                nameFile = self.date+"."+self.venue+PROTOCOL_NAME+self.stock
 
-            print("parsing time into datetime objects...")
-            print
+                self.book = pd.read_csv(bookDir+nameFile+"_book_"+str(levels)+".csv");
+                self.messages = pd.read_csv(messDir+nameFile+"_message.csv");
 
-            self.time = self.messages.time
+                print("parsing time into datetime objects...")
+                print
 
-            self.messages.time = self.messages.time.map(lambda t: utility.parseNanosecondsToDateTime(self.date,t).to_pydatetime())
-            self.book.time = self.book.time.map(lambda t: utility.parseNanosecondsToDateTime(self.date,t).to_pydatetime())
+                self.time = self.messages.time
 
-            with open(pk_folderPath+self.PKfileName, 'wb') as file:
-                print("pickling...")
-                pickle.dump([self.time, self.book, self.messages], file)
+                self.messages.time = self.messages.time.map(lambda t: utility.parseNanosecondsToDateTime(self.date,t).to_pydatetime())
+                self.book.time = self.book.time.map(lambda t: utility.parseNanosecondsToDateTime(self.date,t).to_pydatetime())
 
-        self.ticksize = np.diff(np.unique(self.messages.price)).min()
+                with open(pk_folderPath+self.PKfileName, 'wb') as file:
+                    print("pickling...")
+                    pickle.dump([self.time, self.book, self.messages], file)
+
+                self.ticksize = np.diff(np.unique(self.messages.price)).min()
+
+            except:
+
+                print("No data found for: ", self. stock, self.venue, self.date)
+                print()
+
 
     def get_heat_map(self,t_boud,p_boud,n_t,n_p,levels):
         """ Get the heat map and the mask parameter
@@ -242,5 +251,5 @@ class ts:
         plt.show()
 
 if __name__ == '__main__':
-    a = ts('08302018','PSX','INTC', 5)
+    a = ts('01302019','NASDAQ','INTC', 5)
     a.plot_liquidity_heatmap()
