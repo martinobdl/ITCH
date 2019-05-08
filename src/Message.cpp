@@ -31,7 +31,10 @@ void Message::setType(const std::string& _type){
         type = _type; // (E)xecute
     }
     else if (_type == "P"){
-        type = _type; // execute hidden message; It does not affect the book
+        // The message indicates when a match occurs between non-­­displayable order types.
+        // Since no Add Order Message is generated when a non-­displayed order is initially received
+        // it does not affect the book.
+        type = _type; // execute hidden message
     }
     else if (_type == "C"){
         // The message is sent whenever an order on the book is executed 
