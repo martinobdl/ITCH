@@ -1,7 +1,7 @@
 # NASDAQ ITCH 50 Book Constructor
 > Given the NASDAQ Total View ITCH 50 data feed, reconstruct the full depth order book and related messages.
 
-This is an efficient c++ implementation of reconstructing a Limit Order Book from data feed messages issued by NASDAQ according to the ITCH 50 data protocol specified at <https://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHSpecification.pdf>. Samples data is publicly available trough NASDAQ public ftp at <ftp://emi.nasdaq.com/ITCH/>. The program will output two csv files containing the messages and related limit order book for the relative stock.
+This is an efficient c++ implementation of reconstructing a Limit Order Book from data feed messages issued by NASDAQ according to the ITCH 50 data protocol specified at <https://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHSpecification.pdf>. Some samples data is publicly available trough NASDAQ public ftp at <ftp://emi.nasdaq.com/ITCH/>. The program will output two csv files containing the messages and the related limit order book for the relative stock.
 
 # Folder Structure
 
@@ -38,11 +38,11 @@ ITCH
 
 ![](images/OB.png)
 
-This program aims to facilitates research in HFT providing in a handy way the maximum amount of data released by NASDAQ.\
-NASDAQ receives orders by traders and market makers, then his matching engine construct the order book according to specific rules that may depend on the venue, and sells to clients the data feed.\
+This program aims to facilitates research in HFT providing the maximum amount of data released by NASDAQ, ready for use.\
+NASDAQ receives orders by traders and market participants, then its matching engine construct the order book according to specific rules that may depend on the venue, and eventually sells to clients the data feed.\
 We were able to reconstruct the book with total depth at about 1Mio-2Mio messages per second, this figure also includes the parsing from the binary data.\
-Important to notice is that the messages do not coincides with the orders received by NASDAQ, i.e. we do not need a matching engine to match supply and demand, but we are already given the result of the matching engine. Apart from interpreting the binary data according to the specification of the protocol we have to retrieve information of past orders that new messages are referring to.\
-We can see this difficulty in the following simple add and delete of an order, according to the specifications the add and delete order would be:
+To understand the difficulties of such an exercise is important to understand that the messages do not coincides with the orders received by NASDAQ, i.e. we do not need a matching engine to match supply and demand, but we are already given the result of the matching engine. Apart from interpreting the binary data according to the specification of the protocol we also have to retrieve information of past orders that new messages are referring to.\
+We can see this in the following of a simple add and delete of an order, according to the specifications the add and delete order would be:
 
 | Message Type | Locate | Tracking | ns since 00:00 | Order id | Buy/Sell | Size | Stock | Price   |
 |--------------|--------|----------|----------------|----------|----------|------|-------|---------|
@@ -74,13 +74,15 @@ The output of the program would be two .csv file withe the following structure:
 
 OS X & Linux:
 
+
 ```sh
 git clone https://github.com/martinobdl/ITCH
 cd ITCH
 make
+```
 
-# to get some data needed to run the program (800 Mb)
-
+In order o get some data needed to run the program **(800MB)**
+```sh
 wget ftp://anonymous:@emi.nasdaq.com/ITCH/PSX_ITCH/20190327.PSX_ITCH_50.gz -P ./data/binary
 
 # this file exists at date 05/02/2019
@@ -100,13 +102,10 @@ usage:    ./BookConstructor.sh [-lfh] [-n #] data_folder mm/dd/yyyy venue ticker
  -h, --help     Display usage instructions
  -l, --list     Display all the date venues available at data_folder/binary
  -f, --force    To force program execution if output files already exists
- -n,            Number of levels to sotre for the book, default is 5
+ -n,            Number of levels to store for the book, default is 5
 ```
 
-for example
-``` sh
-./BookConstructor.sh data_folder mm/dd/yyyy venue ticker -n N
-```
+for example `./BookConstructor.sh data_folder mm/dd/yyyy venue ticker -n N`
 will produce two output files named:
 
 ```
@@ -116,7 +115,7 @@ data_folder/messages/mmddyyyy.venue_ITCH50_ticker_message.csv
 
 ###### example
 
-Given that you have in ```/../../ITCH/data/binary``` the file ```PSX_ITCH/20190327.PSX_ITCH_50.gz```
+Given that you have in `/../../ITCH/data/binary` the file `PSX_ITCH/20190327.PSX_ITCH_50.gz`
 
 ``` sh
 cd /../../ITCH
@@ -133,12 +132,12 @@ this will create two output .csv files, namely:
 
 Here we report an in depth description of message file output of the program:
 
-At discrete time T1,T2,T3,... an output will be rreleased by NASDAQ, the field names may have different meaning depending on the type of message. Hence here we will give a detailed description of the message csv.
+At discrete time T1,T2,T3,... an output will be released by NASDAQ, the field names may have different meaning depending on the type of message. Hence here we will give a detailed description of the message csv.
 
 | time | type | id     | side                   | size                                                        | price                                      | cancSize                      | execSize                    | oldId        | oldSize                           | oldPrice                          |
 |------|------|--------|------------------------|-------------------------------------------------------------|--------------------------------------------|-------------------------------|-----------------------------|--------------|-----------------------------------|-----------------------------------|
 | ...  | A    | ...    | ...                    | added size                                                  | limit price of the add order               | -                             | -                           | -            | -                                 | -                                 |
-| ...  | D    | ...    | ...                    | remaining size after the deletion (may be total or partial) | price of the original order                | cancelled size by the message | -                           | -            | -                                 | -                                 |
+| ...  | D    | ...    | ...                    | remaining size after the deletion (may be total or partial) | price of the original order                | canceled size by the message | -                           | -            | -                                 | -                                 |
 | ...  | E    | ...    | ...                    | remaining size after the execution                          | price of the order being executed          | -                             | size being executed         | -            | -                                 | -                                 |
 | ...  | P    | ...    | ...                    | execution of an hidden order                                | price of the execution                     | -                             | size of the hidden eecution | -            | -                                 | -                                 |
 | ...  | R    | new id | equal to the old order | new size                                                    | new limit size                             | -                             | -                           | old order id | size of the order being replaced  | price of the order being replaced |
@@ -177,10 +176,11 @@ make test
 ./bin/executeTests
 ```
 
-## Example Application
+## Application Example
 
 In the python folder there are some example on how the program might be used to perform research on HFT.\
-```envirorment.py``` is the envirorment definition
+`environment.py` is the environment definition and `Algo.py` is the agent abstract class from which we would implement the strategy.\
+The environment definition provides also some visualization tools.
 
 requirements:
 ```
@@ -191,6 +191,23 @@ matplotlib
 tkinter
 tqdm
 ```
+
+###### To run the environment visualization tool:
+
+```sh
+python3 /../../ITCH/python/environment.py mmddyyyy venue stock
+```
+
+
+###### To run a simple fixed spread strategy:
+```sh
+python3 /../../ITCH/python/Algo_fixedSpread.py
+```
+
+## Screen shots
+
+![](images/classDiagram.png)
+![](images/Figure_2.png)
 
 
 
@@ -204,15 +221,7 @@ Distributed under the XYZ license. See ``LICENSE`` for more information.
 
 ## Contributors
 
-Martino Bernasconi <https://github.com/martinobdl>
-Luigi Fisco <https://github.com/luigif9>
-Ozarenka Gragic <https://github.com/oz-dr>
-
-<!-- Markdown link & img dfn's -->
-[npm-image]: https://img.shields.io/npm/v/datadog-metrics.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/datadog-metrics
-[npm-downloads]: https://img.shields.io/npm/dm/datadog-metrics.svg?style=flat-square
-[travis-image]: https://img.shields.io/travis/dbader/node-datadog-metrics/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/dbader/node-datadog-metrics
-[wiki]: https://github.com/yourname/yourproject/wiki
+* Martino Bernasconi    <https://github.com/martinobdl>
+* Luigi Fisco           <https://github.com/luigif9>
+* Ozarenka Dragic       <https://github.com/oz-dr>
 

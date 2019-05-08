@@ -11,7 +11,7 @@ display_usage() {
     echo " -h, --help     Display usage instructions"
     echo " -l, --list     Display all the date venues available at data_folder/binary"
     echo " -f, --force    To force program execution if output files already exists"
-    echo " -n,            Number of levels to sotre for the book, default is 5"
+    echo " -n,            Number of levels to store for the book, default is 5"
     echo
 }
 
@@ -162,7 +162,13 @@ STR_STOCK_DATE=${DATE:4}${DATE:0:2}${DATE:2:2}
 # FILE_STOCK_LOCATE="$DATA_FOLDER"stock_locate_codes/"$VENUE"_stocklocate_"$STR_STOCK_DATE".txt
 
 # 2. option is check it directly on server
-NAME=$VENUE"_stocklocate_"$STR_STOCK_DATE".txt"
+if [ \( $VENUE == NASDAQ \) ]; then
+    URL_VENUE=ndq
+else
+    URL_VENUE=$VENUE
+fi
+
+NAME=$URL_VENUE"_stocklocate_"$STR_STOCK_DATE".txt"
 BASE_URL=ftp://anonymous:@emi.nasdaq.com/ITCH/Stock_Locate_Codes/
 URL=$BASE_URL$NAME
 
@@ -179,10 +185,9 @@ else
   URL_OUT=$STOCK
 fi
 
-
-if display_list | grep --quiet "$STR_DATE_VENUE"; then
+if display_list | grep --quiet "$STR_DATE_VENUE" ; then
     # 2. option condition:
-    if echo $URL_OUT | grep -cq $STOCK ; then
+    if [ $FOUND_URL == 1 ] && $(echo $URL_OUT | grep -cq $STOCK ); then
 
     # 1. option condition :
     #if cat $FILE_STOCK_LOCATE | grep -cq $STOCK; then

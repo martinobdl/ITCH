@@ -9,8 +9,8 @@ import tqdm
 import pickle
 import utility
 from matplotlib.widgets import Button
+import sys
 
-PATH = os.path.dirname(os.path.realpath(__file__))
 PROTOCOL_NAME = "_ITCH50_"
 
 class ts:
@@ -32,7 +32,7 @@ class ts:
         specify the maximum depth of the order book
 
     """
-    def __init__(self, date, venue, stock, levels=5):
+    def __init__(self, date, venue, stock, PATH=os.path.dirname(os.path.realpath(__file__)), levels=5):
         self.date = date
         self.venue = venue
         self.stock = stock
@@ -43,8 +43,7 @@ class ts:
         try:
 
             PKfile = open(pk_folderPath+self.PKfileName,'rb')
-            [self.time, self.book, self.messages] = pickle.load(PKfile)
-            self.ticksize = np.diff(np.unique(self.messages.price)).min()
+            [self.book, self.messages] = pickle.load(PKfile)
 
         except:
 
@@ -67,22 +66,20 @@ class ts:
                 print("parsing time into datetime objects...")
                 print
 
-                self.time = self.messages.time
-
-                self.messages.time = self.messages.time.map(lambda t: utility.parseNanosecondsToDateTime(self.date,t).to_pydatetime())
-                self.book.time = self.book.time.map(lambda t: utility.parseNanosecondsToDateTime(self.date,t).to_pydatetime())
-
                 with open(pk_folderPath+self.PKfileName, 'wb') as file:
                     print("pickling...")
-                    pickle.dump([self.time, self.book, self.messages], file)
-
-                self.ticksize = np.diff(np.unique(self.messages.price)).min()
+                    pickle.dump([self.book, self.messages], file)
 
             except:
 
                 print("No data found for: ", self. stock, self.venue, self.date)
                 print()
+                exit()
 
+        self.time = self.messages.time
+        self.ticksize = np.diff(np.unique(self.messages.price)).min()
+
+        self.initial_param = {'ticksize':self.ticksize,'p0':self.messages.iloc[0].price}
 
     def get_heat_map(self,t_boud,p_boud,n_t,n_p,levels):
         """ Get the heat map and the mask parameter
@@ -161,6 +158,7 @@ class ts:
                                 p_boud=[0,999999],
                                 n_t=400,n_p=100,
                                 levels=100):
+
         """ Plot the best bid and ask time series together with
         the time series of the sizes of the orders.
 
@@ -187,11 +185,6 @@ class ts:
             heat, _, tgrid2, pgrid2 = self.get_heat_map(x_b, y_b, n_t, n_p, levels)
 
             cs.remove()
-
-            # ts_1.set_xdata(self.time.loc[mask]);
-            # ts_1.set_ydata(self.book['1_bid_price'].loc[mask]);
-            # ts_2.set_xdata(self.time.loc[mask]);
-            # ts_2.set_ydata(self.book['1_ask_price'].loc[mask]);
 
             cs = ax.pcolormesh(tgrid2, pgrid2, heat, cmap=cmap,
                         norm=matplotlib.colors.LogNorm(vmin=vmin, vmax=vmax))
@@ -250,6 +243,41 @@ class ts:
         ax.grid()
         plt.show()
 
+    def get_data_up_to(self,t):
+        """ return book df up to time stamp t
+        """
+        return self.book[self.time<=t], self.messages[self.time<=t]
+
+    def get_data_at_time(self,idx):
+        """ return book and message data at index i
+        """
+        return self.book.iloc[idx], self.messages.iloc[idx]
+
+    def get_last_execution(self,t,idx=1):
+        """ get the last execution happend before time stamp t
+        """
+        types = ['E']
+        sliced = self.messages[self.time<=t]
+        if not sliced.loc[self.messages.type == 'E'].empty:
+            return sliced.loc[self.messages.type == 'E'].iloc[-idx]
+        else:
+            return pd.DataFrame(columns = self.messages.columns)
+
+
+
 if __name__ == '__main__':
-    a = ts('01302019','NASDAQ','INTC', 5)
+    argc = len(sys.argv)
+    if argc == 1:
+        date = '01302019'
+        venue = 'NASDAQ'
+        stock = 'INTC'
+    else:
+        date = sys.argv[1]
+        venue = sys.argv[2]
+        stock = sys.argv[3]
+    if argc == 5:
+        PATH = sys.argv[4]
+    else:
+        PATH = os.path.dirname(os.path.realpath(__file__))
+    a = ts(date,venue,stock,PATH,5)
     a.plot_liquidity_heatmap()
