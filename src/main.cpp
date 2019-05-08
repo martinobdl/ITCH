@@ -5,7 +5,7 @@
 int main(int argc, char * argv[]){
 
     if(argc<5){
-        std::cerr << "Should be called with: ./BookConstructor path_input_file dir_book dir_mex levels stock" << std::endl;
+        std::cerr << "The program should be called with: ./BookConstructor path_input_file dir_book dir_messages levels stock" << std::endl;
         return 0;
     }
 

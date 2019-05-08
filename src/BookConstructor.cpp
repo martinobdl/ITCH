@@ -21,7 +21,7 @@ BookConstructor::BookConstructor(const std::string &inputMessageCSV,
 
 BookConstructor::~BookConstructor(){
     if(!pool.isEmpty()){
-        std::cout << "Ids of orders remaining in the book after the market closure: ";
+        std::cout << "Id's of orders remaining in the book after the market closure: ";
         pool.printIds();
     }
 }
@@ -115,10 +115,9 @@ void BookConstructor::updateBook(void){
     }
     else if(typeMsg == "R"){
         // Replace existing order in the pool.
-        //
+        
         // Completely cancel the existing order.
         book.modifySize(message.getOldPrice(),-message.getOldSize(),message.getSide());
-        //
         // Add new order.
         book.modifySize(message.getPrice(),message.getRemSize(),message.getSide());
     }
@@ -135,7 +134,7 @@ void BookConstructor::updateBook(void){
         book.modifySize(message.getOldPrice(),-message.getExecSize(),message.getSide());
     }
     else if(typeMsg=="P"){
-        // Execute hidden order. Does not affect the book.
+        // Execute hidden order. It does not affect the book.
     }
 
     else{

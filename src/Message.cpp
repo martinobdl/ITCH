@@ -9,22 +9,34 @@ Message::Message(const std::string& _type,
 
 void Message::setType(const std::string& _type){
     if(_type =="A" || _type == "F"){
-        type = "A"; // add
+        // Messages related to adding new order.
+        // The only difference between them:
+        // "A"  - The market participant behind the order is anonymous.
+        // "F"  - ID of the market participant behind the order is available
+        // The information is irrelevant therefore we do not distinguish between them.
+        type = "A"; // (A)dd
     }
     else if (_type == "D" || _type == "X"){
-        type = "D"; // delete
+        // Messages related to cancellation of the order:
+        // "D" - complete cancellation; the order related to this message has to be deleted from the book
+        // "X" - partial cancellation
+        type = "D"; // (D)elete
     }
     else if (_type == "U"){
-        type = "R"; // replace
+        // The message is sent whenever xisting order has been completelly canceled and replaced by the new one.
+        type = "R"; // (R)eplace
     }
     else if (_type == "E"){
-        type = _type; // execute
+        // The message is sent whenever an order on the book is executed in whole or in part.
+        type = _type; // (E)xecute
     }
     else if (_type == "P"){
-        type = _type; // execute hidden message
+        type = _type; // execute hidden message; It does not affect the book
     }
     else if (_type == "C"){
-        type = _type;
+        // The message is sent whenever an order on the book is executed 
+        // in whole or in part at a price different from the initial display price.
+        type = _type; 
     }
     else{
         std::cerr << "Message with wrong type (" << _type << ") has been found!"<< std::endl;

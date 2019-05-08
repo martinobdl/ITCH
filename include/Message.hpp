@@ -7,6 +7,7 @@
 #include <iostream>
 #include <utility.hpp>
 
+// Each line of input file represents a Message object
 class Message{
 private:
     std::string type = "";

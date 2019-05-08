@@ -26,7 +26,7 @@ Order::Order(id_type _id,
 //     price=_price;
 // }
 
-//getters
+// getters
 id_type Order::getId(void) const{
     return id;
 }

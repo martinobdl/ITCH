@@ -20,6 +20,7 @@ void OrderPool::modifyOrder(id_type idOrder, size_type size = 0){
         pool.erase(idOrder);
         std::cout << "size = 0" << std::endl;
     }
+    // Otherwise modify the size of the order
     else{
         pool[idOrder].addSize(-size);
         if( pool[idOrder].getSize() == 0 ){

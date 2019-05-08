@@ -4,11 +4,11 @@ std::string OrderBook::getString(const size_t &level) const {
     // Make comma-separated string from information available
     // in the book about the best bid/ask prices and corresponding sizes up to number of levels :
     // "1.BidPrice, 1.BidSize,1.AskPrice,1.AskSize,..,level.BidPrice, level.BidSize,level.AskPrice,level.AskSize"
+    //  If not given by the user, input argument takes default value = 5
 
-    // ??? TO BE CHANGED //
 
-    size_t buyDepth = buySide.size(); // The number of bid prices available in book
-    size_t sellDepth = sellSide.size(); // The number of ask prices available in book
+    size_t buyDepth = buySide.size(); // The number of bid prices available in the book
+    size_t sellDepth = sellSide.size(); // The number of ask prices available in the book
     std::ostringstream string_builder;
     string_builder << timestamp << ",";
 

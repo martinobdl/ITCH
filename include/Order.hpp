@@ -5,11 +5,14 @@
 #include <utility.hpp>
 #include <Message.hpp>
 
+// The class keeps track of the order with specific id throughout a day.
+// A sequence of messages with same ID are related to the same Order object.
+
 class Order{
     id_type id = ID_DEFAULT;
     side_type side; // 0 for buy, 1 for sell
-    size_type size=SIZE_DEFAULT;
-    price_type price=PRICE_DEFAULT;
+    size_type size = SIZE_DEFAULT;
+    price_type price = PRICE_DEFAULT;
 
     public:
     Order() = default;
