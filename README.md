@@ -1,7 +1,7 @@
 # NASDAQ ITCH 50 Book Constructor
 > Given the NASDAQ Total View ITCH 50 data feed, reconstruct the full depth order book and related messages.
 
-This is an efficient c++ implementation of reconstructing a Limit Order Book from data feed messages issued by NASDAQ according to the ITCH 50 data protocol specified at <https://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHSpecification.pdf>. Some samples data is publicly available trough NASDAQ public ftp at <ftp://emi.nasdaq.com/ITCH/>. The program will output two csv files containing the messages and the related limit order book for the relative stock.
+This is an efficient c++ implementation of reconstructing a Limit Order Book from data feed messages issued by NASDAQ according to the ITCH 50 data protocol specified at <https://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHSpecification.pdf>. Some samples data are publicly available trough NASDAQ public ftp at <ftp://emi.nasdaq.com/ITCH/>. The program outputs two csv files containing the messages and the related limit order book for the relative stock.
 
 # Folder Structure
 
@@ -10,7 +10,7 @@ ITCH
 │
 └───bin     (c++ executable)
 │
-└───build   (dipendency and object files)
+└───build   (dependency and object files)
 │
 └───data
 │   │
@@ -38,11 +38,11 @@ ITCH
 
 ![](images/OB.png)
 
-This program aims to facilitates research in HFT providing the maximum amount of data released by NASDAQ, ready for use.\
+This program aims to facilitate research in High Frequency Trading (HFT) providing the maximum amount of data released by NASDAQ, ready for use.\
 NASDAQ receives orders by traders and market participants, then its matching engine construct the order book according to specific rules that may depend on the venue, and eventually sells to clients the data feed.\
 We were able to reconstruct the book with total depth at about 1Mio-2Mio messages per second, this figure also includes the parsing from the binary data.\
-To understand the difficulties of such an exercise is important to understand that the messages do not coincides with the orders received by NASDAQ, i.e. we do not need a matching engine to match supply and demand, but we are already given the result of the matching engine. Apart from interpreting the binary data according to the specification of the protocol we also have to retrieve information of past orders that new messages are referring to.\
-We can see this in the following of a simple add and delete of an order, according to the specifications the add and delete order would be:
+To understand the difficulties of such an exercise is important to understand that the messages do not coincide with the orders received by NASDAQ, i.e. we do not need a matching engine to match supply and demand, but we are already given the result of the matching engine. Apart from interpreting the binary data according to the specification of the protocol we also have to retrieve information of past orders that new messages are referring to.\
+We can see this in the following example of a simple add and delete of an order, according to the specifications the add and delete order would be:
 
 | Message Type | Locate | Tracking | ns since 00:00 | Order id | Buy/Sell | Size | Stock | Price   |
 |--------------|--------|----------|----------------|----------|----------|------|-------|---------|
@@ -50,9 +50,9 @@ We can see this in the following of a simple add and delete of an order, accordi
 | ...          |        |          |                |          |          |      |       |         |
 | D            | 8007   | 0        | 28802131843697 | 45785    |          |      |       |         |
 
-As we can see once we observe the deletion order no information about the direction, size, stock and price are reported. Hence at each time we have to keep tracks of all the active orders in the book, in order to know what to do one we encounter the deletion order.
+As we can see once we observe the deletion order no information about the direction, size, stock and price are reported. Hence at each time we have to keep track of all the active orders in the book, in order to know what to do once we encounter the deletion order.
 
-The output of the program would be two .csv file withe the following structure:
+The output of the program are two .csv file with the following structure:
 
 ##### messages of 08/30/2018 PSX AAPL
 
@@ -81,7 +81,7 @@ cd ITCH
 make
 ```
 
-In order o get some data needed to run the program **(800MB)**
+In order to get some data needed to run the program **(800MB)**
 ```sh
 wget ftp://anonymous:@emi.nasdaq.com/ITCH/PSX_ITCH/20190327.PSX_ITCH_50.gz -P ./data/binary
 
@@ -130,7 +130,7 @@ this will create two output .csv files, namely:
 
 # Detailed output description
 
-Here we report an in depth description of message file output of the program:
+Here we report detailed description of message file output of the program:
 
 At discrete time T1,T2,T3,... an output will be released by NASDAQ, the field names may have different meaning depending on the type of message. Hence here we will give a detailed description of the message csv.
 
@@ -178,7 +178,7 @@ make test
 
 ## Application Example
 
-In the python folder there are some example on how the program might be used to perform research on HFT.\
+In the python folder there are some examples on how the program might be used to perform research on HFT.\
 `environment.py` is the environment definition and `Algo.py` is the agent abstract class from which we would implement the strategy.\
 The environment definition provides also some visualization tools.
 
@@ -223,5 +223,5 @@ Distributed under the XYZ license. See ``LICENSE`` for more information.
 
 * Martino Bernasconi    <https://github.com/martinobdl>
 * Luigi Fisco           <https://github.com/luigif9>
-* Ozarenka Dragic       <https://github.com/oz-dr>
+* Ozrenka Dragic       <https://github.com/oz-dr>
 
