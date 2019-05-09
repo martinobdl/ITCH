@@ -1,10 +1,20 @@
 #include <BookConstructor.hpp>
 
+/**
+ * Class Initializer.
+ * Principal class for the reconstruction of the Order Book (OB).
+ *
+ * @param[in] inputMessageCSV : decompressed file to read from.
+ * @param[in] _stock : selected stock.
+ * @param[in] _levels : selected number of levels for order book.
+ * @param[out] outputBookCSV, outputMessageCSV : destination files to write Order Book and stream message.
+ */
 BookConstructor::BookConstructor(const std::string &inputMessageCSV,
     const std::string &outputMessageCSV,
     const std::string &outputBookCSV,
     const std::string &_stock,
     const size_t &_levels):
+    */
     message_reader(inputMessageCSV, _stock),
     messageWriter(outputMessageCSV),
     bookWriter(outputBookCSV),
@@ -19,6 +29,10 @@ BookConstructor::BookConstructor(const std::string &inputMessageCSV,
         bookWriter.writeLine(bookHeader.substr(0, bookHeader.size()-1)+'\n');
     }
 
+/**
+ * Class deconstructor.
+ * For debug : print orders still present at closure, if any.
+ */
 BookConstructor::~BookConstructor(){
     if(!pool.isEmpty()){
         std::cout << "Id's of orders remaining in the book after the market closure: ";
@@ -26,12 +40,22 @@ BookConstructor::~BookConstructor(){
     }
 }
 
+/**
+ * Start Book reconstruction.
+ */
 void BookConstructor::start(void){
     while(!message_reader.eof() and message_reader.isValid()){
         next();
     }
 }
 
+/**
+ * Process next message. Retain only message affecting the OB (type A,P,D,R,E,C).
+ * If necessary, complete message information from Order Pool (OP) and update OP,
+ * OB and write in output OB and Messages.
+ *
+ * @param[out] message : update message attribute of BookConstructor with the one being currently processed.
+ */
 void BookConstructor::next(void){
     message = message_reader.createMessage();
     if(!message.isEmpty()){
@@ -44,6 +68,12 @@ void BookConstructor::next(void){
     }
 }
 
+/**
+ * Complete message information with missing field.
+ * Ex : Execution messages miss Price -> retrieve order price from the OP through order ID.
+ *
+ *      @param[out] message.price, message.remSize.
+ */
 bool BookConstructor::updateMessage(void){
     std::string typeMsg = message.getType();
 
@@ -104,6 +134,11 @@ bool BookConstructor::updateMessage(void){
     return 1;
 }
 
+/**
+ * Update OB with the current message.
+ *
+ * @param[out] book.buySide, book.sellSide : modify size of price levels.
+ */
 void BookConstructor::updateBook(void){
     book.setTimeStamp(message.getTimeStamp());
     std::string typeMsg = message.getType();
@@ -115,7 +150,7 @@ void BookConstructor::updateBook(void){
     }
     else if(typeMsg == "R"){
         // Replace existing order in the pool.
-        
+
         // Completely cancel the existing order.
         book.modifySize(message.getOldPrice(),-message.getOldSize(),message.getSide());
         // Add new order.
@@ -146,6 +181,11 @@ void BookConstructor::updateBook(void){
     }
 }
 
+/**
+ * Update OP with the current message.
+ *
+ * @param[out] pool.pool
+ */
 void BookConstructor::updatePool(void){
     std::string typeMsg = message.getType();
 
@@ -178,8 +218,12 @@ void BookConstructor::updatePool(void){
     }
 }
 
+/**
+ * Write in output OB state and message stream through Writer Class.
+ *
+ * @param[out] outputBookCSV, outputMessageCSV : destination csv files to update.
+ */
 void BookConstructor::WriteBookAndMessage(void){
     bookWriter.writeLine(book.getString(levels));
     messageWriter.writeLine(message.getString());
 }
-
