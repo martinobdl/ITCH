@@ -26,8 +26,8 @@ public:
                     const std::string &_stock,
                     const size_t &_levels);
     ~BookConstructor();
-    void start(void); 
-    void next(void); // Processing a single line from input file.
+    void start(void);
+    void next(void);
     bool updateMessage(void);
     void updateBook(void);
     void updatePool(void);

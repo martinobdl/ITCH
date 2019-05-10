@@ -23,7 +23,6 @@ class Algo(object):
 
     def __init__(self):
         """ Subclass to define algo specific parameters here.
-        :param latency: algorith latency in execution
         """
         pass
 
@@ -42,10 +41,12 @@ class Algo(object):
         :params env: environment object used to test the
         """
         self.init_run(env.initial_param)
+
         if self.ONLY_EXEC:
             time = env.time[env.messages.type=='E']
         else:
             time = env.time
+
         time = time[time < 57600000000000][time > 34200000000000]
 
         for i in tqdm.tqdm(time.index):
@@ -73,16 +74,16 @@ class Algo(object):
         if self.orders.timestamp < t - 2*self.LATENCY and last_message[1].type=='E':
             pt = last_message[1].price
             # buy
-            for price in self.orders.get_buy_orders().keys():
-                size = self.orders.get_buy_orders()[price]
+            for price,size in self.orders.get_buy_orders().items():
+
                 if price > pt:
                     self.inventory += size
                     self.orders.delete_buy_order(price)
                     self.cash -= size*(price + self.COMMISSIONS)
 
             # sell
-            for price in self.orders.get_sell_orders().keys():
-                size = self.orders.get_sell_orders()[price]
+            for price,size in self.orders.get_sell_orders().items():
+
                 if price < pt:
                     self.inventory -= size
                     self.orders.delete_sell_order(price)
@@ -125,7 +126,7 @@ class Algo(object):
 
 
 class orders(object):
-    def __init__(self, orders = [collections.defaultdict(int), collections.defaultdict(int)]):
+    def __init__(self, orders = [collections.Counter(), collections.Counter()]):
         self.orders = orders
         self.timestamp = 0
 
@@ -152,3 +153,15 @@ class orders(object):
 
     def delete_sell_order(self, price):
         self.orders[1][price] = 0
+
+    def delete_all_buy_order(self):
+        self.orders[0] = collections.Counter()
+
+    def delete_all_sell_order(self):
+        self.orders[1] = collections.Counter()
+
+    def add_buy_orders_from_dict(self, dct):
+        self.orders[0] += dct
+
+    def add_sell_orders_from_dict(self, dct):
+        self.orders[1] += dct

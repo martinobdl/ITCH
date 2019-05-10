@@ -9,24 +9,6 @@ Order::Order(id_type _id,
         size(_size),
         price(_price){}
 
-//setters
-// void Order::setId(id_type _id){
-//     id=_id;
-// }
-
-// void Order::setSide(bool _side){
-//     side=_side;
-// }
-
-// void Order::setSize(size_type _size){
-//     size=_size;
-// }
-
-// void Order::setPrice(price_type _price){
-//     price=_price;
-// }
-
-// getters
 id_type Order::getId(void) const{
     return id;
 }
@@ -43,8 +25,12 @@ price_type Order::getPrice(void) const{
     return price;
 }
 
+/**
+ * Add or subtract size to the order.
+ *
+ * @param[in] _size : size to add or dectract (if size is negative) to the order
+ */
 void Order::addSize(size_type _size){
-    // Size can be also negative
     size+=_size;
     if(size<0){
         std::cerr << "Updated order has negative size" << std::endl;
@@ -63,6 +49,12 @@ void Order::print() const{
         std::cerr << "Trying to print an empty order" << std::endl;
     }
 }
+
+/**
+ * Check wether order is unsetted or not.
+ *
+ * @return bool
+ */
 
 bool Order::isEmpty() const{
     return (id == ID_DEFAULT);

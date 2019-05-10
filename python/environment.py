@@ -74,10 +74,10 @@ class ts:
 
                 print("No data found for: ", self. stock, self.venue, self.date)
                 print()
-                exit()
+                return
 
         self.time = self.messages.time
-        self.ticksize = np.diff(np.unique(self.messages.price)).min()
+        self.ticksize = round(np.diff(np.unique(self.messages.price)).min(),6)
 
         self.initial_param = {'ticksize':self.ticksize,'p0':self.messages.iloc[0].price}
 
@@ -181,9 +181,7 @@ class ts:
         def refocus(event):
 
             global cs, bar
-
             heat, _, tgrid2, pgrid2 = self.get_heat_map(x_b, y_b, n_t, n_p, levels)
-
             cs.remove()
 
             cs = ax.pcolormesh(tgrid2, pgrid2, heat, cmap=cmap,
@@ -245,16 +243,34 @@ class ts:
 
     def get_data_up_to(self,t):
         """ return book df up to time stamp t
-        """
+
+            Parameters
+            ----------
+            t : int
+                time of when to truncate the data
+            """
         return self.book[self.time<=t], self.messages[self.time<=t]
 
     def get_data_at_time(self,idx):
         """ return book and message data at index i
+
+            Parameters
+            ----------
+            idx : int
+                query the data at index idx
         """
         return self.book.iloc[idx], self.messages.iloc[idx]
 
     def get_last_execution(self,t,idx=1):
         """ get the last execution happend before time stamp t
+
+            Parameters
+            ----------
+            t : int
+                time of when to truncate the data
+            idx : ind, optional
+                get idx-last execution message, defualt is 1
+
         """
         types = ['E']
         sliced = self.messages[self.time<=t]
@@ -263,7 +279,72 @@ class ts:
         else:
             return pd.DataFrame(columns = self.messages.columns)
 
+    def plot_order_book(self,i,index='true',**kwargs):
 
+        """ plot the barplot of the order book at time or index i
+
+            Parameters
+            ----------
+            i : int
+                depending of the boolean index (dault=True) plots
+                the order book at index (time) i
+            index : boolean, optional
+                if True, i is the index
+                if False, i is the time
+            **kwargs :
+                xmin, xmax : float, specify the bounds for the xaxis
+                ymax : float, specify the upper bound for the yaxis
+                block : bool, wheter to block at the plot or continue the code
+        """
+
+        [price, size, t, idx] = self.get_book_for_bar_plot(i,index)
+
+        color = ['red','green']*int(len(size)/2)
+
+        fig, ax = plt.subplots()
+
+        rect = plt.bar(price,size,width=self.ticksize/2,color=color)
+        fig.suptitle('time: '+str(t))
+        ax.grid(True)
+        plt.subplots_adjust(bottom=0.2)
+
+        if 'xmin' and 'xmax' in kwargs.keys():
+            plt.xlim((kwargs['xmin'],kwargs['xmax']))
+
+        if 'ymax' in kwargs.keys():
+            plt.ylim((0,kwargs['ymax']))
+
+        if 'block' in kwargs.keys():
+            plt.show(kwargs['block'])
+        else:
+            plt.show()
+        return fig
+
+    def get_book_for_bar_plot(self,i,index):
+
+        """ get the barplot data of the order book at time or index i
+
+            Parameters
+            ----------
+            i : int
+                depending of the boolean index (dault=True) plots
+                the order book at index (time) i
+            index : boolean
+                if True, i is the index
+                if False, i is the time
+        """
+
+        if index:
+            data = self.book.iloc[i]
+            t = self.time[i]
+            idx = i
+        else:
+            data = self.book[self.book.time<i].iloc[-1]
+            t = int(data.time)
+            idx = data.index
+        price = data.iloc[1:-1:2]
+        size = data.iloc[2::2]
+        return price,size,t,idx
 
 if __name__ == '__main__':
     argc = len(sys.argv)
@@ -281,3 +362,4 @@ if __name__ == '__main__':
         PATH = os.path.dirname(os.path.realpath(__file__))
     a = ts(date,venue,stock,PATH,5)
     a.plot_liquidity_heatmap()
+

@@ -2,24 +2,24 @@
 
 /**
  * Class Initializer.
- * Principal class for the reconstruction of the Order Book (OB).
  *
- * @param[in] inputMessageCSV : decompressed file to read from.
- * @param[in] _stock : selected stock.
- * @param[in] _levels : selected number of levels for order book.
- * @param[out] outputBookCSV, outputMessageCSV : destination files to write Order Book and stream message.
+ * Principal class for the reconstruction of the Order Book (OB).
+ * The constructor also writes the headers of output files.
+ *
+ * @param[in] inputMessageCSV decompressed file to read from.
+ * @param[in] _stock selected stock.
+ * @param[in] _levels selected number of levels for order book.
+ * @param[out] outputBookCSV, outputMessageCSV destination files to write Order Book and stream message.
  */
 BookConstructor::BookConstructor(const std::string &inputMessageCSV,
     const std::string &outputMessageCSV,
     const std::string &outputBookCSV,
     const std::string &_stock,
     const size_t &_levels):
-    */
     message_reader(inputMessageCSV, _stock),
     messageWriter(outputMessageCSV),
     bookWriter(outputBookCSV),
     levels(_levels){
-        // Write headers of output files.
         messageWriter.writeLine("time,type,id,side,size,price,cancSize,execSize,oldId,oldSize,oldPrice\n");
         std::string bookHeader = "time,";
         for(size_t i = 1; i<=levels; i++){
@@ -31,7 +31,8 @@ BookConstructor::BookConstructor(const std::string &inputMessageCSV,
 
 /**
  * Class deconstructor.
- * For debug : print orders still present at closure, if any.
+ *
+ * For debug purposes print to std output orders still present at closure. There shouldn't be any.
  */
 BookConstructor::~BookConstructor(){
     if(!pool.isEmpty()){
@@ -42,6 +43,8 @@ BookConstructor::~BookConstructor(){
 
 /**
  * Start Book reconstruction.
+ *
+ * calls iteratevely the next method utile the reader has completed the reading.
  */
 void BookConstructor::start(void){
     while(!message_reader.eof() and message_reader.isValid()){
@@ -50,13 +53,12 @@ void BookConstructor::start(void){
 }
 
 /**
- * Process next message. Retain only message affecting the OB (type A,P,D,R,E,C).
- * If necessary, complete message information from Order Pool (OP) and update OP,
- * OB and write in output OB and Messages.
+ * Process next message. Retain only message affecting the Order Book (type A,P,D,R,E,C).
+ * Reads the message from the Reader interface then if necessary, complete message information retriving information from Order Pool, then updates the Order Book and Order Book according to the type of message recived.
+ * At the end writes the book and message (enriched with all additional information) to the two output files.
  *
- * @param[out] message : update message attribute of BookConstructor with the one being currently processed.
  */
-void BookConstructor::next(void){
+void BookConstructor::next(){
     message = message_reader.createMessage();
     if(!message.isEmpty()){
         bool validMessage = updateMessage();
@@ -70,19 +72,25 @@ void BookConstructor::next(void){
 
 /**
  * Complete message information with missing field.
- * Ex : Execution messages miss Price -> retrieve order price from the OP through order ID.
  *
- *      @param[out] message.price, message.remSize.
+ * Once a message is readed by the reader this metod retrives missing informations from the
+ * order pool, this behaviour depends on the type of the message.
+ * Example : Execution messages miss Price -> retrieve order price from the OP through order ID.
+ *
+ * A,P: all the informations are already present, stop.
+ * D: size and price information have to be retrived from the Pool.
+ * R: oldSize and oldPrice information have to be retrived from the Pool.
+ * E: size and price have to be retrived from the Pool.
+ * C: size and original price have to be retrived from the Order Pool.
+ *
  */
 bool BookConstructor::updateMessage(void){
     std::string typeMsg = message.getType();
 
     if(typeMsg == "A" or typeMsg == "P"){
-        // All information about the message has been read from input file.
         return 1;
     }
 
-    // The information about other type of messages has to be recovered from preceding processed messages with same ID.
     // Matching (R)eplace message is done by comparing its oldID with the IDs of preceding processed messages.
     id_type messageId = (typeMsg == "R") ? message.getOldId() : message.getId();
 
@@ -95,7 +103,6 @@ bool BookConstructor::updateMessage(void){
     message.setSide(matchedOrder.getSide());
 
     if(typeMsg == "D"){
-       // (D)elete: adding remSize, Price
         if (message.getCancSize() == SIZE_DEFAULT){
             // CancSize has default value, meaning the complete deletion has taken place.
             // Retrive the information about size to be canceled from matched order.
@@ -108,20 +115,17 @@ bool BookConstructor::updateMessage(void){
     }
 
     else if(typeMsg == "R"){
-        // (R)eplace: adding oldSize, oldPrice
         message.setOldSize(matchedOrder.getSize());
         message.setOldPrice(matchedOrder.getPrice());
     }
 
     else if(typeMsg == "E"){
-        // (E)xecution: adding remSize, price
         message.setPrice(matchedOrder.getPrice());
         size_type remainingSize = matchedOrder.getSize() - message.getExecSize();
         message.setRemSize(remainingSize);
     }
 
     else if(typeMsg == "C"){
-        // Execution at different price
         size_type remainingSize = matchedOrder.getSize() - message.getExecSize();
         message.setRemSize(remainingSize);
         message.setOldPrice(matchedOrder.getPrice());
@@ -135,17 +139,18 @@ bool BookConstructor::updateMessage(void){
 }
 
 /**
- * Update OB with the current message.
+ * Update Order Book with the current message.
  *
- * @param[out] book.buySide, book.sellSide : modify size of price levels.
+ * Updates the OrderBook double map accordingly to the type of the message.
+ * A: Add the order to the pool. If key in the map (price) is already there just add the size. Otherwise add the key with corresponding size.
+ * R: Replace existing order in the pool, hence cancel completely the existing size and create a new one
+ *
  */
 void BookConstructor::updateBook(void){
     book.setTimeStamp(message.getTimeStamp());
     std::string typeMsg = message.getType();
 
     if(typeMsg == "A"){
-        // Add the order to the pool. If key in the map (price) is already there
-        // just add the size. Otherwise add the key with corresponding size.
         book.modifySize(message.getPrice(),message.getRemSize(),message.getSide());
     }
     else if(typeMsg == "R"){
@@ -182,36 +187,38 @@ void BookConstructor::updateBook(void){
 }
 
 /**
- * Update OP with the current message.
+ * Update Order Pool with the current message.
  *
- * @param[out] pool.pool
+ * Using the message attribute in the BookConstructor class updates the pool.
+ * types of order and effects:
+ * A: Add order to order pool.
+ * R: Delete order and add new one.
+ * D: Delete (partially or totally) order.
+ * E: Execute (partially or totally) order.
+ * C: Execute order at different price.
+ * P: Execute hidden order. Does not affect the book.
+ *
  */
 void BookConstructor::updatePool(void){
     std::string typeMsg = message.getType();
 
     if(typeMsg == "A"){
-        // Add order to order pool.
         pool.addToOrderPool(message.getId(), message.getSide(), message.getRemSize(), message.getPrice());
     }
     else if(typeMsg=="R"){
-        // Delete old order and add new one.
         pool.modifyOrder(message.getOldId(), message.getOldSize());
         pool.addToOrderPool(message.getId(), message.getSide(), message.getRemSize(), message.getPrice());
     }
     else if(typeMsg=="D"){
-        // Delete (partially or totally) order.
         pool.modifyOrder(message.getId(), message.getCancSize());
     }
     else if(typeMsg=="E"){
-        // Execute (partially or totally) order.
         pool.modifyOrder(message.getId(), message.getExecSize());
     }
     else if(typeMsg=="C"){
-        // Execute order at different price.
         pool.modifyOrder(message.getId(), message.getExecSize());
     }
     else if(typeMsg=="P"){
-        // Execute hidden order. Does not affect the book.
     }
     else{
         std::cerr << "Unexpected type of message has been found while updating pool! " << typeMsg << std::endl;
@@ -219,9 +226,8 @@ void BookConstructor::updatePool(void){
 }
 
 /**
- * Write in output OB state and message stream through Writer Class.
+ * Write in output Order Book state and message stream through Writer Class.
  *
- * @param[out] outputBookCSV, outputMessageCSV : destination csv files to update.
  */
 void BookConstructor::WriteBookAndMessage(void){
     bookWriter.writeLine(book.getString(levels));

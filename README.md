@@ -198,30 +198,22 @@ tqdm
 python3 /../../ITCH/python/environment.py mmddyyyy venue stock
 ```
 
-
-###### To run a simple fixed spread strategy:
+###### To run a simple low regret fixed spread strategy:
 ```sh
 python3 /../../ITCH/python/Algo_fixedSpread.py
 ```
+
+The implemented strategy can be found at
+
+[# 2013] Abernethy, J., Kale, S., Adaptive Market Making via Online Learning.
 
 ## Screen shots
 
 ![](images/classDiagram.png)
 ![](images/Figure_2.png)
 
-
-
-<!-- ## Meta
-
-Your Name – [@YourTwitter](https://twitter.com/dbader_org) – YourEmail@example.com
-
-Distributed under the XYZ license. See ``LICENSE`` for more information.
-
-[https://github.com/yourname/github-link](https://github.com/dbader/) -->
-
 ## Contributors
 
+* Luigi Fusco           <https://github.com/luigif9>
+* Ozrenka Dragic        <https://github.com/oz-dr>
 * Martino Bernasconi    <https://github.com/martinobdl>
-* Luigi Fisco           <https://github.com/luigif9>
-* Ozrenka Dragic       <https://github.com/oz-dr>
-

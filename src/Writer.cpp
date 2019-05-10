@@ -1,5 +1,13 @@
 #include <Writer.hpp>
 
+/**
+ * Constructor for Writer class
+ *
+ * If unable to open file to read print to standard error a message.
+ * If file has been opened correctly, write it to standard optput.
+ *
+ * @param[in] _fileName destination csv files to update.
+ */
 Writer::Writer(const std::string& _fileName):fileName(_fileName){
   file.open(_fileName);
   if(!file.is_open()){
@@ -10,7 +18,12 @@ Writer::Writer(const std::string& _fileName):fileName(_fileName){
   }
 }
 
-void Writer::writeLine(std::string stringToWrite){
+/**
+ * Writes string to stream
+ *
+ * @param[in] stringToWrite string to write to the csv.
+ */
+void Writer::writeLine(const std::string &stringToWrite){
   file << stringToWrite;
 }
 

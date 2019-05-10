@@ -14,3 +14,6 @@ def get_last_execution(message_df,t,idx=1):
         return sliced.loc[message_df.type == 'E'].iloc[-idx]
     else:
         return pd.DataFrame(columns = message_df.columns)
+
+def normalize(vector):
+    return vector/len(vector)

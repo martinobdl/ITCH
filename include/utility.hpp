@@ -3,7 +3,7 @@
 #define UTILITY_H
 
 #include <iostream>
-
+#include <climits>
 
 typedef double price_type;
 typedef long size_type;

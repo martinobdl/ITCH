@@ -7,6 +7,19 @@ Message::Message(const std::string& _type,
         id(_id),
         timestamp(_timestamp){};
 
+/**
+ * Setter for the messegae. Transforms the Nasdaq type defintions in ours.
+ *
+ * - NASDAQ   --> Custom
+ * - A,F      --> (A)dd
+ * - D,X      --> (D)elete
+ * - U        --> (R)eplace
+ * - E        --> (E)xecution
+ * - P        --> P, hidden execution
+ * - C        --> C, execution at different price
+ *
+ * @param[in] _type type string: according to the definition of NASDAQ
+ */
 void Message::setType(const std::string& _type){
     if(_type =="A" || _type == "F"){
         // Messages related to adding new order.
@@ -23,7 +36,7 @@ void Message::setType(const std::string& _type){
         type = "D"; // (D)elete
     }
     else if (_type == "U"){
-        // The message is sent whenever xisting order has been completelly canceled and replaced by the new one.
+        // The message is sent whenever existing order has been completelly canceled and replaced by the new one.
         type = "R"; // (R)eplace
     }
     else if (_type == "E"){
@@ -37,9 +50,9 @@ void Message::setType(const std::string& _type){
         type = _type; // execute hidden message
     }
     else if (_type == "C"){
-        // The message is sent whenever an order on the book is executed 
+        // The message is sent whenever an order on the book is executed
         // in whole or in part at a price different from the initial display price.
-        type = _type; 
+        type = _type;
     }
     else{
         std::cerr << "Message with wrong type (" << _type << ") has been found!"<< std::endl;
@@ -135,7 +148,15 @@ bool Message::isEmpty()const{
     return (id==ID_DEFAULT);
 }
 
-std::string Message::getString()const{
+/**
+ * Get string representation for writing into the csv
+ *
+ * @return string representation of message.
+ *          If field is not being setted is just an empty char
+ *          separated by commas.
+ *
+ */
+std::string Message::getString(void)const{
     std::ostringstream string_builder;
     if(!isEmpty()){
         string_builder  << timestamp << ",";

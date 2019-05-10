@@ -7,3 +7,9 @@
 *.pk
 data/*
 bin/*
+doc/latex/*
+**/.DS_Store
+*.pyc
+*.pyc
+!doc/latex/refman.pdf
+!doc/Doxyfile
