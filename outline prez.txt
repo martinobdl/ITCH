@@ -1,0 +1,31 @@
+-Introduction	 	-> definition Lob  : (Martino's gif), issues 
+	     	 	-> Our project     : Parsing ITCH, Reconstructing OB, Application, c++ collaborative Development 
+					     
+
+-Input		 	-> ITCH 5.0 Data   : which information? Add/Exec/Del/Replace orders 
+		 	-> Data format     : binary structure  
+				    	     no way for parallelization
+
+-OOP implementation	-> diagram Class   
+			-> BookConstructor : how the system works? 
+					     (explain BookConstructor::next, see Lobster picture)
+					     
+			-> Reader/Writer   : why useful to create Reader/Writer Class?
+					     ifstream -> how we dealt with big-endian?  
+			-> Order Pool      : why unor_map for pool? 
+			-> Order Book      : why map for buy/sell side?
+			-> utility  
+
+-Bash wrapper  		
+-Gtests/Gmock		 
+
+-Python 		-> environment     : heatmap
+			-> strategy Ex
+
+			 		    
+
+what to put in the prez : 
+-non standard libraries we used
+-good practices we adopted (code structure, ...)
+
+
