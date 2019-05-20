@@ -3,7 +3,7 @@
 /**
  * Constructor for Reader class
  *
- * If unable to open file to read print to standard error a message.
+ * If unable to open file to read print to standard error a Message.
  * If file has been opened correctly, write it to standard optput.
  *
  * @param[in] _fileName destination csv files to update.
@@ -47,7 +47,7 @@ void Reader::printProgress(void){
 /**
  * Reads n bytes from the opend file
  *
- * Reads from the file into the message attribute of the Reader class the specified number of bytes.
+ * Reads from the file into the message c-string attribute of the Reader class the specified number of bytes.
  *
  *@params[in] size Number of bytes to read from the stream.
  *
@@ -77,9 +77,10 @@ char Reader::getKey(void){
 /**
  * Reads bytes from the stream and create a message
  *
- * Main function of the class. Creates a message object from the file stream and return a message to the BookConstructor class.
+ * Main function of the class. Creates a Message object from the file stream and return a message to the BookConstructor class.
  *
  *@return Message created from the read bytes.
+ *@warning Dead code is still present in the method. Might be used to parse the entire input ITCH50 file for debug purposes
  *
  */
 Message Reader::createMessage(void){

@@ -12,6 +12,10 @@ ITCH
 │
 └───build   (dependency and object files)
 │
+└───doc
+│   │
+│   └───binary      (LaTex-pdf documentation created with Doxygen)
+│
 └───data
 │   │
 │   └───binary      (ITCH binary gzip compressed files from NASDAQ)
@@ -209,8 +213,13 @@ The implemented strategy can be found at
 
 ## Screen shots
 
+### Implementation Class Diagram
+> For more details about the API see the documentation in the doc/ folder
 ![](images/classDiagram.png)
+
+### Order Book visualization Tool (from environment.py)
 ![](images/Figure_2.png)
+![](images/ezgif-1-77b8a25c6b7c.gif)
 
 ## Contributors
 

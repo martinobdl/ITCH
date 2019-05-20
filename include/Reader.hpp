@@ -7,8 +7,6 @@
 #include <time.h>
 #include <inttypes.h> // PRIux
 #include <cstring>
-#include <algorithm> // min
-#include <cmath> // sqrt
 #include <Message.hpp>
 #include <Writer.hpp>
 

@@ -3,13 +3,13 @@
 /**
  * Class Initializer.
  *
- * Principal class for the reconstruction of the Order Book (OB).
- * The constructor also writes the headers of output files.
+ * Principal class for the reconstruction of the order book.
+ * The constructor also writes the headers to the output files.
  *
- * @param[in] inputMessageCSV decompressed file to read from.
+ * @param[in] inputMessageCSV decompressed binary ITCH50 file to read from.
  * @param[in] _stock selected stock.
  * @param[in] _levels selected number of levels for order book.
- * @param[out] outputBookCSV, outputMessageCSV destination files to write Order Book and stream message.
+ * @param[out] outputBookCSV, outputMessageCSV destination files to write order book and stream message.
  */
 BookConstructor::BookConstructor(const std::string &inputMessageCSV,
     const std::string &outputMessageCSV,
@@ -44,7 +44,7 @@ BookConstructor::~BookConstructor(){
 /**
  * Start Book reconstruction.
  *
- * calls iteratevely the next method utile the reader has completed the reading.
+ * calls iteratevely the next method untile the Reader has completed the reading.
  */
 void BookConstructor::start(void){
     while(!message_reader.eof() and message_reader.isValid()){
@@ -53,9 +53,9 @@ void BookConstructor::start(void){
 }
 
 /**
- * Process next message. Retain only message affecting the Order Book (type A,P,D,R,E,C).
- * Reads the message from the Reader interface then if necessary, complete message information retriving information from Order Pool, then updates the Order Book and Order Book according to the type of message recived.
- * At the end writes the book and message (enriched with all additional information) to the two output files.
+ * Process next message. Retain only message affecting the OrderBook (type A,P,D,R,E,C).
+ * Reads the message from the Reader interface then if necessary, complete message information retriving information from OrderPool, then updates the OrderBook and OrderPool according to the type of message recived.
+ * At the end the Writer writes the book and message (enriched with all additional information) to the two output files.
  *
  */
 void BookConstructor::next(){
@@ -139,11 +139,11 @@ bool BookConstructor::updateMessage(void){
 }
 
 /**
- * Update Order Book with the current message.
+ * Update OrderBook with the current message.
  *
  * Updates the OrderBook double map accordingly to the type of the message.
- * A: Add the order to the pool. If key in the map (price) is already there just add the size. Otherwise add the key with corresponding size.
- * R: Replace existing order in the pool, hence cancel completely the existing size and create a new one
+ * A: Add the Order to the pool. If key in the map (price) is already there just add the size. Otherwise add the key with corresponding size.
+ * R: Replace existing order in the pool, hence cancel completely the existing size and create a new one.
  *
  */
 void BookConstructor::updateBook(void){
@@ -187,16 +187,15 @@ void BookConstructor::updateBook(void){
 }
 
 /**
- * Update Order Pool with the current message.
+ * Update OrderPool with the current Message.
  *
  * Using the message attribute in the BookConstructor class updates the pool.
- * types of order and effects:
- * A: Add order to order pool.
- * R: Delete order and add new one.
- * D: Delete (partially or totally) order.
- * E: Execute (partially or totally) order.
- * C: Execute order at different price.
- * P: Execute hidden order. Does not affect the book.
+ * - A: Add order to OrderPool.
+ * - R: Delete order and add new one.
+ * - D: Delete (partially or totally) order.
+ * - E: Execute (partially or totally) order.
+ * - C: Execute order at different price.
+ * - P: Execute hidden order. Does not affect the book.
  *
  */
 void BookConstructor::updatePool(void){
@@ -226,7 +225,7 @@ void BookConstructor::updatePool(void){
 }
 
 /**
- * Write in output Order Book state and message stream through Writer Class.
+ * Write in output OrderBook state and message stream through Writer class.
  *
  */
 void BookConstructor::WriteBookAndMessage(void){

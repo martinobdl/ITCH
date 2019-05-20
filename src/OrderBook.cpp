@@ -2,7 +2,7 @@
 
 /**
  * Make comma-separated string from information available
- * in the book about the best bid/ask prices and corresponding sizes up to number of levels :
+ * in the OrderBook about the best bid/ask prices and corresponding sizes up to number of levels :
  * "1.BidPrice, 1.BidSize,1.AskPrice,1.AskSize,..,level.BidPrice, level.BidSize,level.AskPrice,level.AskSize"
  *
  * @param[in] level up to what level to write the price/size tuple.
@@ -27,15 +27,17 @@ std::string OrderBook::getString(const size_t &level) const {
             string_builder << it_buy->first << ","<< it_buy->second << ",";
             ++it_buy;
         }
-        else // no prices on buy side left
-             string_builder << ",,";
+        else{ // no prices on buy side left
+            string_builder << ",,";
+        }
 
         if (i < sellDepth){
             string_builder << it_sell->first << "," << it_sell->second << ",";
             ++it_sell;
         }
-        else // no prices on sell side left
+        else{ // no prices on sell side left
             string_builder << ",,";
+        }
     }
 
     // Removing the last character from string stream: comma
@@ -47,7 +49,7 @@ std::string OrderBook::getString(const size_t &level) const {
  }
 
 /**
- * Performs actions on the double map reoresenting the Order Book
+ * Performs actions on the double map reoresenting the OrderBook
  *
  * @param[in] price modify map corresponding to price
  * @param[in] size add (or delete if size is negatinve) the size corrsponding to price
@@ -62,7 +64,7 @@ void OrderBook::modifySize(price_type price, size_type size, side_type side){
         else if(sellSide[price] < 0)
             std::cerr << "Negative size in order book is found! " << std::endl;
     }
-    else { // modify buySide
+    else{ // modify buySide
         buySide[price] += size;
         if (buySide[price] == 0 )
             buySide.erase(price);

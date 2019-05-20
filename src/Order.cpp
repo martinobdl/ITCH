@@ -51,9 +51,9 @@ void Order::print() const{
 }
 
 /**
- * Check wether order is unsetted or not.
+ * Check wether the Order is unsetted or not.
  *
- * @return bool
+ * @return bool, 1 is unsetted (Empty), 0 if setted.
  */
 
 bool Order::isEmpty() const{

@@ -1,7 +1,7 @@
 #include <OrderPool.hpp>
 
 /**
- * Look for the Order specified by the id in the order pool
+ * Look for the Order specified by the id in the OrderPool
  *
  * @param[in] idOrder : id relative to the order quaried
  * @return Order with id equals to idOrder.
@@ -17,7 +17,7 @@ Order OrderPool::searchOrderPool(id_type idOrder){
 }
 
 /**
- * Initialize and add an order to the Order Pool
+ * Initialize and add an Order to the OrderPool
  *
  * @param[in] idOrder id of the order to add
  * @param[in] side side of the order to add (0 for buy and 1 for sell)
@@ -31,9 +31,9 @@ void OrderPool::addToOrderPool(id_type idOrder, bool side, size_type size, price
 }
 
 /**
- * Delete size of an order in the Order Pool.
+ * Delete size of an order in the OrderPool.
  *
- * If the remaining size if zero then order get deleted from the Pool.
+ * If the remaining size if zero then order get deleted from the OrderPool.
  * size is always subtracted from the order.
  *
  * @param[in] idOrder id of the order to modify
@@ -41,20 +41,14 @@ void OrderPool::addToOrderPool(id_type idOrder, bool side, size_type size, price
  *
  */
 void OrderPool::modifyOrder(id_type idOrder, size_type size = 0){
-    if (size == 0){
+    pool[idOrder].addSize(-size);
+    if( pool[idOrder].getSize() == 0 ){
         pool.erase(idOrder);
-        std::cerr << "Order with size = 0 has been found in the Order Pool: id: " << idOrder << std::endl;
-    }
-    else{
-        pool[idOrder].addSize(-size);
-        if( pool[idOrder].getSize() == 0 ){
-            pool.erase(idOrder);
-        }
     }
 }
 
 /**
- * Check wether the Order Pool map is empty
+ * Check wether the OrderPool map is empty
  *
  * @return book, 1 if empty, 0 if not.
  */
@@ -63,9 +57,9 @@ bool OrderPool::isEmpty(void) const{
 }
 
 /**
- * Prints id of all orders in the Pool.
+ * Prints id of all orders in the OrderPool.
  *
- * It's used at the end to check if the Order Book is empty (should be).
+ * It's used at the end to check if the OrderPool is empty (should be).
  *
  */
 void OrderPool::printIds(void) const{
