@@ -1,13 +1,5 @@
 #include <OrderBook.hpp>
 
-/**
- * Make comma-separated string from information available
- * in the OrderBook about the best bid/ask prices and corresponding sizes up to number of levels :
- * "1.BidPrice, 1.BidSize,1.AskPrice,1.AskSize,..,level.BidPrice, level.BidSize,level.AskPrice,level.AskSize"
- *
- * @param[in] level up to what level to write the price/size tuple.
- *
- */
 std::string OrderBook::getString(const size_t &level) const {
 
     size_t buyDepth = buySide.size(); // The number of bid prices available in the book
@@ -48,14 +40,6 @@ std::string OrderBook::getString(const size_t &level) const {
 
  }
 
-/**
- * Performs actions on the double map reoresenting the OrderBook
- *
- * @param[in] price modify map corresponding to price
- * @param[in] size add (or delete if size is negatinve) the size corrsponding to price
- * @param[in] side 0 for buy side and 1 for sell side.
- *
- */
 void OrderBook::modifySize(price_type price, size_type size, side_type side){
     if (side){ // modify sellSide
         sellSide[price] += size;
@@ -73,11 +57,6 @@ void OrderBook::modifySize(price_type price, size_type size, side_type side){
     }
 }
 
-/**
- * Check if the biggest bid price is less than smallest ask
- *
- * @return bool value of the check. 1 OK, 0 KO.
- */
 bool OrderBook::checkBookConsistency(){
     if (!(buySide.empty() or sellSide.empty())){
         return ((buySide.rbegin()->first) <= (sellSide.begin()->first));

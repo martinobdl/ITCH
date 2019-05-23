@@ -1,13 +1,5 @@
 #include <Writer.hpp>
 
-/**
- * Constructor for Writer class
- *
- * If unable to open file to read print to standard error a message.
- * If file has been opened correctly, write it to standard optput.
- *
- * @param[in] _fileName destination csv files to update.
- */
 Writer::Writer(const std::string& _fileName):fileName(_fileName){
   file.open(_fileName);
   if(!file.is_open()){
@@ -18,12 +10,6 @@ Writer::Writer(const std::string& _fileName):fileName(_fileName){
   }
 }
 
-/**
- * Writes string to stream
- *
- * It used to write the Message and the OrderBook strings to the outfiles.
- * @param[in] stringToWrite string to write to the csv.
- */
 void Writer::writeLine(const std::string &stringToWrite){
   file << stringToWrite;
 }

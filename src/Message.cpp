@@ -7,19 +7,6 @@ Message::Message(const std::string& _type,
         id(_id),
         timestamp(_timestamp){};
 
-/**
- * Setter for the messegae. Transforms the Nasdaq type defintions in ours.
- *
- * - NASDAQ   --> Custom
- * - A,F      --> (A)dd
- * - D,X      --> (D)elete
- * - U        --> (R)eplace
- * - E        --> (E)xecution
- * - P        --> P, hidden execution
- * - C        --> C, execution at different price
- *
- * @param[in] _type type string: according to the definition of NASDAQ
- */
 void Message::setType(const std::string& _type){
     if(_type =="A" || _type == "F"){
         // Messages related to adding new order.
@@ -148,14 +135,6 @@ bool Message::isEmpty()const{
     return (id==ID_DEFAULT);
 }
 
-/**
- * Get string representation for writing into the csv
- *
- * @return string representation of message.
- *          If field is not being setted is just an empty char
- *          separated by commas.
- *
- */
 std::string Message::getString(void)const{
     std::ostringstream string_builder;
     if(!isEmpty()){

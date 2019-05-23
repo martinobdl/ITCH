@@ -5,18 +5,21 @@
 #include <utility.hpp>
 #include <Message.hpp>
 
-// The class keeps track of the order with specific id throughout a day.
-// A sequence of messages with same ID are related to the same Order object.
-
 class Order{
     id_type id = ID_DEFAULT;
-    side_type side; // 0 for buy, 1 for sell
+    side_type side;
     size_type size = SIZE_DEFAULT;
     price_type price = PRICE_DEFAULT;
 
     public:
     Order() = default;
     Order(id_type _id, side_type _side, size_type _size, price_type _price);
+
+    /**
+    * Add or subtract size to the order.
+    *
+    * @param[in] _size : size to add or dectract (if size is negative) to the order
+    */
     void addSize(size_type size);
 
     // setters
@@ -32,6 +35,12 @@ class Order{
     price_type getPrice(void) const;
 
     void print(void) const;
+
+    /**
+    * Check wether the Order is unsetted or not.
+    *
+    * @return bool, 1 is unsetted (Empty), 0 if setted.
+    */
     bool isEmpty(void) const;
 };
 

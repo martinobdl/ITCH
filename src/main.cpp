@@ -27,4 +27,6 @@ int main(int argc, char * argv[]){
         levels);
 
     BookConstructor.start();
+
+    return 1;
 }

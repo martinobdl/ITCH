@@ -6,7 +6,6 @@
 #include <iostream>
 #include <utility.hpp>
 
-// Each line of input file represents a Message object
 class Message{
 private:
     std::string type = "";
@@ -27,6 +26,20 @@ public:
     Message() = default;
     Message(const std::string& type,const id_type &id,
         const time_type &timestamp);
+
+    /**
+     * Setter for the messegae. Transforms the Nasdaq type defintions in ours.
+     *
+     * - NASDAQ   --> Custom
+     * - A,F      --> (A)dd
+     * - D,X      --> (D)elete
+     * - U        --> (R)eplace
+     * - E        --> (E)xecution
+     * - P        --> P, hidden execution
+     * - C        --> C, execution at different price
+     *
+     * @param[in] _type type string: according to the definition of NASDAQ
+     */
     void setType(const std::string &);
     void setId(const id_type &);
     void setTimeStamp(const time_type &);
@@ -52,7 +65,16 @@ public:
     size_type getOldSize(void) const;
 
     bool isEmpty(void) const;
-    std::string getString(void) const; // concatenate all attributes of an object in comma-separated string
+
+    /**
+     * Get string representation for writing into the csv
+     *
+     * @return string representation of message.
+     *          If field is not being setted is just an empty char
+     *          separated by commas.
+     *
+     */
+    std::string getString(void) const;
     void print(void) const;
 };
 

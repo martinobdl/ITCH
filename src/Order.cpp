@@ -25,11 +25,6 @@ price_type Order::getPrice(void) const{
     return price;
 }
 
-/**
- * Add or subtract size to the order.
- *
- * @param[in] _size : size to add or dectract (if size is negative) to the order
- */
 void Order::addSize(size_type _size){
     size+=_size;
     if(size<0){
@@ -49,12 +44,6 @@ void Order::print() const{
         std::cerr << "Trying to print an empty order" << std::endl;
     }
 }
-
-/**
- * Check wether the Order is unsetted or not.
- *
- * @return bool, 1 is unsetted (Empty), 0 if setted.
- */
 
 bool Order::isEmpty() const{
     return (id == ID_DEFAULT);

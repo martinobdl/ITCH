@@ -1,14 +1,5 @@
 #include <Reader.hpp>
 
-/**
- * Constructor for Reader class
- *
- * If unable to open file to read print to standard error a Message.
- * If file has been opened correctly, write it to standard optput.
- *
- * @param[in] _fileName destination csv files to update.
- * @param[in] _stock For performace reasons, the Reader class will discard directly all messages clearly related to other stocks
- */
 Reader::Reader(const std::string &_fileName, const std::string &_stock):
     fileName(_fileName), stock(_stock){
         file.open(fileName);
@@ -22,21 +13,8 @@ Reader::Reader(const std::string &_fileName, const std::string &_stock):
         start = time(0);
     }
 
-/**
- * Alternative Constructor for Reader class
- *
- * Constructor used in tests where we do not need a fileName.
- *
- * @param[in] _stock For performace reasons, the Reader class will discard directly all messages clearly related to other stocks
- */
 Reader::Reader(const std::string &_stock): stock(_stock){}
 
-/**
- * Progress updates
- *
- * Writes to standard output a progress message with the number of messages analyzed up to now and average number of messages per second since the beginnning.
- *
- */
 void Reader::printProgress(void){
     count ++;
     if(count % 10000000 == 0){
@@ -44,26 +22,10 @@ void Reader::printProgress(void){
     }
 }
 
-/**
- * Reads n bytes from the opend file
- *
- * Reads from the file into the message c-string attribute of the Reader class the specified number of bytes.
- *
- *@params[in] size Number of bytes to read from the stream.
- *
- */
 void Reader::readBytesIntoMessage(const long &size){
     file.read(message, size);
 }
 
-/**
- * Skips n bytes from the stream
- *
- * Discard from the file the specified number of bytes. Used mainly in the tests.
- *
- *@params[in] size Number of bytes to discard from the stream.
- *
- */
 void Reader::skipBytes(const long &size){
     file.ignore(size);
 }
@@ -74,15 +36,6 @@ char Reader::getKey(void){
     return key;
 }
 
-/**
- * Reads bytes from the stream and create a message
- *
- * Main function of the class. Creates a Message object from the file stream and return a message to the BookConstructor class.
- *
- *@return Message created from the read bytes.
- *@warning Dead code is still present in the method. Might be used to parse the entire input ITCH50 file for debug purposes
- *
- */
 Message Reader::createMessage(void){
     printProgress();
     Message msg;
