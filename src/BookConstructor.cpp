@@ -88,7 +88,7 @@ bool BookConstructor::updateMessage(void){
     std::string typeMsg = message.getType();
 
     if(typeMsg == "A" or typeMsg == "P"){
-        return 1;
+        return TRUE;
     }
 
     // Matching (R)eplace message is done by comparing its oldID with the IDs of preceding processed messages.
@@ -97,7 +97,7 @@ bool BookConstructor::updateMessage(void){
     // Find order in pool corresponding to the same ID as currently processing message.
     Order matchedOrder = pool.searchOrderPool(messageId);
     if(matchedOrder.isEmpty()){
-        return 0;
+        return FALSE;
     }
 
     message.setSide(matchedOrder.getSide());
@@ -133,9 +133,9 @@ bool BookConstructor::updateMessage(void){
 
     else{
         std::cerr << "Unexpected type of message has been found while updating message! " << typeMsg << std::endl;
-        return 0;
+        return FALSE;
     }
-    return 1;
+    return TRUE;
 }
 
 /**
