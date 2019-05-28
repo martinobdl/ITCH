@@ -8,7 +8,7 @@
 
 class Message{
 private:
-    std::string type = "";
+    char type = 0;
     id_type id = ID_DEFAULT;
     time_type timestamp = 0;
 
@@ -24,7 +24,7 @@ private:
 
 public:
     Message() = default;
-    Message(const std::string& type,const id_type &id,
+    Message(const char& type,const id_type &id,
         const time_type &timestamp);
 
     /**
@@ -40,7 +40,7 @@ public:
      *
      * @param[in] _type type string: according to the definition of NASDAQ
      */
-    void setType(const std::string &);
+    void setType(const char &);
     void setId(const id_type &);
     void setTimeStamp(const time_type &);
     void setSide(const side_type &);
@@ -52,7 +52,7 @@ public:
     void setOldPrice(const price_type &);
     void setOldSize(const size_type &);
 
-    std::string getType(void) const;
+    char getType(void) const;
     id_type getId(void) const;
     time_type getTimeStamp(void) const;
     side_type getSide(void) const;

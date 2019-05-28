@@ -17,7 +17,8 @@ CXXFLAGS += -Wall -std=c++11 \
    -Wswitch-enum \
    -Wswitch-default \
    -Wundef \
-   -MMD
+   -MMD \
+   -O3
 
 CPPFLAGS += -I$(INC_DIR)
 

@@ -1,42 +1,42 @@
 #include "Message.hpp"
 
-Message::Message(const std::string& _type,
+Message::Message(const char& _type,
     const id_type& _id,
     const time_type& _timestamp):
         type(_type),
         id(_id),
         timestamp(_timestamp){};
 
-void Message::setType(const std::string& _type){
-    if(_type =="A" || _type == "F"){
+void Message::setType(const char& _type){
+    if(_type =='A' || _type == 'F'){
         // Messages related to adding new order.
         // The only difference between them:
         // "A"  - The market participant behind the order is anonymous.
         // "F"  - ID of the market participant behind the order is available
         // The information is irrelevant therefore we do not distinguish between them.
-        type = "A"; // (A)dd
+        type = 'A'; // (A)dd
     }
-    else if (_type == "D" || _type == "X"){
+    else if (_type == 'D' || _type == 'X'){
         // Messages related to cancellation of the order:
         // "D" - complete cancellation; the order related to this message has to be deleted from the book
         // "X" - partial cancellation
-        type = "D"; // (D)elete
+        type = 'D'; // (D)elete
     }
-    else if (_type == "U"){
+    else if (_type == 'U'){
         // The message is sent whenever existing order has been completelly canceled and replaced by the new one.
-        type = "R"; // (R)eplace
+        type = 'R'; // (R)eplace
     }
-    else if (_type == "E"){
+    else if (_type == 'E'){
         // The message is sent whenever an order on the book is executed in whole or in part.
         type = _type; // (E)xecute
     }
-    else if (_type == "P"){
+    else if (_type == 'P'){
         // The message indicates when a match occurs between non-­­displayable order types.
         // Since no Add Order Message is generated when a non-­displayed order is initially received
         // it does not affect the book.
         type = _type; // execute hidden message
     }
-    else if (_type == "C"){
+    else if (_type == 'C'){
         // The message is sent whenever an order on the book is executed
         // in whole or in part at a price different from the initial display price.
         type = _type;
@@ -87,7 +87,7 @@ void Message::setOldSize(const size_type& _size){
 }
 
 // getters
-std::string Message::getType() const{
+char Message::getType() const{
     return type;
 }
 
@@ -199,13 +199,13 @@ void Message::print() const {
     std::cout << "Side           :" << side << std::endl;
     std::cout << "Price          :"<< price << std::endl;
     std::cout << "Remaining size :" << remSize << std::endl;
-    if (type == "D"){
+    if (type == 'D'){
         std::cout << "Deletion size  :" << cancSize << std::endl;
     }
-    if (type == "E"){
+    if (type == 'E'){
         std::cout << "Execution size :" << execSize << std::endl;
     }
-    if (type == "U"){
+    if (type == 'U'){
         std::cout << "Old Id         :" << oldId << std::endl;
         std::cout << "Old size       :"<< oldSize << std::endl;
         std::cout << "Old price      :" << oldPrice << std::endl;

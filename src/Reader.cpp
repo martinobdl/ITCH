@@ -210,7 +210,7 @@ Message Reader::createMessage(void){
             //         direction,size,ticker,
             //         price/10000,price%10000);
             // }
-            msg.setType(std::string(1,key));
+            msg.setType(key);
             msg.setTimeStamp(static_cast<time_type>(timeStamp));
             msg.setId(static_cast<id_type>(orderId));
             msg.setSide(static_cast<side_type>(direction == 'S'));
@@ -234,7 +234,7 @@ Message Reader::createMessage(void){
             //     direction,size,ticker,
             //     price/10000,price%10000,mpid);
             // }
-            msg.setType(std::string(1,key));
+            msg.setType(key);
             msg.setTimeStamp(static_cast<time_type>(timeStamp));
             msg.setId(static_cast<id_type>(orderId));
             msg.setSide(static_cast<side_type>(direction == 'S'));
@@ -254,7 +254,7 @@ Message Reader::createMessage(void){
             //     key,locateCode,trackingNumb,timeStamp,orderId,
             //     execSize,matchNumber);
             // }
-            msg.setType(std::string(1,key));
+            msg.setType(key);
             msg.setTimeStamp(static_cast<time_type>(timeStamp));
             msg.setId(static_cast<id_type>(orderId));
             msg.setExecSize(static_cast<size_type>(execSize));
@@ -275,7 +275,7 @@ Message Reader::createMessage(void){
             //     execSize,matchNumber,printable,
             //     price/10000,price%10000);
             // }
-            msg.setType(std::string(1,key));
+            msg.setType(key);
             msg.setTimeStamp(static_cast<time_type>(timeStamp));
             msg.setId(static_cast<id_type>(orderId));
             msg.setExecSize(static_cast<size_type>(execSize));
@@ -292,7 +292,7 @@ Message Reader::createMessage(void){
             //     sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 ",%" PRIu32 "\n",
             //     key,locateCode,trackingNumb,timeStamp,orderId,cancSize);
             // }
-            msg.setType(std::string(1,key));
+            msg.setType(key);
             msg.setTimeStamp(static_cast<time_type>(timeStamp));
             msg.setId(static_cast<id_type>(orderId));
             msg.setCancSize(static_cast<size_type>(cancSize));
@@ -307,7 +307,7 @@ Message Reader::createMessage(void){
             //     sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 "\n",
             //     key,locateCode,trackingNumb,timeStamp,orderId);
             // }
-            msg.setType(std::string(1,key));
+            msg.setType(key);
             msg.setTimeStamp(static_cast<time_type>(timeStamp));
             msg.setId(static_cast<id_type>(orderId));
             break;
@@ -325,7 +325,7 @@ Message Reader::createMessage(void){
             //     key,locateCode,trackingNumb,timeStamp,oldOrderId,
             //     newOrderId,newSize,newPrice/10000,newPrice%10000);
             // }
-            msg.setType(std::string(1,key));
+            msg.setType(key);
             msg.setTimeStamp(static_cast<time_type>(timeStamp));
             msg.setId(static_cast<id_type>(newOrderId));
             msg.setOldId(static_cast<id_type>(oldOrderId));
@@ -348,7 +348,7 @@ Message Reader::createMessage(void){
             //     key,locateCode,trackingNumb,timeStamp,orderId,
             //     direction,size,ticker,price/10000,price%10000,matchId);
             // }
-            msg.setType(std::string(1,key));
+            msg.setType(key);
             msg.setTimeStamp(static_cast<time_type>(timeStamp));
             msg.setId(static_cast<id_type>(orderId));
             msg.setSide(static_cast<side_type>(direction == 'S'));

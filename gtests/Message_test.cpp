@@ -8,7 +8,7 @@ struct Message_Test : public testing::Test{
     Message *fullMessage;
     void SetUp(){
         emptyMessage = new Message();
-        fullMessage = new Message("A",45749,28800006862979);
+        fullMessage = new Message('A',45749,28800006862979);
     }
     void TearDown(){
         delete emptyMessage;
