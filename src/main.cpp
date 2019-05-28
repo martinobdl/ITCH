@@ -6,7 +6,7 @@ int main(int argc, char * argv[]){
 
     if(argc<5){
         std::cerr << "The program should be called with: ./BookConstructor path_input_file dir_book dir_messages levels stock" << std::endl;
-        return 0;
+        return 1;
     }
 
     std::string pathFile = argv[1];
@@ -28,5 +28,5 @@ int main(int argc, char * argv[]){
 
     BookConstructor.start();
 
-    return 1;
+    return 0;
 }
