@@ -15,5 +15,5 @@ doc/latex/*
 !doc/latex/refman.pdf
 !doc/Doxyfile
 *.pyc
-bin/
+bin/*
 data/.DS_Store
