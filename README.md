@@ -14,7 +14,7 @@ ITCH
 │
 └───doc
 │   │
-│   └───binary      (LaTex-pdf documentation created with Doxygen)
+│   └───latex       (LaTex-pdf documentation created with Doxygen)
 │
 └───data
 │   │
