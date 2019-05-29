@@ -8,11 +8,12 @@
 data/*
 bin/*
 doc/latex/*
+.DS_Store
 **/.DS_Store
 *.pyc
 *.pyc
 !doc/latex/refman.pdf
 !doc/Doxyfile
 *.pyc
-*.pyc
+bin/
 data/.DS_Store
