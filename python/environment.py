@@ -360,6 +360,6 @@ if __name__ == '__main__':
         PATH = sys.argv[4]
     else:
         PATH = os.path.dirname(os.path.realpath(__file__))
-    a = ts(date,venue,stock,PATH,5)
+    a = ts(date,venue,stock,PATH,20)
     a.plot_liquidity_heatmap()
 
