@@ -18,8 +18,8 @@ class fixed_spread(Algo):
         self.spread = self.spread_ticks*self.tick
         self.last_price = env_p0['p0']
         self.width = 1
-        self.a_sell = 9999999
-        self.a_buy = 0
+        self.a_sell = env_p0['p0']+self.spread
+        self.a_buy = env_p0['p0']
 
     def step(self,last_message):
         """ Get startegy for next tick.
@@ -33,7 +33,7 @@ class fixed_spread(Algo):
             self.orders.delete_all_buy_order()
             self.orders.delete_all_sell_order()
 
-            if pt>self.a_sell or pt<self.a_sell:
+            if pt>self.a_sell or pt<self.a_buy:
                 self.a_sell = pt if pt > self.a_sell else pt+self.spread
                 self.a_buy = pt if pt < self.a_buy else pt-self.spread
 
