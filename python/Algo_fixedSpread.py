@@ -54,7 +54,6 @@ class fixed_spread(Algo):
 
 if __name__=='__main__':
     s = fixed_spread(10);
-    a = environment.ts('03272019','PSX','AAPL')
+    a = environment.ts('01302019','NASDAQ','AAPL')
     s.run(a)
-    a.plot_liquidity_heatmap()
     s.plot()
