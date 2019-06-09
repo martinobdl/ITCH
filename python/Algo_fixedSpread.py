@@ -33,8 +33,9 @@ class fixed_spread(Algo):
             self.orders.delete_all_buy_order()
             self.orders.delete_all_sell_order()
 
-            self.a_sell = pt if pt > self.a_sell else pt+self.spread
-            self.a_buy = pt if pt < self.a_buy else pt-self.spread
+            if pt>self.a_sell or pt<self.a_sell:
+                self.a_sell = pt if pt > self.a_sell else pt+self.spread
+                self.a_buy = pt if pt < self.a_buy else pt-self.spread
 
             self.width = max(self.width, int(abs(pt - self.last_price)/self.tick))
 
@@ -42,7 +43,7 @@ class fixed_spread(Algo):
 
             for i in range(1,self.width+1):
                 self.orders.set_buy_order(self.a_buy-i*self.tick,1)
-                self.orders.set_buy_order(self.a_sell+i*self.tick,1)
+                self.orders.set_sell_order(self.a_sell+i*self.tick,1)
 
 if __name__=='__main__':
     s = fixed_spread(5);
