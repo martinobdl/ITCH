@@ -178,7 +178,7 @@ if curl --output /dev/null --silent --head --fail $URL; then
   FOUND_URL=1
   URL_OUT=$(curl --silent $URL 2>&1)
 else
-  echo Unable to chack if stock $STOCK is present on URL: $URL, baceuse invalid URL.
+  echo Unable to check if stock $STOCK is present on URL: $URL, because of invalid URL.
   echo Still reconstructing the book. Attention: it might be empty.
   echo
 
