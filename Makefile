@@ -58,31 +58,34 @@ directories:
 # --------------------------------------------------------------
 
 $(BIN_DIR)/$(EXE): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $^ -o $@
+	@$(CXX) $(CXXFLAGS) $^ -o $@
 
 # --------------------------------------------------------------
 
 test: directories $(BIN_DIR)/$(EXE_TEST)
 
 $(BIN_DIR)/$(EXE_TEST): $(OBJECTS_T)
-	$(CXX) $(CXXFLAGS) $^ $(LDFLAGS) -o $@ #put LDFLAGS before objects and LDLIBS after
+	@$(CXX) $(CXXFLAGS) $^ $(LDFLAGS) -o $@ #put LDFLAGS before objects and LDLIBS after
 
 # --------------------------------------------------------------
 
 $(BUILD_DIR)/%.o : $(SCR_DIR)/%.cpp #$(SCR_DIR)/%.h $(SCR_DIR)/%.d
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
+	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
+	@echo "Compiling: $<"
 
 $(BUILD_DIR)/%.o : $(TEST_DIR)/%.cpp
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
-
+	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
+	@echo "Compiling: $<"
 # --------------------------------------------------------------
 
 -include $(OBJECTS:%.o=%.d) #(.d are dependency files automatically produced by -MMD flag)
 
 clean:
-	$(RM) $(BUILD_DIR)/* #delete all files(.o, .d)
+	@$(RM) $(BUILD_DIR)/* #delete all files(.o, .d)
+	@echo "Removing: * from $(BUILD_DIR)"
 
 distclean: clean
-	$(RM) $(BIN_DIR)/$(EXE) $(BIN_DIR)/$(EXE_TEST)
+	@$(RM) $(BIN_DIR)/$(EXE) $(BIN_DIR)/$(EXE_TEST)
+	@echo "Removing: * from $(BIN_DIR)"
 
 print-%  : ; @echo $* = $($*)
