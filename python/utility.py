@@ -1,9 +1,16 @@
 import pandas as pd
 
-def parseNanosecondsToDateTime(date,nanosecs):
-    date = pd.Timestamp.strptime(date,'%m%d%Y')
-    date = date + pd.Timedelta(nanosecs, unit ='ns')
-    return date
+def parseNanosecondsToDateTime(nanosecs,date=None):
+    """ Converts from nanosecs to pandas timestamp.
+    """
+
+    time = pd.Timedelta(nanosecs, unit ='ns')
+
+    if date:
+        date_str = pd.Timestamp.strptime(date,'%m%d%Y')
+    else:
+        date_str = pd.Timestamp.strptime('01012001','%m%d%Y')
+    return date_str + time
 
 def get_last_execution(message_df,t,idx=1):
     """ get the last execution happend before time stamp t

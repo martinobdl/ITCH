@@ -50,7 +50,7 @@ class ts:
             print
             print("Executing BookConstructor...")
 
-            shellScriptPath = os.path.dirname(PATH)+"/BookConstructor.sh"
+            shellScriptPath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))+"/BookConstructor.sh"
 
             try:
 
@@ -62,9 +62,6 @@ class ts:
 
                 self.book = pd.read_csv(bookDir+nameFile+"_book_"+str(levels)+".csv");
                 self.messages = pd.read_csv(messDir+nameFile+"_message.csv");
-
-                print("parsing time into datetime objects...")
-                print
 
                 with open(pk_folderPath+self.PKfileName, 'wb') as file:
                     print("pickling...")
