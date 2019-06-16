@@ -28,7 +28,7 @@ public:
         const time_type &timestamp);
 
     /**
-     * Setter for the messegae. Transforms the Nasdaq type defintions in ours.
+     * Setter for the message. Transforms the Nasdaq type definitions in ours.
      *
      * - NASDAQ   --> Custom
      * - A,F      --> (A)dd
@@ -70,7 +70,7 @@ public:
      * Get string representation for writing into the csv
      *
      * @return string representation of message.
-     *          If field is not being setted is just an empty char
+     *          If field is not being setted it is just an empty char
      *          separated by commas.
      *
      */
