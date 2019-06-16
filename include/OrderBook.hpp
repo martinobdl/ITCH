@@ -34,10 +34,10 @@ class OrderBook{
     std::string getString(const size_t &) const;
 
     /**
-     * Performs actions on the double map reoresenting the OrderBook
+     * Performs actions on the double map representing the OrderBook
      *
      * @param[in] price modify map corresponding to price
-     * @param[in] size add (or delete if size is negatinve) the size corrsponding to price
+     * @param[in] size add (or delete if size is negative) the size corresponding to price
      * @param[in] side 0 for buy side and 1 for sell side.
      *
      */
