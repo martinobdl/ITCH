@@ -44,7 +44,7 @@ class OrderPool{
     /**
      * Delete size of an order in the OrderPool.
      *
-     * If the remaining size if zero then order get deleted from the OrderPool.
+     * If the remaining size is zero then order is deleted from the OrderPool.
      * size is always subtracted from the order.
      *
      * @param[in] idOrder id of the order to modify
@@ -54,7 +54,7 @@ class OrderPool{
     void modifyOrder(id_type, size_type);
 
     /**
-     * Check wether the OrderPool map is empty
+     * Check whether the OrderPool map is empty
      *
      * @return book, 1 if empty, 0 if not.
      */
@@ -63,7 +63,7 @@ class OrderPool{
     /**
      * Prints id of all orders in the OrderPool.
      *
-     * It's used at the end to check if the OrderPool is empty (should be).
+     * It's used at the end to check if the OrderPool is empty (it should be).
      *
      */
     void printIds(void) const;
