@@ -18,7 +18,7 @@ class Order{
     /**
     * Add or subtract size to the order.
     *
-    * @param[in] _size : size to add or dectract (if size is negative) to the order
+    * @param[in] _size : size to add or detract (if size is negative) to the order
     */
     void addSize(size_type size);
 
@@ -37,7 +37,7 @@ class Order{
     void print(void) const;
 
     /**
-    * Check wether the Order is unsetted or not.
+    * Check whether the Order is unsetted or not.
     *
     * @return bool, 1 is unsetted (Empty), 0 if setted.
     */
