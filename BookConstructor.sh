@@ -187,7 +187,7 @@ fi
 
 if display_list | grep --quiet "$STR_DATE_VENUE" ; then
     # 2. option condition:
-    if [ $FOUND_URL == 1 ] && $(echo $URL_OUT | grep -cq $STOCK ); then
+    #if [ $FOUND_URL == 1 ] && $(echo $URL_OUT | grep -cq $STOCK ); then
 
     # 1. option condition :
     #if cat $FILE_STOCK_LOCATE | grep -cq $STOCK; then
@@ -242,18 +242,18 @@ if display_list | grep --quiet "$STR_DATE_VENUE" ; then
         else
             echo Decompression of $TMP$FILE_NAME not sucsesfull
         fi
-    else
-        echo
-        echo Non-existing stock ticker has been inserted.
-        echo For more information on existing tickers refer to:
-        # 1.option
-        #echo $FILE_STOCK_LOCATE
+    # else
+    #     echo
+    #     echo Non-existing stock ticker has been inserted.
+    #     echo For more information on existing tickers refer to:
+    #     # 1.option
+    #     #echo $FILE_STOCK_LOCATE
 
-        # 2. option
-        echo $URL
-        echo
-        exit
-    fi
+    #     # 2. option
+    #     echo $URL
+    #     echo
+    #     exit
+    # fi
 else
     echo
     echo $STR_DATE_VENUE not available
