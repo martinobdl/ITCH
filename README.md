@@ -145,7 +145,7 @@ At discrete time T1,T2,T3,... an output will be released by NASDAQ, the field na
 | ...  | E    | ...    | ...                    | remaining size after the execution                          | price of the order being executed          | -                             | size being executed         | -            | -                                 | -                                 |
 | ...  | P    | ...    | ...                    | execution of an hidden order                                | price of the execution                     | -                             | size of the hidden eecution | -            | -                                 | -                                 |
 | ...  | R    | new id | equal to the old order | new size                                                    | new limit size                             | -                             | -                           | old order id | size of the order being replaced  | price of the order being replaced |
-| ...  | C    | ...    | ...                    | remaining size after the execution                          | price at which the order is being executed | -                             | ?                           | -            | -                                 | original price of the order       |
+| ...  | C    | ...    | ...                    | remaining size after the execution                          | price at which the order is being executed | -                             | -                           | -            | -                                 | original price of the order       |
 
 
 ## Development setup
