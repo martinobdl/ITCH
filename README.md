@@ -1,7 +1,7 @@
 # NASDAQ ITCH 50 Book Constructor
 > Given the NASDAQ Total View ITCH 50 data feed, reconstruct the full depth order book and related messages.
 
-This is an efficient c++ implementation of reconstructing a Limit Order Book from data feed messages issued by NASDAQ according to the ITCH 50 data protocol specified at <https://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHSpecification.pdf>. Some samples data are publicly available trough NASDAQ public ftp at <ftp://emi.nasdaq.com/ITCH/>. The program outputs two csv files containing the messages and the related limit order book for the relative stock.
+This is an efficient c++ implementation of reconstructing a Limit Order Book from data feed messages issued by NASDAQ according to the ITCH 50 data protocol specified at <https://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHSpecification.pdf>. Some samples data are publicly available through NASDAQ public ftp at <ftp://emi.nasdaq.com/ITCH/>. The program outputs two csv files containing the messages and the related limit order book for the relative stock.
 
 # Folder Structure
 
@@ -43,10 +43,10 @@ ITCH
 ![](images/OB.png)
 
 This program aims to facilitate research in High Frequency Trading (HFT) providing the maximum amount of data released by NASDAQ, ready for use.\
-NASDAQ receives orders by traders and market participants, then its matching engine construct the order book according to specific rules that may depend on the venue, and eventually sells to clients the data feed.\
+NASDAQ receives orders by traders and market participants, then its matching engine constructs the order book according to specific rules that may depend on the venue, and eventually sells to clients the data feed.\
 We were able to reconstruct the book with total depth at about 1Mio-2Mio messages per second, this figure also includes the parsing from the binary data.\
 To understand the difficulties of such an exercise is important to understand that the messages do not coincide with the orders received by NASDAQ, i.e. we do not need a matching engine to match supply and demand, but we are already given the result of the matching engine. Apart from interpreting the binary data according to the specification of the protocol we also have to retrieve information of past orders that new messages are referring to.\
-We can see this in the following example of a simple add and delete of an order, according to the specifications the add and delete order would be:
+We can see this in the following example of submission and deletion of an order, according to the specifications the Add and Delete order would be:
 
 | Message Type | Locate | Tracking | ns since 00:00 | Order id | Buy/Sell | Size | Stock | Price   |
 |--------------|--------|----------|----------------|----------|----------|------|-------|---------|
