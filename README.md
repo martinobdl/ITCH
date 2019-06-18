@@ -224,5 +224,5 @@ The implemented strategy can be found at
 ## Contributors
 
 * Luigi Fusco           <https://github.com/luigif9>
-* Ozrenka Dragic        <https://github.com/oz-dr>
+* Ozrenka Dragić        <https://github.com/oz-dr>
 * Martino Bernasconi    <https://github.com/martinobdl>
