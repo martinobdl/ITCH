@@ -20,7 +20,7 @@ BookConstructor::BookConstructor(const std::string &inputMessageCSV,
     messageWriter(outputMessageCSV),
     bookWriter(outputBookCSV),
     levels(_levels){
-        messageWriter.writeLine("time,type,id,side,size,price,cancSize,execSize,oldId,oldSize,oldPrice\n");
+        messageWriter.writeLine("time,type,id,side,size,price,cancSize,execSize,oldId,oldSize,oldPrice,mpid\n");
         std::string bookHeader = "time,";
         for(size_t i = 1; i<=levels; i++){
             std::string num = std::to_string(i);
@@ -78,10 +78,10 @@ void BookConstructor::next(){
  * Example : Execution messages miss Price -> retrieve order price from the OP through order ID.
  *
  * A,P: all the informations are already present, stop.
- * D: size and price information have to be retrived from the Pool.
- * R: oldSize and oldPrice information have to be retrived from the Pool.
- * E: size and price have to be retrived from the Pool.
- * C: size and original price have to be retrived from the Order Pool.
+ * D: MPID,size and price information have to be retrived from the Pool.
+ * R: MPID,oldSize and oldPrice information have to be retrived from the Pool.
+ * E: MPID,size and price have to be retrived from the Pool.
+ * C: MPID,size and original price have to be retrived from the Order Pool.
  *
  */
 bool BookConstructor::updateMessage(void){
@@ -100,6 +100,7 @@ bool BookConstructor::updateMessage(void){
         return false;
     }
 
+    message.setMPID(*matchedOrder.getMPID());
     message.setSide(matchedOrder.getSide());
 
     if(typeMsg == 'D'){
@@ -189,7 +190,7 @@ void BookConstructor::updateBook(void){
 /**
  * Update OrderPool with the current Message.
  *
- * Using the message attribute in the BookConstructor class updates the pool.
+ * Using the message attribute in the BookConstructor class to updates the pool.
  * - A: Add order to OrderPool.
  * - R: Delete order and add new one.
  * - D: Delete (partially or totally) order.
@@ -202,11 +203,11 @@ void BookConstructor::updatePool(void){
     char typeMsg = message.getType();
 
     if(typeMsg == 'A'){
-        pool.addToOrderPool(message.getId(), message.getSide(), message.getRemSize(), message.getPrice());
+        pool.addToOrderPool(message.getId(), message.getSide(), message.getRemSize(), message.getPrice(), message.getMPID());
     }
     else if(typeMsg=='R'){
         pool.modifyOrder(message.getOldId(), message.getOldSize());
-        pool.addToOrderPool(message.getId(), message.getSide(), message.getRemSize(), message.getPrice());
+        pool.addToOrderPool(message.getId(), message.getSide(), message.getRemSize(), message.getPrice(), message.getMPID());
     }
     else if(typeMsg=='D'){
         pool.modifyOrder(message.getId(), message.getCancSize());

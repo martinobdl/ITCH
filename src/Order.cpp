@@ -3,11 +3,14 @@
 Order::Order(id_type _id,
             bool _side,
             size_type _size,
-            price_type _price):
+            price_type _price,
+            const char *_mpid):
         id(_id),
         side(_side),
         size(_size),
-        price(_price){}
+        price(_price){
+            strncpy(mpid, _mpid, 4); mpid[4] = 0;
+        }
 
 id_type Order::getId(void) const{
     return id;
@@ -23,6 +26,10 @@ size_type Order::getSize(void) const{
 
 price_type Order::getPrice(void) const{
     return price;
+}
+
+const char * Order::getMPID()const{
+    return mpid;
 }
 
 void Order::addSize(size_type _size){

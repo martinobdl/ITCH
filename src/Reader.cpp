@@ -41,17 +41,13 @@ Message Reader::createMessage(void){
     Message msg;
     skipBytes(2);
     char key = getKey();
-    // char str[100] = {0};
     char ticker[9];
     strncpy(ticker, stock.c_str(), 8); ticker[8] = 0;
     switch(key){
         uint64_t timeStamp, orderId, oldOrderId, newOrderId;
         uint32_t size, price, execSize, cancSize, newSize, newPrice;
-        // uint16_t locateCode, trackingNumb;
-        // uint32_t upperAuctionCollarPrice, lowerAuctionCollarPrice, fairPrice, nearPrice, referencePrice, numberOfSharesInALot, ETPLevarage, timeIPO, priceIPO, auctionCollarPrice;
-        // uint64_t level1, level2, level3, matchNumber, size64, pairedShares, imbalanceShares, matchId;
         char direction;
-        // char auctionCollarExtension, eventCode, marketCategory, financialStatus, roundLotsOnly, issueClassification, subType[3], autenticity, shortIndicator, ipoFlag, indicatorLULD, flagETP, inverseETPFlag, tradingState, reserved, reason[5], regSHO, mpidIdentifier[5], primaryMarketMaker, marketMakerMode, makerParticipantState, breachedLevel, qualifierIPO, marketCode, haltAction, mpid[5], printable, crossType, imbalanceDirection, priceVariationIndicator;
+        char mpid[5];
 
         case 'S':
             readBytesIntoMessage(11);
@@ -228,7 +224,7 @@ Message Reader::createMessage(void){
             // if(debug){
             //    locateCode = parse_uint16(message);
             //    trackingNumb = parse_uint16(message+2);
-            //     strncpy(mpid, message+35, 4); mpid[4] = 0;
+            strncpy(mpid, message+35, 4); mpid[4] = 0;
             //     sprintf(str,"%c,%" PRIu16 ",%" PRIu16 ",%" PRIu64 ",%" PRIu64 ",%c,%" PRIu32 ",%s,%" PRIu32 ".%04" PRIu32 ",%s\n",
             //     key,locateCode,trackingNumb,timeStamp,orderId,
             //     direction,size,ticker,
@@ -240,6 +236,7 @@ Message Reader::createMessage(void){
             msg.setSide(static_cast<side_type>(direction == 'S'));
             msg.setRemSize(static_cast<size_type>(size));
             msg.setPrice(static_cast<price_type>(price)/10000);
+            msg.setMPID(*mpid);
             break;
         case 'E':
             readBytesIntoMessage(30);

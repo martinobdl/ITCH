@@ -22,10 +22,11 @@ TEST_F(Message_Test, emptynessTest){
 
 TEST_F(Message_Test, getStringEmptyTest){
 
-    ASSERT_EQ(",,,,,,,,,,\n", emptyMessage->getString());
+    ASSERT_EQ(",,,,,,,,,,,\n", emptyMessage->getString());
 }
 
 TEST_F(Message_Test, getStringAndSettersTest){
+    const char mpid[] = "tmpd";
     fullMessage->setSide(1);
     fullMessage->setRemSize(93);
     fullMessage->setPrice(11.79);
@@ -34,6 +35,22 @@ TEST_F(Message_Test, getStringAndSettersTest){
     fullMessage->setOldId(123456);
     fullMessage->setOldSize(110);
     fullMessage->setOldPrice(33.333333);
+    fullMessage->setMPID(*mpid);
+    std::cout << fullMessage->getString() << std::endl;
+    ASSERT_EQ("28800006862979,A,45749,1,93,11.79,10,20,123456,110,33.3333,tmpd\n", fullMessage->getString());
+}
 
-    ASSERT_EQ("28800006862979,A,45749,1,93,11.79,10,20,123456,110,33.3333\n", fullMessage->getString());
+TEST_F(Message_Test, getMPIDTest){
+    const char mpid[]="tmpd";
+    fullMessage->setMPID(*mpid);
+    std::string mpid_string(fullMessage->getMPID());
+    ASSERT_EQ("tmpd", mpid_string);
+}
+
+TEST_F(Message_Test, getSetMPIDTest){
+    const char mpid[]="tmpd";
+    fullMessage->setMPID(*mpid);
+    emptyMessage->setMPID(*fullMessage->getMPID());
+    std::string mpid_string(emptyMessage->getMPID());
+    ASSERT_EQ("tmpd", mpid_string);
 }

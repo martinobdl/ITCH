@@ -9,8 +9,8 @@ Order OrderPool::searchOrderPool(id_type idOrder){
     return foundOrder;
 }
 
-void OrderPool::addToOrderPool(id_type idOrder, bool side, size_type size, price_type price){
-    Order orderToAdd(idOrder, side, size, price);
+void OrderPool::addToOrderPool(id_type idOrder, bool side, size_type size, price_type price, const char *mpid){
+    Order orderToAdd(idOrder, side, size, price, mpid);
     pool[idOrder] = orderToAdd;
 }
 

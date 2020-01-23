@@ -21,6 +21,7 @@ private:
     id_type oldId = ID_DEFAULT;
     price_type oldPrice = PRICE_DEFAULT;
     size_type oldSize = SIZE_DEFAULT;
+    char mpid[5] = "";
 
 public:
     Message() = default;
@@ -51,6 +52,7 @@ public:
     void setOldId(const id_type &id);
     void setOldPrice(const price_type &);
     void setOldSize(const size_type &);
+    void setMPID(const char &);
 
     char getType(void) const;
     id_type getId(void) const;
@@ -63,6 +65,7 @@ public:
     id_type getOldId(void) const;
     price_type getOldPrice(void) const;
     size_type getOldSize(void) const;
+    const char *getMPID(void) const;
 
     bool isEmpty(void) const;
 

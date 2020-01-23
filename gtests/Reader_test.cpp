@@ -12,6 +12,9 @@ public:
     void mock_readBytes_A(){
         setMessage("\x00\x00\x00\x00\x1a\x31\x86\x2d\xb8\x83\x00\x00\x00\x00\x00\x00\xb2\xb5\x53\x00\x00\x00\x5d\x4d\x41\x52\x54\x49\x4e\x4f\x20\x00\x01\xcc\x8c");
     }
+    void mock_readBytes_F(){
+        setMessage("\x00\x00\x00\x00\x1a\x31\x86\x2d\xb8\x83\x00\x00\x00\x00\x00\x00\xb2\xb5\x53\x00\x00\x00\x5d\x4d\x41\x52\x54\x49\x4e\x4f\x20\x00\x01\xcc\x8c\x74\x6d\x70\x64");
+    }
     void mock_readBytes_E(){
         setMessage("\x00\x00\x00\x00\x1f\x1b\x50\x4f\xbd\x72\x00\x00\x00\x00\x00\x03\xfd\x79\x00\x00\x00\xc8\x5d\x50\x4b\x47\x20\x20\x20\x20\x20\x00\x01\xcc\x8c");
     }
@@ -39,7 +42,7 @@ struct Reader_Test : public testing::Test{
     }
 };
 
-TEST_F(Reader_Test, conversion_A_F) {
+TEST_F(Reader_Test, conversion_A) {
     // Arrange
     EXPECT_CALL((*mk_reader), getKey())
     .Times(1)
@@ -52,7 +55,23 @@ TEST_F(Reader_Test, conversion_A_F) {
     // Act
     Message createdMsg = mk_reader->createMessage();
     // Assert
-    ASSERT_EQ("28800006862979,A,45749,1,93,11.79,,,,,\n",createdMsg.getString());
+    ASSERT_EQ("28800006862979,A,45749,1,93,11.79,,,,,,\n",createdMsg.getString());
+}
+
+TEST_F(Reader_Test, conversion_F) {
+    // Arrange
+    EXPECT_CALL((*mk_reader), getKey())
+    .Times(1)
+    .WillOnce(testing::Return('F'));
+
+    EXPECT_CALL((*mk_reader), readBytesIntoMessage(testing::_))
+    .Times(1)
+    .WillOnce(testing::InvokeWithoutArgs(&(*mk_reader), &MockReader::mock_readBytes_F));
+
+    // Act
+    Message createdMsg = mk_reader->createMessage();
+    // Assert
+    ASSERT_EQ("28800006862979,A,45749,1,93,11.79,,,,,,tmpd\n",createdMsg.getString());
 }
 
 TEST_F(Reader_Test, conversion_E) {
@@ -68,7 +87,7 @@ TEST_F(Reader_Test, conversion_E) {
     // Act
     Message createdMsg = mk_reader->createMessage();
     // Assert
-    ASSERT_EQ("34202171981170,E,261497,0,,,,200,,,\n",createdMsg.getString());
+    ASSERT_EQ("34202171981170,E,261497,0,,,,200,,,,\n",createdMsg.getString());
 }
 
 TEST_F(Reader_Test, conversion_X) {
@@ -84,7 +103,7 @@ TEST_F(Reader_Test, conversion_X) {
     // Act
     Message createdMsg = mk_reader->createMessage();
     // Assert
-    ASSERT_EQ("281474976710654,D,18446744073709551614,0,,,4294967294,,,,\n",createdMsg.getString());
+    ASSERT_EQ("281474976710654,D,18446744073709551614,0,,,4294967294,,,,,\n",createdMsg.getString());
 }
 
 TEST_F(Reader_Test, conversion_D) {
@@ -100,7 +119,7 @@ TEST_F(Reader_Test, conversion_D) {
     // Act
     Message createdMsg = mk_reader->createMessage();
     // Assert
-    ASSERT_EQ("1099511628031,R,255,0,1,1.1,,,1099511628031,,\n",createdMsg.getString());
+    ASSERT_EQ("1099511628031,R,255,0,1,1.1,,,1099511628031,,,\n",createdMsg.getString());
 }
 
 TEST_F(Reader_Test, conversion_P) {
@@ -116,5 +135,5 @@ TEST_F(Reader_Test, conversion_P) {
     // Act
     Message createdMsg = mk_reader->createMessage();
     // Assert
-    ASSERT_EQ("1099511628031,P,255,1,,0.6528,,255,,,\n",createdMsg.getString());
+    ASSERT_EQ("1099511628031,P,255,1,,0.6528,,255,,,,\n",createdMsg.getString());
 }

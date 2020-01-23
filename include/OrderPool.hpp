@@ -39,7 +39,7 @@ class OrderPool{
      * @param[in] price limit price of the order to add
      *
      */
-    void addToOrderPool(id_type, bool, size_type, price_type);
+    void addToOrderPool(id_type, bool, size_type, price_type, const char *);
 
     /**
      * Delete size of an order in the OrderPool.

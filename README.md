@@ -48,11 +48,11 @@ We were able to reconstruct the book with total depth at about 1Mio-2Mio message
 To understand the difficulties of such an exercise is important to understand that the messages do not coincide with the orders received by NASDAQ, i.e. we do not need a matching engine to match supply and demand, but we are already given the result of the matching engine. Apart from interpreting the binary data according to the specification of the protocol we also have to retrieve information of past orders that new messages are referring to.\
 We can see this in the following example of submission and deletion of an order, according to the specifications the Add and Delete order would be:
 
-| Message Type | Locate | Tracking | ns since 00:00 | Order id | Buy/Sell | Size | Stock | Price   |
-|--------------|--------|----------|----------------|----------|----------|------|-------|---------|
-| A            | 8007   | 0        | 28802131792425 | 45785    | B        | 3000 | USO   | 14.7200 |
-| ...          |        |          |                |          |          |      |       |         |
-| D            | 8007   | 0        | 28802131843697 | 45785    |          |      |       |         |
+| Message Type | Locate | Tracking | ns since 00:00 | Order id | Buy/Sell | Size | Stock | Price   | MPID |
+|--------------|--------|----------|----------------|----------|----------|------|-------|---------|------|
+| A            | 8007   | 0        | 28802131792425 | 45785    | B        | 3000 | USO   | 14.7200 | id_1 |
+| ...          |        |          |                |          |          |      |       |         |      |
+| D            | 8007   | 0        | 28802131843697 | 45785    |          |      |       |         | id_1 |
 
 As we can see once we observe the deletion order no information about the direction, size, stock and price are reported. Hence at each time we have to keep track of all the active orders in the book, in order to know what to do once we encounter the deletion order.
 
@@ -60,11 +60,11 @@ The output of the program are two .csv file with the following structure:
 
 ##### messages of 08/30/2018 PSX AAPL
 
-| time           | type | id    | side | size | price  | cancSize | execSize | oldId | oldSize | oldPrice |
-|----------------|------|-------|------|------|--------|----------|----------|-------|---------|----------|
-| 29041353544851 | A    | 49816 | 1    | 100  | 223.39 |          |          |       |         |          |
-| 29041495720727 | D    | 49816 | 1    | 0    | 223.39 | 100      |          |       |         |          |
-| ...            | ...  |       |      |      |        |          |          |       |         |          |
+| time           | type | id    | side | size | price  | cancSize | execSize | oldId | oldSize | oldPrice | MPID |
+|----------------|------|-------|------|------|--------|----------|----------|-------|---------|----------|------|
+| 29041353544851 | A    | 49816 | 1    | 100  | 223.39 |          |          |       |         |          | id_1 |
+| 29041495720727 | D    | 49816 | 1    | 0    | 223.39 | 100      |          |       |         |          | id_1 |
+| ...            | ...  |       |      |      |        |          |          |       |         |          |      |
 
 ##### book of 08/30/2018 PSX AAPL
 
@@ -138,14 +138,14 @@ Here we report detailed description of message file output of the program:
 
 At discrete time T1,T2,T3,... an output will be released by NASDAQ, the field names may have different meaning depending on the type of message. Hence here we will give a detailed description of the message csv.
 
-| time | type | id     | side                   | size                                                        | price                                      | cancSize                      | execSize                    | oldId        | oldSize                           | oldPrice                          |
-|------|------|--------|------------------------|-------------------------------------------------------------|--------------------------------------------|-------------------------------|-----------------------------|--------------|-----------------------------------|-----------------------------------|
-| ...  | A    | ...    | ...                    | added size                                                  | limit price of the add order               | -                             | -                           | -            | -                                 | -                                 |
-| ...  | D    | ...    | ...                    | remaining size after the deletion (may be total or partial) | price of the original order                | canceled size by the message | -                           | -            | -                                 | -                                 |
-| ...  | E    | ...    | ...                    | remaining size after the execution                          | price of the order being executed          | -                             | size being executed         | -            | -                                 | -                                 |
-| ...  | P    | ...    | ...                    | execution of an hidden order                                | price of the execution                     | -                             | size of the hidden eecution | -            | -                                 | -                                 |
-| ...  | R    | new id | equal to the old order | new size                                                    | new limit size                             | -                             | -                           | old order id | size of the order being replaced  | price of the order being replaced |
-| ...  | C    | ...    | ...                    | remaining size after the execution                          | price at which the order is being executed | -                             | -                           | -            | -                                 | original price of the order       |
+| time | type | id     | side                   | size                                                        | price                                      | cancSize                      | execSize                    | oldId        | oldSize                           | oldPrice                          | MPID                                                 |
+|------|------|--------|------------------------|-------------------------------------------------------------|--------------------------------------------|-------------------------------|-----------------------------|--------------|-----------------------------------|-----------------------------------|------|
+| ...  | A    | ...    | ...                    | added size                                                  | limit price of the add order               | -                             | -                           | -            | -                                 | -                                 | mpid of the market partecipant who issued the order  |
+| ...  | D    | ...    | ...                    | remaining size after the deletion (may be total or partial) | price of the original order                | canceled size by the message | -                           | -            | -                                 | -                                 | mpid of the market partecipant who deleted the order |
+| ...  | E    | ...    | ...                    | remaining size after the execution                          | price of the order being executed          | -                             | size being executed         | -            | -                                 | -                                 | mpid of the mp whos resting order is being executed |
+| ...  | P    | ...    | ...                    | execution of an hidden order                                | price of the execution                     | -                             | size of the hidden execution | -            | -                                 | -                                 | - |
+| ...  | R    | new id | equal to the old order | new size                                                    | new limit size                             | -                             | -                           | old order id | size of the order being replaced  | price of the order being replaced | same as the old order (if any) |
+| ...  | C    | ...    | ...                    | remaining size after the execution                          | price at which the order is being executed | -                             | -                           | -            | -                                 | original price of the order       | the mpid of the executed order |
 
 
 ## Development setup
@@ -226,3 +226,4 @@ The implemented strategy can be found at
 * Luigi Fusco           <https://github.com/luigif9>
 * Ozrenka Dragić        <https://github.com/oz-dr>
 * Martino Bernasconi    <https://github.com/martinobdl>
+

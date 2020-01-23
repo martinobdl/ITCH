@@ -12,7 +12,8 @@ struct Order_Test : public testing::Test{
         id_type id = 1234;
         side_type side = 0;
         emptyOrder = new Order();
-        fullOrder = new Order(id, side, size, price);
+        char mpid[] = "tmpd";
+        fullOrder = new Order(id, side, size, price, mpid);
     }
     void TearDown(){
         delete emptyOrder;

@@ -86,6 +86,10 @@ void Message::setOldSize(const size_type& _size){
     oldSize = _size;
 }
 
+void Message::setMPID(const char& _mpid){
+    strncpy(mpid, &_mpid, 4); mpid[4] = 0;
+}
+
 // getters
 char Message::getType() const{
     return type;
@@ -129,6 +133,10 @@ price_type Message::getOldPrice()const{
 
 size_type Message::getOldSize()const{
     return oldSize;
+}
+
+const char * Message::getMPID()const{
+    return mpid;
 }
 
 bool Message::isEmpty()const{
@@ -187,6 +195,8 @@ std::string Message::getString(void)const{
     if(oldPrice!=PRICE_DEFAULT){
         string_builder << oldPrice;
     }
+    string_builder << ",";
+    string_builder << mpid;
     string_builder << std::endl;
 
     return string_builder.str();
@@ -209,6 +219,9 @@ void Message::print() const {
         std::cout << "Old Id         :" << oldId << std::endl;
         std::cout << "Old size       :"<< oldSize << std::endl;
         std::cout << "Old price      :" << oldPrice << std::endl;
+    }
+    if (type == 'F'){
+        std::cout << "MPID :" << mpid << std::endl;
     }
     std::cout << " " << std::endl;
 }
