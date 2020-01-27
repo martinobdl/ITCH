@@ -36,7 +36,6 @@ TEST_F(Message_Test, getStringAndSettersTest){
     fullMessage->setOldSize(110);
     fullMessage->setOldPrice(33.333333);
     fullMessage->setMPID(*mpid);
-    std::cout << fullMessage->getString() << std::endl;
     ASSERT_EQ("28800006862979,A,45749,1,93,11.79,10,20,123456,110,33.3333,tmpd\n", fullMessage->getString());
 }
 
