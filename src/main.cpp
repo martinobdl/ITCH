@@ -2,6 +2,29 @@
 #include <string>
 #include <BookConstructor.hpp>
 
+/**
+ * Declaration of main function.
+ *
+ * @file main.cpp
+ */
+
+/**
+ * main
+ *
+ * Interface to use the BookRecustruction Class
+ * WARNING: this is lightweight and do not perform checks for file existence, good formatting
+ * of inputs ecc..
+ *
+ * @param[in] argc An integer argument count of the command line arguments
+ * @param[in] argv An argument vector of the command line arguments:
+ * @param[in] path to the unzipped ITCH raw data binary file
+ * @param[in] path to the directory to which the output book csv file will be written to (add trailing backslash!)
+ * @param[in] path to the directory to which the output message csv file will be written to (add trailing backslahs!)
+ * @param[in] integer this is the depth of the orderbook, for bid and ask side
+ * @param[in] name string of the stock you want the reconstruct the book
+ *
+ */
+
 int main(int argc, char * argv[]){
 
     if(argc<5){
