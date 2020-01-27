@@ -1,7 +1,7 @@
 #ifndef _MESSAGE_H_
 #define _MESSAGE_H_
 
-#include <string>
+#include <cstring>
 #include <sstream>
 #include <iostream>
 #include <utility.hpp>
