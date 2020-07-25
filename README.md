@@ -26,15 +26,15 @@ ITCH
 │   │
 │   └───pk          (pickle object files)
 │
-└───gtests  (.cpp for tests)
+└───gtests    (.cpp for tests)
 │
-└───images  (images for README.md Markdown)
+└───images    (images for README.md Markdown)
 │
-└───include (.hpp for main program)
+└───include   (.hpp for main program)
 │
-└───python  (python implementation of some application example)
+└───examples  (python implementation of some application example)
 │
-└───src     (.cpp for main program)
+└───src       (.cpp for main program)
 
 ```
 
