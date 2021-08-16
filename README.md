@@ -221,9 +221,28 @@ The implemented strategy can be found at
 ![](images/Figure_2.png)
 ![](images/ezgif-1-77b8a25c6b7c.gif)
 
+
+--- 
+### Citations
+If you use this software in your research, please cite the paper using the following BibTeX:
+
+```
+@misc{https://doi.org/10.5281/zenodo.5209267,
+  doi = {10.5281/ZENODO.5209267},
+  url = {https://zenodo.org/record/5209267},
+  author = {Bernasconi-De-Luca,  Martino and Fusco,  Luigi and Dragić,  Ozrenka},
+  title = {martinobdl/ITCH: ITCH50Converter},
+  publisher = {Zenodo},
+  year = {2021},
+  copyright = {Open Access}
+}
+```
+
+
+
 ## Contributors
 
-* Luigi Fusco           <https://github.com/luigif9>
-* Ozrenka Dragić        <https://github.com/oz-dr>
-* Martino Bernasconi    <https://github.com/martinobdl>
+* Luigi Fusco                           <https://github.com/luigif9>
+* Ozrenka Dragić                        <https://github.com/oz-dr>
+* Martino Bernasconi-de-Luca            <https://github.com/martinobdl>
 
