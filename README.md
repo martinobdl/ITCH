@@ -87,7 +87,7 @@ make
 
 In order to get some data needed to run the program **(800MB)**
 ```sh
-wget ftp://anonymous:@emi.nasdaq.com/ITCH/PSX_ITCH/20190327.PSX_ITCH_50.gz -P ./data/binary
+wget ftp://anonymous:@emi.nasdaq.com/ITCH/Nasdaq\ PSX\ ITCH/20190327.PSX_ITCH_50.gz -P ./data/binary
 
 # this file exists at date 05/02/2019
 # otherwise download manually from the ftp and put the
